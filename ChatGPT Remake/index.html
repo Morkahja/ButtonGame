@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Buttongame</title>
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #000; }
+    body { display: grid; place-items: center; min-height: 100vh; }
+    canvas { display: block; width: min(450px, 100vw, 100vh); height: min(450px, 100vw, 100vh); touch-action: none; }
+  </style>
+</head>
+<body>
+  <canvas id="game" width="450" height="450" aria-label="Buttongame. Klick druff da! Click the cyan target to score and gain one second."></canvas>
+  <script src="assets.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>

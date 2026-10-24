@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_page">#061214</color>
+    <color name="bg_panel">#050E10</color>
+    <color name="cyan">#00FFFF</color>
+    <color name="cyan_dim">#007A7A</color>
+    <color name="white">#FFFFFF</color>
+    <color name="text_muted">#5A7A7E</color>
+</resources>

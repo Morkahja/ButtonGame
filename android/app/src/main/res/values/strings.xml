@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Buttongame</string>
+    <string name="app_developer">Babuni.dev</string>
+    <string name="app_byline">by Babuni.dev</string>
+    <string name="host_title">Host</string>
+    <string name="play_title">Play</string>
+    <string name="serve_wifi">Serve on Wi‑Fi</string>
+    <string name="stop_serve">Stop serving</string>
+    <string name="play_game">Play Buttongame</string>
+    <string name="back_host">Back to host</string>
+    <string name="waiting">Start serving to show a QR code for guests on this Wi‑Fi.</string>
+    <string name="hotspot_hint">If scans fail on guest/café Wi‑Fi, turn on your hotspot and have people join that.</string>
+    <string name="channel_host">Buttongame host</string>
+    <string name="notif_hosting">Serving Buttongame on Wi‑Fi</string>
+    <string name="live_players">Live players</string>
+    <string name="no_players_yet">Waiting for players…</string>
+    <string name="player_time_fmt">Time %1$ds</string>
+    <string name="player_waiting">ready</string>
+    <string name="player_react_fmt">React %1$d ms</string>
+    <string name="player_react_none">React —</string>
+    <string name="player_apm_fmt">APM %1$d</string>
+    <string name="player_apm_none">APM —</string>
+</resources>
