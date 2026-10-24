@@ -21,6 +21,8 @@
   const BREAK_PHASE_MS = 230;
   const SCATTER_FADE_MS = 460;
   const TAP_FLASH_MS = 125;
+  const TAP_PULSE_MS = 145;
+  const TAP_PULSE_SCALE = 1.10;
   const QUICK_SPIN_MS = 290;
   const STAGE = 450;
   const TARGET_HALF = 40;
@@ -533,7 +535,14 @@
 
   function applyFeindTransform() {
     const now = performance.now();
-    const scale = popping ? 1 : Math.min(1, spawnScale);
+    // Press feedback: grow slightly and ease back without automatic shatter scaling.
+    const pulseAge = now - tapFlashStartedAt;
+    let pulseScale = 1;
+    if (pulseAge >= 0 && pulseAge < TAP_PULSE_MS) {
+      const fade = 1 - pulseAge / TAP_PULSE_MS;
+      pulseScale += (TAP_PULSE_SCALE - 1) * fade * fade;
+    }
+    const scale = (popping ? 1 : Math.min(1, spawnScale)) * pulseScale;
     let extraRotation = 0;
     const spinTime = now - quickSpinStartedAt;
     if (!popping && spinTime >= 0 && spinTime < QUICK_SPIN_MS) {
@@ -1410,7 +1419,7 @@
       spawnScale !== 1 ||
       ts < spawnAnimUntil ||
       popping ||
-      ts - tapFlashStartedAt < TAP_FLASH_MS ||
+      ts - tapFlashStartedAt < TAP_PULSE_MS ||
       ts - quickSpinStartedAt < QUICK_SPIN_MS
     ) {
       applyFeindTransform();
