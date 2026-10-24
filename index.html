@@ -513,13 +513,14 @@
       position: absolute;
       left: 0;
       top: 0;
-      width: 66px;
-      height: 64px;
-      margin-left: -33px;
-      margin-top: -32px;
+      width: 72px;
+      height: 72px;
+      margin-left: -36px;
+      margin-top: -36px;
       cursor: pointer;
       transform-origin: center center;
       z-index: 1;
+      will-change: transform, filter;
     }
 
     #feind img {
@@ -536,10 +537,34 @@
       display: block;
     }
 
-    #feind .feind0 { width: 56px; height: 56px; }
-    #feind .feind1 { width: 56px; height: 56px; }
+    #feind .feind0 { width: 62px; height: 62px; }
+    #feind .feind1 { width: 62px; height: 62px; }
 
     #feind.is-gone { visibility: hidden; pointer-events: none; }
+    #feind.is-shattering > img.feind0,
+    #feind.is-shattering > img.feind1 { visibility: hidden; }
+    #feind .button-piece {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      width: 62px;
+      height: 62px;
+      display: block;
+      pointer-events: none;
+      transform-origin: center center;
+      will-change: transform, opacity;
+    }
+    #feind .button-cracks {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      width: 62px;
+      height: 62px;
+      overflow: hidden;
+      pointer-events: none;
+      clip-path: circle(45.7% at center);
+      z-index: 2;
+    }
 
     #live-wrap {
       width: min(470px, calc(100vw - 1.5rem));
@@ -693,8 +718,8 @@
         </form>
       </div>
       <div id="feind" class="show-idle" role="button" tabindex="0" aria-label="Ziel">
-        <img class="feind0" src="assets/button.svg" width="56" height="56" alt="" draggable="false" />
-        <img class="feind1" src="assets/button.svg" width="56" height="56" alt="" draggable="false" />
+        <img class="feind0" src="assets/button.svg" width="62" height="62" alt="" draggable="false" />
+        <img class="feind1" src="assets/button.svg" width="62" height="62" alt="" draggable="false" />
       </div>
     </div>
   </div>
