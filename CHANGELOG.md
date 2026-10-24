@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-24 — Tap size pulse
+
+- Each button press now briefly scales the turquoise jacket button to 110% of its normal 62 px artwork and eases it back to 100% over 145 ms.
+- Keeps the existing white hit flash and Quick Strike spin; rapid repeated presses retrigger the pulse.
+- The button stays fully opaque for its remaining lifespan. The staged crack/separation/shatter animation does not independently enlarge the button; scoring during the pop remains available.
+- Signed the new Android APK with the same certificate as the previous shatter update. Confirmed JavaScript syntax, a headless browser press/repeat test, and the APK v2 signature and digest. Physical-device verification pending.
+
 ## 2026-10-24 — Button shatter sequence and tap feedback
 
 - Replaced the previous enlargement-and-particle effect with five clearly ordered destruction stages: intact, cracked, separated into the actual button's vector pieces, scattered, and faded.
