@@ -16,8 +16,14 @@
   const FADE_START_ALPHA = 100;
   const FADE_END_ALPHA = 5;
   const QUICK_HIT_MS = 320;
+  const POP_DURATION_MS = 580;
+  const CRACK_PHASE_MS = 140;
+  const BREAK_PHASE_MS = 230;
+  const SCATTER_FADE_MS = 460;
+  const TAP_FLASH_MS = 125;
+  const QUICK_SPIN_MS = 290;
   const STAGE = 450;
-  const TARGET_HALF = 36;
+  const TARGET_HALF = 40;
   const MERGE_DIST = 34;
   const FLOAT_LIFE = 3400;
   const FLOAT_GRAVITY = 480;
@@ -410,6 +416,11 @@
   let shakeX = 0;
   let shakeY = 0;
   let shakeUntil = 0;
+  let popping = false;
+  let popStartedAt = 0;
+  let popUntil = 0;
+  let tapFlashStartedAt = -Infinity;
+  let quickSpinStartedAt = -Infinity;
 
   /** @type {Array<{
    *  el: HTMLElement, value: number, x: number, y: number,
@@ -419,6 +430,101 @@
   const floaters = [];
   const timeFlies = [];
   let timeFlashUntil = 0;
+  const popShards = [];
+  const SHATTER_CELLS = [[[0,0],[20.53,0],[21.33,14.5],[15.14,19.14],[0,15.78]],[[20.53,0],[41,0],[38.5,15.83],[34.32,19.08],[21.33,14.5]],[[41,0],[62,0],[62,17.4],[53.45,20.82],[38.5,15.83]],[[0,40.03],[0,15.78],[15.14,19.14],[16.83,32.67]],[[16.83,32.67],[15.14,19.14],[21.33,14.5],[34.32,19.08],[33.75,30.47],[21.57,35.04]],[[33.75,30.47],[34.32,19.08],[38.5,15.83],[53.45,20.82],[47.75,35.65],[40.79,37.04]],[[62,17.4],[62,42.67],[59.76,42.85],[47.75,35.65],[53.45,20.82]],[[0,44.86],[0,40.03],[16.83,32.67],[21.57,35.04],[23.3,48.03],[18,52.57]],[[23.3,48.03],[21.57,35.04],[33.75,30.47],[40.79,37.04],[37.76,47.98],[35,50.22]],[[50.73,53.88],[37.76,47.98],[40.79,37.04],[47.75,35.65],[59.76,42.85]],[[18,62],[0,62],[0,44.86],[18,52.57]],[[35,62],[18,62],[18,52.57],[23.3,48.03],[35,50.22]],[[51.75,62],[35,62],[35,50.22],[37.76,47.98],[50.73,53.88]],[[62,42.67],[62,62],[51.75,62],[50.73,53.88],[59.76,42.85]]];
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  let crackOverlay = null;
+
+  function polygonCss(poly) {
+    return "polygon(" + poly.map(function (p) {
+      return (p[0] / 62 * 100).toFixed(3) + "% " + (p[1] / 62 * 100).toFixed(3) + "%";
+    }).join(", ") + ")";
+  }
+
+  function clearPopShards() {
+    if (crackOverlay) {
+      crackOverlay.remove();
+      crackOverlay = null;
+    }
+    for (let i = 0; i < popShards.length; i++) popShards[i].el.remove();
+    popShards.length = 0;
+    feind.classList.remove("is-shattering");
+  }
+
+  function createShatterParts() {
+    clearPopShards();
+    crackOverlay = document.createElementNS(SVG_NS, "svg");
+    crackOverlay.setAttribute("viewBox", "0 0 62 62");
+    crackOverlay.setAttribute("aria-hidden", "true");
+    crackOverlay.classList.add("button-cracks");
+    for (let i = 0; i < SHATTER_CELLS.length; i++) {
+      const polygon = document.createElementNS(SVG_NS, "polygon");
+      polygon.setAttribute("points", SHATTER_CELLS[i].map(function (p) { return p.join(","); }).join(" "));
+      polygon.setAttribute("fill", "none");
+      polygon.setAttribute("stroke", "#002126");
+      polygon.setAttribute("stroke-width", "1.65");
+      polygon.setAttribute("stroke-linejoin", "round");
+      crackOverlay.appendChild(polygon);
+    }
+    feind.appendChild(crackOverlay);
+
+    SHATTER_CELLS.forEach(function (poly, i) {
+      const image = document.createElement("img");
+      image.className = "button-piece";
+      image.src = "assets/button.svg";
+      image.alt = "";
+      image.draggable = false;
+      image.style.clipPath = polygonCss(poly);
+      image.style.webkitClipPath = polygonCss(poly);
+      image.style.opacity = "0";
+      feind.appendChild(image);
+      const centroid = poly.reduce(function (acc, pt) {
+        acc.x += pt[0]; acc.y += pt[1]; return acc;
+      }, {x:0,y:0});
+      centroid.x /= poly.length; centroid.y /= poly.length;
+      const dx = centroid.x - 31;
+      const dy = centroid.y - 31;
+      const angle = Math.atan2(dy,dx) + (i % 3 - 1) * 0.13;
+      popShards.push({
+        el:image,
+        tx:Math.cos(angle) * (50 + (i * 17) % 42),
+        ty:Math.sin(angle) * (50 + (i * 17) % 42),
+        spin:((i % 2) ? -1 : 1) * (24 + (i * 19) % 83)
+      });
+    });
+  }
+
+  function updatePopShards(now) {
+    if (!popping) return;
+    const age = Math.max(0, now - popStartedAt);
+    const crack = age < CRACK_PHASE_MS;
+    feind.classList.toggle("is-shattering", !crack);
+    if (crackOverlay) crackOverlay.style.display = crack ? "block" : "none";
+    for (let i = 0; i < popShards.length; i++) {
+      const shard = popShards[i];
+      if (crack) {
+        shard.el.style.opacity = "0";
+        continue;
+      }
+      let dist, turn;
+      if (age < BREAK_PHASE_MS) {
+        const t = (age - CRACK_PHASE_MS) / (BREAK_PHASE_MS - CRACK_PHASE_MS);
+        dist = 0.07 * t;
+        turn = 0.035 * t;
+      } else {
+        const t = Math.min(1, (age - BREAK_PHASE_MS) / (POP_DURATION_MS - BREAK_PHASE_MS));
+        const eased = 1 - Math.pow(1 - t, 2);
+        dist = 0.07 + 0.93 * eased;
+        turn = 0.035 + 0.965 * eased;
+      }
+      const opacity = age > SCATTER_FADE_MS
+        ? Math.max(0, 1 - (age - SCATTER_FADE_MS) / (POP_DURATION_MS - SCATTER_FADE_MS))
+        : 1;
+      shard.el.style.opacity = String(opacity);
+      shard.el.style.transform = "translate(" + (shard.tx * dist).toFixed(2) + "px, " +
+        (shard.ty * dist).toFixed(2) + "px) rotate(" + (shard.spin * turn).toFixed(2) + "deg)";
+    }
+  }
 
   function setFeindVisual(hit) {
     feind.classList.toggle("show-idle", !hit);
@@ -426,23 +532,67 @@
   }
 
   function applyFeindTransform() {
-    const scale = punchScale * spawnScale;
-    feind.style.opacity = String((alpha / 100) * Math.min(1, 0.35 + spawnScale * 0.65));
-    feind.style.transform =
-      "translate(" +
-      (x + shakeX) +
-      "px, " +
-      (y + shakeY) +
-      "px) rotate(" +
-      rotation +
-      "deg) scale(" +
-      scale +
-      ")";
+    const now = performance.now();
+    const scale = popping ? 1 : Math.min(1, spawnScale);
+    let extraRotation = 0;
+    const spinTime = now - quickSpinStartedAt;
+    if (!popping && spinTime >= 0 && spinTime < QUICK_SPIN_MS) {
+      const t = spinTime / QUICK_SPIN_MS;
+      extraRotation = 360 * (1 - Math.pow(1 - t, 3));
+    }
+    const flashTime = now - tapFlashStartedAt;
+    if (flashTime >= 0 && flashTime < TAP_FLASH_MS) {
+      const strength = 1 - flashTime / TAP_FLASH_MS;
+      feind.style.filter = "brightness(" + (1 + 1.55 * strength) +
+        ") saturate(" + (1 - 0.98 * strength) + ")";
+    } else {
+      feind.style.filter = "none";
+    }
+    feind.style.opacity = "1";
+    feind.style.transform = "translate(" + (x + shakeX) + "px, " + (y + shakeY) +
+      "px) rotate(" + (rotation + extraRotation) + "deg) scale(" + scale + ")";
   }
 
   function playSpawnIn() {
     spawnScale = 0.15;
     spawnAnimUntil = performance.now() + 320;
+    applyFeindTransform();
+  }
+
+  function respawnTarget() {
+    popping = false;
+    popStartedAt = 0;
+    popUntil = 0;
+    clearPopShards();
+    feind.style.filter = "none";
+    tapFlashStartedAt = -Infinity;
+    const spawn = randomSpawn();
+    x = spawn.x;
+    y = spawn.y;
+    rotation += randomint(1, 369);
+    alpha = FADE_START_ALPHA;
+    punchScale = 1;
+    shakeX = 0;
+    shakeY = 0;
+    setFeindVisual(false);
+    playSpawnIn();
+    spawnTime = performance.now();
+  }
+
+  function beginPopPhase() {
+    popping = true;
+    popStartedAt = performance.now();
+    popUntil = popStartedAt + POP_DURATION_MS;
+    alpha = FADE_START_ALPHA;
+    punchScale = 1;
+    spawnScale = 1;
+    spawnAnimUntil = 0;
+    shakeX = 0;
+    shakeY = 0;
+    shakeUntil = 0;
+    setFeindVisual(false);
+    createShatterParts();
+    updatePopShards(popStartedAt);
     applyFeindTransform();
   }
 
@@ -856,6 +1006,7 @@
     }
     floaters.length = 0;
     clearTimeFlies();
+    clearPopShards();
   }
 
   function mergeFloaters(a, b) {
@@ -1037,6 +1188,7 @@
 
   function endGame() {
     endEl.textContent = "Game Over";
+    clearPopShards();
     feind.classList.add("is-gone");
     gameOver = true;
     fading = false;
@@ -1066,6 +1218,13 @@
     shakeX = 0;
     shakeY = 0;
     shakeUntil = 0;
+    popping = false;
+    popStartedAt = 0;
+    popUntil = 0;
+    tapFlashStartedAt = -Infinity;
+    quickSpinStartedAt = -Infinity;
+    feind.style.filter = "none";
+    feind.style.opacity = "1";
     hitCount = 0;
     reactionSumMs = 0;
     reactionSamples = 0;
@@ -1123,6 +1282,13 @@
     const now = performance.now();
     registerHit();
     playRandomImpact();
+    tapFlashStartedAt = now;
+    applyFeindTransform();
+
+    if (popping) {
+      addPoints(1);
+      return;
+    }
 
     if (fading) {
       addPoints(1);
@@ -1142,6 +1308,7 @@
     }
 
     if (reactionMs != null && reactionMs <= QUICK_HIT_MS) {
+      quickSpinStartedAt = now;
       triggerQuickFx();
     }
 
@@ -1194,22 +1361,20 @@
   fitToPhone();
 
   function feindEnterFrame() {
+    if (popping) {
+      if (performance.now() >= popUntil) {
+        respawnTarget();
+        return;
+      }
+      applyFeindTransform();
+      return;
+    }
     if (!fading) return;
-
     alpha -= flupp;
     if (alpha <= FADE_END_ALPHA) {
       fading = false;
-      const spawn = randomSpawn();
-      x = spawn.x;
-      y = spawn.y;
-      rotation += randomint(1, 369);
-      alpha = FADE_START_ALPHA;
-      punchScale = 1;
-      shakeX = 0;
-      shakeY = 0;
-      setFeindVisual(false);
-      playSpawnIn();
-      spawnTime = performance.now();
+      beginPopPhase();
+      return;
     }
     applyFeindTransform();
   }
@@ -1237,12 +1402,16 @@
     updateFx(ts);
     tweenReactDisplay(dt);
     updateFloaters(dt);
+    updatePopShards(ts);
     if (
       shakeX ||
       shakeY ||
       punchScale !== 1 ||
       spawnScale !== 1 ||
-      ts < spawnAnimUntil
+      ts < spawnAnimUntil ||
+      popping ||
+      ts - tapFlashStartedAt < TAP_FLASH_MS ||
+      ts - quickSpinStartedAt < QUICK_SPIN_MS
     ) {
       applyFeindTransform();
     }
