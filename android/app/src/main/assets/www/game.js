@@ -139,6 +139,13 @@
     "assets/sfx/Bell2.ogg",
     "assets/sfx/Bell3.ogg",
   ];
+  // Optional new recordings. Until the actual clips are provided, existing
+  // bell/impact sounds are used so all builds remain fully playable.
+  const SPECIAL_REVEAL_FILE = "assets/sfx/4273.ogg";
+  const QUICK_STRIKE_IMPACT_FILES = [
+    "assets/sfx/QuickStrikepoints.ogg",
+    "assets/sfx/QuickStrikepoints1.ogg",
+  ];
 
   let audioCtx = null;
   let masterGain = null;
@@ -212,7 +219,8 @@
   }
 
   function preloadSfx() {
-    Promise.all(IMPACT_FILES.concat(BELL_FILES).map(loadBuffer));
+    Promise.all(IMPACT_FILES.concat(BELL_FILES, QUICK_STRIKE_IMPACT_FILES,
+      [SPECIAL_REVEAL_FILE]).map(loadBuffer));
   }
 
   function playBuffer(url, opts) {
@@ -254,6 +262,34 @@
       gain: 0.78 + Math.random() * 0.12,
       rate: 0.98 + Math.random() * 0.04,
     });
+  }
+
+  function playSpecialRevealSound() {
+    // Replace, rather than layer over, the milestone bell for transformed
+    // 42/73. Use the old bell if the new file is not installed yet.
+    if (!buffers[SPECIAL_REVEAL_FILE]) {
+      playRandomBell();
+      return;
+    }
+    playBuffer(SPECIAL_REVEAL_FILE, { gain: 0.85, rate: 1 });
+  }
+
+  function playQuickStrikeImpact() {
+    const ready = QUICK_STRIKE_IMPACT_FILES.filter(function (url) {
+      return !!buffers[url];
+    });
+    if (!ready.length) {
+      playRandomImpact();
+      return;
+    }
+    const url = ready[(Math.random() * ready.length) | 0];
+    playBuffer(url, { gain: 0.62 + Math.random() * 0.1,
+      rate: 0.98 + Math.random() * 0.04 });
+  }
+
+  function playTapImpact() {
+    if (quickStrikeActive) playQuickStrikeImpact();
+    else playRandomImpact();
   }
 
   function ringJackpotBell(value) {
@@ -872,7 +908,7 @@
       // The newly visible 73 is a separate jackpot milestone from 37.
       if (!fx.resultBellPlayed && elapsed >= moveEnd + REVERSE_FLIP_MS / 2) {
         fx.resultBellPlayed = true;
-        ringJackpotBell(73);
+        playSpecialRevealSound();
       }
       let x = REVERSE_CENTER_X;
       let y = REVERSE_CENTER_Y;
@@ -1000,7 +1036,7 @@
       // Sound the second bell when the assembled 42 becomes fully visible.
       if (!fx.resultBellPlayed && elapsed >= gatherEnd) {
         fx.resultBellPlayed = true;
-        ringJackpotBell(42);
+        playSpecialRevealSound();
       }
       if (elapsed < bounceEnd) {
         let remaining = Math.min(64, Math.max(0, now - fx.lastUpdate));
@@ -1795,16 +1831,17 @@
     ensureAudio();
     const now = performance.now();
     registerHit();
-    playRandomImpact();
     tapFlashStartedAt = now;
     applyFeindTransform();
 
     if (popping) {
+      playTapImpact();
       addPoints(tapPoints());
       return;
     }
 
     if (fading) {
+      playTapImpact();
       addPoints(tapPoints());
       return;
     }
@@ -1837,6 +1874,9 @@
       triggerQuickFx();
     }
 
+    // Pick the sound AFTER checking the trigger so the activating tap also
+    // uses a QuickStrikepoints recording, not an ordinary impact.
+    playTapImpact();
     flupp = randomint(1, 22);
     deadline += fadeDurationMs(flupp);
 
