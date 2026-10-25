@@ -1,5 +1,19 @@
 # Development log
 
+## 2026-10-25 — Session stats, dynamic time awards, replay position and audio attenuation
+
+**Gameplay balance:** Removed `deadline += fadeDurationMs(flupp)` from the fresh-button click handler while retaining the button lifecycle variable `flupp`. Initial 60 seconds still begins on first click. `TIME_BONUS_SECONDS = {7:2,14:3,42:5,73:4}` replaces all +3s awards; early 21 and 37 do not fly any time bonus. At the first fully visible special 42 or 73 result, `grantTimeBonusFly(centerX,centerY,resultValue)` enqueues the +5/+4 seconds once. Natural 42/73 are eligible too. The golden time bank continues to collect variable-value pickups and decrement into the timer at four seconds per real second. When pending time revives the countdown, `roundExpired` can be cleared.
+
+**Audio:** Measured source mean levels using ffmpeg: new recordings ~−20 to −21 dB versus previous impacts/bells ~−24 to −26 dB. Lowered new audio *playback gain* (not destructive re-encoding) by approximately 4–5 dB. All original OGG bytes are preserved in the signed APK.
+
+**Final stats:** `endGame()` now freezes `finalStats`, recording durationMs = performance.now() − startTime (including final pending-point settlement), reactionMs = rounded reactionSumMs/reactionSamples (0 if no eligible samples), and apm = rounded hitCount*60000/durationMs. `submitScore()` POSTs these along with name/points, and the high-score list displays all four. No session clock has been added to the game HUD.
+
+**Storage/versioning:** New `buttongame_scores_v2` localStorage key. Native Kotlin `ScoreEntry` and `GameServer` API request/response now include the three new integer fields; `ScoreStore` uses a fresh `scores-v2.json`, deleting the old beta `scores.json`. The Kotlin source has been committed but **cannot be compiled in the currently available local environment (Android SDK and build tools absent)**, so today's APK retains the old Android native classes. Until a full native rebuild, each submitting browser caches its own session details and enriches its locally viewed host leaderboard; other devices' old-host records have dashes for unknown metrics. Full cross-device metrics and host record reset need a native rebuild. Do not treat the APK as an implementation of the new native server.
+
+**Replay:** The existing `#play-again` button had z-index 4 versus the redesigned lower stats panel z-index 6, hiding it. Moved button to z-index 12 and aligned it to the 15.5rem lower HUD at bottom 10px, so it overlays both React and APM after Game Over for host and guest browsers. Reset hides the button again.
+
+**Tests/build:** Node syntax; mock DOM checks for the 7/14/21→42/37→73 time model, freeze at Game Over, stored stat formatting and Play Again visibility; legacy native score-only response enrichment; bouncy 21→42, 37→73, Quick Strike new audio, and exact milestone-bell regressions. Repacked cumulative signed APK with updated game.js and index.html, preserved all original and three user-supplied OGG assets, and verified APK v2 content digest/signing certificate and ZIP integrity. Native Kotlin compilation, cross-device score-stat propagation, GitHub binary OGG commit, and device-level visual/audio QA remain open.
+
 ## 2026-10-25 — Package user-supplied 4273 and QuickStrikepoints recordings
 
 **Inputs:** Received `4273.ogg` (12,035 bytes; 0.937 s), `QuickStrikepoints.ogg` (6,967 bytes; 0.252 s), and `QuickStrikepoints1.ogg` (9,023 bytes; 0.482 s). All files successfully decoded as stereo, 44.1 kHz Ogg Vorbis audio. The files already use the case-sensitive paths named by `SPECIAL_REVEAL_FILE` and `QUICK_STRIKE_IMPACT_FILES`.
