@@ -69,6 +69,7 @@
   const punkteEl = document.getElementById("punkte");
   const scoreBufferEl = document.getElementById("score-buffer");
   const stageEl = document.getElementById("stage");
+  const scoreFlyLayer = document.getElementById("score-fly-layer");
   const timeEl = document.getElementById("time");
   const apmEl = document.getElementById("apm");
   const reactEl = document.getElementById("react");
@@ -815,23 +816,42 @@
     scoreBufferEl.classList.toggle("is-visible", scoreBank > 0);
   }
 
-  // Score HUD is above the stage. Convert its center into stage coordinates,
-  // including any scaling applied by the responsive phone layout.
-  function scoreBankTarget() {
-    if (stageEl && scoreBufferEl &&
-        typeof stageEl.getBoundingClientRect === "function" &&
-        typeof scoreBufferEl.getBoundingClientRect === "function") {
-      const stageRect = stageEl.getBoundingClientRect();
-      const bufferRect = scoreBufferEl.getBoundingClientRect();
-      if (stageRect.width > 0) {
-        const ratio = STAGE / stageRect.width;
+  function toScoreLayerPoint(screenX, screenY) {
+    if (scoreFlyLayer &&
+        typeof scoreFlyLayer.getBoundingClientRect === "function") {
+      const rect = scoreFlyLayer.getBoundingClientRect();
+      if (rect.width > 0) {
+        const scale = (scoreFlyLayer.clientWidth || 470) / rect.width;
         return {
-          x: (bufferRect.left + bufferRect.width / 2 - stageRect.left) * ratio,
-          y: (bufferRect.top + bufferRect.height / 2 - stageRect.top) * ratio,
+          x: (screenX - rect.left) * scale,
+          y: (screenY - rect.top) * scale,
         };
       }
     }
-    return { x: 105, y: 46 };
+    return { x: screenX, y: screenY };
+  }
+
+  function scoreBankTarget() {
+    if (scoreBufferEl &&
+        typeof scoreBufferEl.getBoundingClientRect === "function") {
+      const rect = scoreBufferEl.getBoundingClientRect();
+      if (rect.width > 0 || rect.height > 0) {
+        return toScoreLayerPoint(rect.left + rect.width / 2,
+          rect.top + rect.height / 2);
+      }
+    }
+    return { x: 170, y: 58 };
+  }
+
+  function scoreFlyOrigin(fromX, fromY) {
+    if (stageEl && typeof stageEl.getBoundingClientRect === "function") {
+      const rect = stageEl.getBoundingClientRect();
+      if (rect.width > 0) {
+        return toScoreLayerPoint(rect.left + fromX * rect.width / STAGE,
+          rect.top + fromY * rect.height / STAGE);
+      }
+    }
+    return { x: fromX + 10, y: fromY + 10 };
   }
 
   function startScoreFly(amount, fromX, fromY) {
@@ -839,9 +859,12 @@
     const el = document.createElement("div");
     el.className = "score-fly";
     el.textContent = "+" + amount;
-    floatLayer.appendChild(el);
-    const fly = { el: el, value: amount, age: 0,
-      x0: fromX, y0: fromY, x: fromX, y: fromY };
+    scoreFlyLayer.appendChild(el);
+    const origin = scoreFlyOrigin(fromX, fromY);
+    const fly = {
+      el: el, value: amount, age: 0,
+      x0: origin.x, y0: origin.y, x: origin.x, y: origin.y,
+    };
     scoreFlies.push(fly);
     paintScoreFly(fly, 1, 1);
   }
