@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-25 — Bell on every jackpot milestone
+
+- Combination bells now sound **each time a merged floating number reaches exactly 7, 14, 21, 37, 42, or 73**. Previously a merged lineage remembered its first bell, silencing later milestones (e.g. 7 → 14), and any value >=7 could ring regardless of eligibility.
+- Each eligible number plays a **randomly selected one of the existing three bell recordings**, with the same small pitch and volume variation.
+- The special **21 → 42** rings for 21 when reached and again when its fully assembled 42 appears; **37 → 73** rings for 37 when reached and again when the digits flip to 73.
+- Normal 42 and 73 jackpots ring once when those values are reached. Removed redundant bells from the generic jackpot and special animation entry points, so a single milestone cannot play two bells simultaneously.
+- No changes to impact sounds, master mute preference, scores, golden time bonuses, combination visuals, physics, or multiplayer.
+- Node simulated-frame sound regression tests passed for 7 → 14 → 21 → 42, 37 → 73, natural 42 and 73, and silent non-eligible values 8, 22, and 75. Existing physics, special-combination, and time-bank tests passed. APK ZIP integrity and v2 cryptographic signature/content digest verified against prior build using the same certificate. Physical device sound testing pending.
+
 ## 2026-10-25 — Full-label floater collisions and slower numerical growth
 
 - Fixed floating-number wall and HUD collisions so they account for the **entire displayed +N label**, including all digits, its actual DOM-measured width/height, CSS scale, and rotation. Previously collisions used a small radius derived from font size, allowing second/third digits to clip outside the field.
