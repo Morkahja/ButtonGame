@@ -1,5 +1,17 @@
 # Development log
 
+## 2026-10-25 — Correct floating-number bounding boxes and pace merges
+
+**Observed bug:** Collision radius was `max(11, floaterFontSize(value)*scale*0.38)`, independent of the number's text length. For `+37`, `+123` and longer labels, the first glyph could collide while later digits extended past a wall or overlapped HUD boundaries. Visual scale was also aggressive (up to 2.4×), and the merge loop could immediately chain several collisions in one frame, pushing values rapidly into the hundreds.
+
+**Geometry:** Introduced `floaterBounds(f)`: measure `f.el.offsetWidth/offsetHeight` (full `+N` text) with a conservative font/character-count fallback, apply current floater scale, then calculate the axis-aligned half-extents of the *rotated* label using absolute sine/cosine. Add 3px clearance for the glow. Both `resolveAabb` (HUD contacts) and `collideFloatersWorld` (stage walls) use these x/y half-extents instead of a font-size circle. Re-clamp after HUD resolution so correction cannot leave any digit offstage. Use a center fallback only when text ever exceeds both available horizontal or vertical space.
+
+**Visual growth:** Keep `floaterFontSize(1)=26` but lower the growth curve to `23 + min(15, 3*log2(value+1))`, versus `18 + min(28, 8*log2(value+1))`. Spawn scale range is slightly reduced from 0.95–1.35 to 0.95–1.25. Merged scale now uses `min(1.55, 1 + 0.075*log2(value+1))`; lingering increases use 1.04× capped at 1.58, not 1.08× capped at 2.2.
+
+**Numerical growth:** Introduced `mergeReadyAt` on normal floaters. New spawns wait 120ms; after merging, the survivor waits `320 + min(460, 100*log2(total+1))` ms before merging again. The physics merge loop checks readiness for both participants and breaks following the first successful merge, slowing chain combinations without capping values or changing the scoring ledger.
+
+**Validation:** Node syntax; deterministic collision tests covering 1-, 2-, 3- and 4-digit labels rotated at 0°/±45°/75° and colliding with all four walls and corners. Explicit DOM-width test verifies measured full-label dimensions. Four overlapping +1s merge into two +2s after 144ms and only later into a +4. Verified 21→42 and 37→73 trigger paths directly; previous bouncy-combo and golden-time-bonus tests pass. Android APK rebuild replaced the game JavaScript, retained existing HTML and resources, and passed ZIP integrity, APK v2 signature/content digest and unchanged signer check. Visual verification on physical Android device is still pending.
+
 ## 2026-10-25 — Compact, mirrored HUD and combined lower statistics
 
 **Layout request:** Narrow the four corner panels, move Points and Time nearer the outer game frame, mirror the Time golden bonus readout to the left of the right-anchored Time plate, and combine Reaction/APM into one centered lower plate with a vertical separator.
