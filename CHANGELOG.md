@@ -1,5 +1,16 @@
 # Changelog
 
+## 2026-10-25 — Golden time-bonus HUD and eligible combo glow
+
+- Eligible floating combination totals **7, 14, 21, 42, 37 and 73** receive the same golden glow as the +3-second bonus pickup while they remain eligible. The glow is removed if the floating number merges into a noneligible total or enters its green score-collection phase.
+- Both upper-center special displays (37 → 73 and 21 → 42) glow gold until their final green score pickup phase.
+- Added a persistent-position **golden `+Ns` time bank to the right of the Time HUD**, mirroring the shared green score bank. The right-side readout is hidden when empty.
+- Golden +3s pickups now fly through the foreground HUD overlay to the golden time bank, rather than being hidden behind the Time HUD or immediately changing the timer on arrival.
+- New +3s arrivals merge with the current bank, even while its balance is counting down. The first deposit pauses 350 ms, then banked seconds feed into the timer at 4 seconds per real second, preserving the exact time total without double-awarding. As the golden balance decreases, the timer increases.
+- Game Over waits for all inbound time flights **and any remaining banked seconds**, preventing a round from ending before earned time is credited. Play Again clears the time bank and its in-flight pickups.
+- Preserved 21 → 42 and 37 → 73 exact green scoring, Quick Strike effects, and score-fusion behavior.
+- Tested with a mocked DOM and simulated frame clock: 3+3+3 incoming seconds, mid-drain deposits, 9 seconds of exact deadline credit, foreground pickup placement, gold-on-merge and cleanup, late-game time settlement, Play Again reset, and existing 21/37 specials. APK ZIP and unchanged signing identity validated. Physical Android visual behavior not yet verified.
+
 ## 2026-10-25 — 21 → 42 scatter, duplicate, and fuse
 
 - Replaced the generic jackpot behavior for floating **21** with a new special transformation: explode into **21 individual “1” units**, duplicate into **42 visible units**, then gather them at the upper-center “Smash it!” location into one enlarged **42**.
