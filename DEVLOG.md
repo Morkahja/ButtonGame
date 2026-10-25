@@ -1,5 +1,15 @@
 # Development log
 
+## 2026-10-25 — 73 ms post-spawn Quick Strike and active multiplier
+
+**Timing:** Replaced the legacy `reactionMs <= 320` check with a distinct `SPAWN_ANIM_MS = 320` and `QUICK_STRIKE_WINDOW_MS = 73` check: `spawnAnimUntil <= now <= spawnAnimUntil + 73`. The animation still lasts 320 ms, but the Quick Strike opportunity begins when it ends and remains open for the next 73 ms. Reaction time reporting still measures first-tap latency from initial spawn.
+
+**Active state:** The first qualifying press sets `quickStrikeActive`, reuses the existing Quick Strike spin/flash feedback, and adds `.is-quick-strike` to `#point-source`. CSS renders the pulsing emitter core and halo green rather than cyan. The flag stays active for the button's normal tapped lifespan and every stage of its clickable shatter; it resets only when the next button spawns, on Play Again, initialization, or Game Over.
+
+**Scoring:** `tapPoints()` returns 2 while the active flag is set and otherwise 1. The first, subsequent, and destruction-period taps all use it. Multiplied values enter the ordinary floating score system, so merging, jackpot triggers, pending-value conservation, airborne pickups and shared-green-bank countdown behave normally. No extra immediate score writes.
+
+**Validation:** Node syntax check; simulated-clock runtime tests at 0, 319, 320, 356, 393, 394 and 450 ms, including repeated taps, score being deferred, the green state persisting during destruction, and proper reset on next spawn. Verified APK ZIP entries, v2 signature/digest and unchanged signing certificate versus preceding user-installed build. Physical Android screen/interaction timing not verified.
+
 ## 2026-10-25 — Central point emitter indicator
 
 **Goal:** Give the origin of normal floating point numbers a subtle, recognizable visual landmark without interfering with the game.
