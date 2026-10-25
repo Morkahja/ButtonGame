@@ -170,16 +170,29 @@
       pointer-events: none;
     }
 
-    .hud-panel.punkte-panel {
+    /* Place the green bank outside the clipped Points plate. */
+    .points-hud-group {
+      position: absolute;
       top: 22px;
       left: 22px;
+      z-index: 6;
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      pointer-events: none;
+    }
+    .points-hud-group .hud-panel.punkte-panel {
+      position: relative;
+      top: auto;
+      left: auto;
       width: max-content;
       min-width: 7.75rem;
       max-width: 15rem;
     }
     .punkte-panel .hud-panel-face { padding-right: 10px; }
-    .points-values { display: flex; align-items: baseline; gap: 7px; white-space: nowrap; }
     #score-buffer {
+      flex: none;
+      margin-bottom: 10px;
       color: #61ff94;
       text-shadow: 0 0 9px rgba(65, 255, 120, 0.8);
       visibility: hidden;
@@ -534,6 +547,14 @@
       text-shadow: 0 0 9px rgba(60,255,128,0.8), 0 0 3px #d9ffe5;
     }
 
+    /* Paint incoming score pickups above sibling HUDs, not inside #stage. */
+    #score-fly-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 9;
+      pointer-events: none;
+      overflow: visible;
+    }
     .score-fly {
       position: absolute;
       left: 0;
@@ -697,16 +718,16 @@
         fill="none" stroke="#00ffff" stroke-width="1" vector-effect="non-scaling-stroke" />
     </svg>
 
-    <div class="hud-panel punkte-panel">
-      <div class="hud-panel-mid">
-        <div class="hud-panel-face">
-          <span class="label">Points</span>
-          <div class="points-values">
+    <div class="points-hud-group">
+      <div class="hud-panel punkte-panel">
+        <div class="hud-panel-mid">
+          <div class="hud-panel-face">
+            <span class="label">Points</span>
             <div id="punkte" class="hud">0</div>
-            <div id="score-buffer" class="hud" aria-label="Pending score">+0</div>
           </div>
         </div>
       </div>
+      <div id="score-buffer" class="hud" aria-label="Pending score">+0</div>
     </div>
 
     <div class="hud-panel time-panel">
@@ -769,6 +790,7 @@
         <img class="feind1" src="assets/button.svg" width="62" height="62" alt="" draggable="false" />
       </div>
     </div>
+    <div id="score-fly-layer" aria-hidden="true"></div>
   </div>
   </div>
   <script src="game.js"></script>
