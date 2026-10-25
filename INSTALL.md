@@ -1,42 +1,68 @@
-# Buttongame host — install on Pixel 8 Pro
+# Button Game — Android host build and installation
 
 Developer: **Babuni.dev**
 
-Your phone becomes the Wi‑Fi host. Guests scan a QR code, play in the browser, and scores land on your phone.
+The Android app is the **single score authority** for every player in its Wi-Fi session. The host saves records in its own private app storage; guests send results to the host via `POST /api/scores` and read them through `GET /api/scores`. Guests do not maintain separate leaderboards.
 
-## Install the APK
+## Install a signed release APK
 
-1. Copy `dist/Buttongame-host-debug.apk` to the Pixel (USB, Drive, Nearby Share, etc.).
-2. On the phone: **Settings → Apps → Special app access → Install unknown apps** (or open the APK in Files and allow that app to install).
-3. Open the APK and install **Buttongame**.
+Install the signed release build on the Android host by opening the APK in Files and approving installation by that source if Android asks. A build signed with the existing project release certificate upgrades the installed app without uninstalling it.
 
-USB option from this PC (with USB debugging on):
+**Do not confuse the GitHub Actions debug APK with the project's release-signed APK.** The workflow's debug APK uses a different signing certificate and cannot upgrade an app signed with the existing release certificate. The unsigned release artifact also cannot be installed as-is; it needs local developer signing.
+
+USB installation of the signed APK, if Android debugging/ADB is configured:
 
 ```bash
-adb install -r dist/Buttongame-host-debug.apk
+adb install -r ButtonGame-Native-Host-Highscores-Full-Build.apk
 ```
 
-## Host a session
+## Host a Wi-Fi session
 
-1. Open **Buttongame** on your Pixel.
-2. Tap **Serve on Wi‑Fi**. Keep the app open (a notification stays while hosting).
-3. Guests on the **same Wi‑Fi** scan the QR code (or open the URL under it).
-4. Tap **Play Buttongame** on your phone to play into the same scoreboard.
+1. Open Button Game on the Android host.
+2. Tap **Serve on Wi-Fi**.
+3. Players on the same Wi-Fi join using the host URL or QR code.
+4. The Android host and all guests play against the same high-score leaderboard.
 
-If café/guest Wi‑Fi blocks phone-to-phone traffic, turn on your **Pixel hotspot** and have guests join that instead. You are still the host.
+## What the host stores
 
-## Scores
+New records in `scores-v2.json` have five fields:
 
-- After Game Over, enter a name and tap **Submit score**.
-- The leaderboard is stored on the host phone in app storage (`scores.json`).
-- Closing the app stops the server address; saved scores remain.
+- Player name (`name`)
+- Final points (`score`)
+- Final average reaction in milliseconds (`reactionMs`)
+- Final actions per minute (`apm`)
+- Elapsed time in milliseconds from first click until Game Over (`durationMs`)
 
-## Rebuild after web changes
+The Game Over UI shows the four *statistics*—points, reaction, APM, and elapsed time—alongside player name. The host owns and persists all five fields.
+
+This beta intentionally starts a new database: earlier `scores.json` records are not migrated. The v2 Android host deletes the old beta file on initialization.
+
+## Reset high scores
+
+Android Settings → Apps → Button Game → Storage & cache → **Clear storage / Clear data**. This deletes all host records, plus other app-private data/preferences. It does not uninstall Button Game.
+
+A guest browser cannot reset host records by deleting its own browsing data.
+
+## Build native Android code with GitHub Actions
+
+Workflow: [Android native build](https://github.com/babunidev/ButtonGame/actions/workflows/android-build.yml).
+
+Changes to `android/**`, `game.js`, `index.html`, `assets/**`, or the workflow trigger a full Gradle build. You can also launch it from the Actions tab using **Run workflow**.
+
+The GitHub Actions runner installs JDK 17, Android SDK platform 35, and Gradle 8.9 through the checked-in wrapper, then builds both debug and unsigned release APKs. Build artifacts are retained for 30 days:
+
+- `ButtonGame-Native-Android-Debug`: test APK, debug-signed; **cannot upgrade release-signed app**
+- `ButtonGame-Native-Android-Release-Unsigned`: compiled native release APK **requiring original release signing**
+
+**Private signing credentials are not stored in the GitHub repository or GitHub Actions.** The original PKCS#12 keystore is held separately by the developer and is used to sign the release artifact locally. A successful CI build proves Kotlin/Android compilation, not release signing or device behavior.
+
+To build locally instead (JDK 17 / Android SDK installed):
 
 ```bash
 ./scripts/sync-www.sh
-cd android && ./gradlew assembleDebug
-cp app/build/outputs/apk/debug/app-debug.apk ../dist/Buttongame-host-debug.apk
+cd android
+./gradlew assembleDebug assembleRelease
 ```
 
-Needs JDK 17+ and Android SDK (`android/local.properties` → `sdk.dir=...`).
+For a source-complete release, ensure the three user-supplied special sounds exist both in `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/`; GitHub's source currently lacks those binary recordings even though separately packaged APKs include them. Do not distribute a plain CI APK as audio-complete until those assets are added.
+
