@@ -1,5 +1,15 @@
 # Development log
 
+## 2026-10-25 — High-impact Quick Strike scale
+
+The existing Quick Strike rotated the button through 360 degrees in 290 ms but reused the general 110% tap pulse, making the spin difficult to notice.
+
+Introduced `QUICK_STRIKE_SCALE = 1.5` into `applyFeindTransform()`. During a Quick Strike, scale reaches 150% of the resting button size immediately and stays enlarged for the first 60% of the 290 ms spin. During the remaining 40%, a smoothstep curve returns it to 100% by the time rotation finishes. Ordinary taps continue using their own 145 ms, 110% pulse. The final scale is `max(pulseScale, quickScale)` rather than a multiplication, preventing double scaling when players tap repeatedly. The base spawn scale and existing 360-degree Quick Strike rotation are preserved. The shatter animation ignores Quick Strike scaling.
+
+Only `game.js` and the corresponding Android-bundled `game.js` changed. No HTML, graphics, score logic, Wi-Fi host code, or server data files were modified.
+
+Verification: Node syntax check, simulated-frame runtime checks at the start, middle, and end of the spin, regular 110% repeat taps, preserved 2x points, green emitter reset, and no destruction scaling. APK v2 signature, archive contents and certificate match were independently verified against the prior Quick Strike APK; no Android hardware test.
+
 ## 2026-10-25 — 73 ms post-spawn Quick Strike and active multiplier
 
 **Timing:** Replaced the legacy `reactionMs <= 320` check with a distinct `SPAWN_ANIM_MS = 320` and `QUICK_STRIKE_WINDOW_MS = 73` check: `spawnAnimUntil <= now <= spawnAnimUntil + 73`. The animation still lasts 320 ms, but the Quick Strike opportunity begins when it ends and remains open for the next 73 ms. Reaction time reporting still measures first-tap latency from initial spawn.
