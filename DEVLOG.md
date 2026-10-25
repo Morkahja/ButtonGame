@@ -1,5 +1,17 @@
 # Development log
 
+## 2026-10-25 — Correct score ownership and polish breakup/audio/scrolling
+
+**Clarification:** Host controls the only authoritative high-score ledger. Wi-Fi players POST their finished result—including name, points, reactionMs, apm, durationMs—to that same Android server; they merely read the host's `GET /api/scores` leaderboard. The previously introduced per-player `buttongame_scores_v2` localStorage cache/enrichment was incorrect and has been removed. Submission failure must show a retryable error, not claim a guest-local save. Standalone HTML without an Android host cannot persist a networked leaderboard; nickname and mute preferences are still device-local.
+
+**Native API status:** Kotlin `ScoreEntry`, `ScoreStore` (fresh `scores-v2.json`), and `GameServer.handlePostScore` are already updated on GitHub to retain the four final metrics, and no backward compatibility is required. Today's cumulative APK cannot include that Kotlin change because no Android SDK/build chain is installed; it still embeds the older native server which accepts new JSON but retains only `name` and `score`. Browser code accurately reports `Points on host · host update needed for stats` for that older API, and DOES NOT retain stats on any guest device. Full native APK compilation is the remaining blocker for host statistics.
+
+**Destruction timing:** Maintained the per-target post-fade interval at approximately 580 ms but divided it into 160 ms of still-intact, still-tappable state and 420 ms of breakup. Added `pendingPopAt` (reset/respawn-safe); `feindEnterFrame` schedules `beginPopPhase` after the delay. Retuned shatter keyframes proportionally: CRACK 100 ms; BREAK 165 ms; SCATTER_FADE 325 ms; POP_DURATION 420 ms. Existing Quick Strike and score multipliers are active during the short extra intact hold.
+
+**Sound and scrollbar:** Reduced playback gains by another ~3 dB (4273 0.35; QuickStrikepoints choices 0.26–0.30), leaving original recording bytes untouched. Hide `#leaderboard` scrollbar on desktop and mobile via standard, old IE/Edge and WebKit rules while retaining `overflow-y:auto`, touch pan and inertia.
+
+**Validation/build:** Eight tests pass: host-only POST with four final stats/no local leaderboard, 160ms delayed/420ms shatter and preserved 580ms cycle, timer/bonus, combo bells, special 21→42/37→73, new sounds, and full-width collision. JavaScript syntax valid. Repacked the previous cumulative signed APK with game.js and index.html only; three uploaded OGG files preserved. APK ZIP integrity/content and APK v2 signature checked against unchanged certificate fingerprint `3f7a1386adb23903ebd09c54a4f7105d197b7a6611be4b5dd53c7fe5e0902392`. Device-side UI/audio QA and native recompilation pending.
+
 ## 2026-10-25 — Session stats, dynamic time awards, replay position and audio attenuation
 
 **Gameplay balance:** Removed `deadline += fadeDurationMs(flupp)` from the fresh-button click handler while retaining the button lifecycle variable `flupp`. Initial 60 seconds still begins on first click. `TIME_BONUS_SECONDS = {7:2,14:3,42:5,73:4}` replaces all +3s awards; early 21 and 37 do not fly any time bonus. At the first fully visible special 42 or 73 result, `grantTimeBonusFly(centerX,centerY,resultValue)` enqueues the +5/+4 seconds once. Natural 42/73 are eligible too. The golden time bank continues to collect variable-value pickups and decrement into the timer at four seconds per real second. When pending time revives the countdown, `roundExpired` can be cleared.
