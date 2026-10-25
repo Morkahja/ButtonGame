@@ -56,10 +56,10 @@ jobs:
           test -f app/src/main/assets/www/game.js
           test -f app/src/main/assets/www/index.html
 
-      - name: Build full native Android APK
+      - name: Build complete native debug and release APKs
         run: |
           chmod +x gradlew
-          ./gradlew --no-daemon --stacktrace assembleDebug
+          ./gradlew --no-daemon --stacktrace assembleDebug assembleRelease
 
       - name: Verify APK compiled and contains game assets
         run: |
@@ -68,6 +68,18 @@ jobs:
           unzip -l "$apk" | grep -q 'assets/www/game.js'
           unzip -l "$apk" | grep -q 'assets/www/index.html'
           echo "Compiled APK: $(wc -c < "$apk") bytes"
+          unsigned=app/build/outputs/apk/release/app-release-unsigned.apk
+          test -s "$unsigned"
+          unzip -l "$unsigned" | grep -q 'assets/www/game.js'
+          unzip -l "$unsigned" | grep -q 'assets/www/index.html'
+
+      - name: Upload unsigned release for local developer signing
+        uses: actions/upload-artifact@v4
+        with:
+          name: ButtonGame-Native-Android-Release-Unsigned
+          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Upload installable debug APK
         uses: actions/upload-artifact@v4
