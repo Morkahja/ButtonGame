@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-25 — “Smash it!” greeting and 37 → 73 reversal
+
+- Changed the initial and Play Again guidance from “Klick druff da!!!” to **“Smash it!”**.
+- A merged floating value of **37** no longer triggers the generic doubled jackpot. Instead its live number rises to the upper-center `Smash it!` position (stage x=225, y=110), enlarges, flips to display **73**, holds, then turns green.
+- After the transformation, **73 points enter the existing foreground green score-fly pipeline immediately**, without a second floating lifespan; the shared score balance then transfers those points to the final total.
+- The exact **73-point payout replaces** the original 37 payout (which previously credited 111 total). Reversed 73 does not re-trigger the separate 73 jackpot; the 21/42 and natural 73 combos keep their existing effects.
+- Game Over waits for any in-progress 37 reversal and its outgoing score flight; Play Again cancels outstanding reversal animations.
+- Verified using Node syntax and deterministic runtime tests: merged 20+17, movement, reversal, green phase, exact 73 credited once, no double-credit, round-end settlement and reset. The Android APK was signed with the same certificate as previous releases; device visual testing is still pending.
+
 ## 2026-10-25 — Correct reaction timing
 
 - Excluded the initial page-load button's first tap from Reaction statistics, including when starting a new round with Play Again. The Reaction panel remains “—” until a subsequent button contributes a valid sample.
