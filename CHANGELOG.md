@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-25 — Shared in-panel score bank
+
+- Green point pickups now travel **inside the Points HUD**, to the right of the total score, instead of lining up outside the panel.
+- Their text uses the **same 22 px font size and baseline** as the white score total.
+- Every arriving pickup is **added into one shared green +N bank**; arrivals aggregate even while the bank is transferring units into the white score.
+- The bank pauses briefly when first filled, then counts down at an adaptive rate while the total counts up by exactly the removed amount; subsequent deposits never interrupt an active countdown.
+- The target is measured from the actual HUD position so flight paths follow responsive layout changes.
+- Resets and Game Over account for all incoming flights and remaining bank values. Preserved special-combo, shatter and audio behavior.
+- Automated deterministic tests confirmed overlapping deposits, conservation across taps and jackpots, round-end settlement, and bank hiding at zero. APK v2 certificate/digest and ZIP integrity verified; device-level rendering remains untested.
+
 ## 2026-10-25 — Deferred points and green score fusion
 
 - Replaced immediate per-tap score increases: each tap creates uncredited floating points that can merge until their lifespan ends.
