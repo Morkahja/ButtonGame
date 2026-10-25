@@ -26,6 +26,7 @@
   const QUICK_SPIN_MS = 290;
   const STAGE = 450;
   const TARGET_HALF = 40;
+  const MAX_SPAWN_TILT_DEG = 45;
   const MERGE_DIST = 34;
   const FLOAT_LIFE = 3400;
   const FLOAT_GRAVITY = 480;
@@ -387,6 +388,11 @@
     return false;
   }
 
+  function randomSpawnRotation() {
+    // Independently tilt each button, carrying the orientation into its shatter.
+    return randomint(-MAX_SPAWN_TILT_DEG, MAX_SPAWN_TILT_DEG);
+  }
+
   function randomSpawn() {
     for (let i = 0; i < 50; i++) {
       const nx = randomint(55, 395);
@@ -589,7 +595,7 @@
     const spawn = randomSpawn();
     x = spawn.x;
     y = spawn.y;
-    rotation += randomint(1, 369);
+    rotation = randomSpawnRotation();
     alpha = FADE_START_ALPHA;
     punchScale = 1;
     shakeX = 0;
@@ -1365,6 +1371,7 @@
     x = spawn.x;
     y = spawn.y;
     spawnTime = performance.now();
+    rotation = randomSpawnRotation();
 
     feind.classList.remove("is-gone");
     setFeindVisual(false);
@@ -1389,6 +1396,7 @@
     const spawn = randomSpawn();
     x = spawn.x;
     y = spawn.y;
+    rotation = randomSpawnRotation();
     setFeindVisual(false);
     playSpawnIn();
     setScore(0);
