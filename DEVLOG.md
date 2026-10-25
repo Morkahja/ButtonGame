@@ -1,5 +1,15 @@
 # Development log
 
+## 2026-10-26 — Remote guest score missing from the host's stationary Game Over view
+
+**User observation:** A guest finished a round and submitted their high score while the creator was looking at Game Over on the Android host. The host's existing high-score list remained unchanged. The intended model is still one authoritative list on the host; a guest should appear without requiring the host player to submit a score, replay, or reopen Game Over.
+
+**Diagnosis:** The native server's `GET /api/scores` always reads `ScoreStore`; `POST /api/scores` writes the posted entry and returns updated host scores. The web UI called `loadLeaderboard()` immediately when entering Game Over and when submitting its *own* score. Its recurring 12-second fetch was explicitly guarded by `started && !gameOver`. That made an already-open Game Over view a frozen snapshot. Based on source review, this explains the reported display behavior, though the guest's actual persisted host record has not yet been confirmed on a physical device.
+
+**Implementation:** Added a separate 3-second `gameOver`-only refresh to the common game script and a `visibilitychange` listener to refresh when returning to an open Game Over page. Kept the 12-second active-round preview and the host-only data contract unchanged. Committed equivalent `game.js` content to the root and the Android asset mirror. Added the executable Node regression `tests/live-leaderboard-refresh.cjs` and wired it into CI so this class of regression cannot silently recur.
+
+**Verification:** Ran the Node regression locally on the updated game script: passed startup, idle, active play, host Game Over, hidden/visible return, and replay states; `node --check` passed. GitHub Actions builds the complete Android host, but proof of a native compile is distinct from a signed distributable and physical host/guest testing. Remaining QA: actually submit from a guest and observe the host Game Over list refresh within three seconds, then verify score remains after app restart. No evidence yet of server-side score-loss bug.
+
 ## 2026-10-25 — First successful native Kotlin build and preserved-signature Android release
 
 **Problem resolved:** The previous series of APKs were manually repacked from an older binary: they contained current JavaScript but stale compiled Kotlin (`scores.json`, only name/points). The creator repeatedly requested permanent four-stat host storage, and the assistant's earlier to-do reports incorrectly implied the unfinished compilation was an unimplemented feature. To resolve this, configured a first-party CI pipeline rather than continuing to patch web files into an old binary.
