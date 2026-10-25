@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-25 — Foreground score pickups and right-hand bank
+
+- Move the combined green points bank outside and directly to the right of the Points HUD's chamfered box, at the same 22 px number size as the white total. The panel no longer expands to enclose the bank.
+- Render incoming green score pickups in a dedicated frame-level overlay above HUD panels, avoiding clipping and the old behind-the-panel stacking order.
+- Use transformed screen-to-frame coordinate conversion so score pickups fly accurately from stage points to the new bank position under responsive frame scaling.
+- Preserve the accumulating green bank, ongoing green-to-white countdown, pending-score conservation, score timing, shatter and randomly rotated button spawning.
+- Verified delayed collection, concurrent bank deposits, jackpot conservation, Game Over settlement, flight parent/coordinates in mocked runtime, JavaScript syntax, APK ZIP integrity and matching v2 signing certificate; full visual/phone validation remains pending.
+
 ## 2026-10-25 — Random button orientation at spawn
 
 - Each newly spawned turquoise jacket button receives an independently chosen starting angle between -45° and +45°, including first page load, subsequent spawns, and the first target after pressing Play Again.
