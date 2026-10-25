@@ -1,5 +1,15 @@
 # Development log
 
+## 2026-10-25 — Special 37 → 73 transformation
+
+**Request:** Replace “Klick druff da” with “Smash it!” and implement the 37-to-73 special. When a floating number reaches 37, carry it to the upper center at the former instruction's position, enlarge, reverse the digits, and immediately send the green 73 into ordinary score collection.
+
+**Implementation:** `afterFloaterValue()` still detects 37 on merging and grants its pre-existing time bonus, but hands it to `begin37Reverse()` rather than the generic jackpot. That function retires the physics floater and transfers its element to `#stage` with the `.reverse-37` class. `update37Reversals()` runs each animation frame and phases through eased movement to (225,110) over 490 ms, edge-on 3D digit reversal in 360 ms, enlarged hold for 160 ms, and green shrink for 180 ms. It then calls `startScoreFly(73,225,110)` **without creating a new 73 floater**. The pickup moves to the existing green score bank, from which 73 units count down into the total. Because the old 37 pending value is retired rather than credited, the resulting jackpot is precisely 73, not 37+74 or 73+another 73 jackpot.
+
+**Conservation:** `hasPendingScore()` now includes the `reversing37` state, keeping rounds alive until their special and score transfer settle. `clearFloaters()` removes orphaned reversal elements on reset. Other jackpots remain unchanged. Initial HTML and reset text both say `Smash it!`.
+
+**Verification:** Node VM runtime and syntax tests confirm the 20+17 merge to 37, text reversal, green transition, exactly 73 collected after the regular score-flight/bank behavior, Game Over wait, and cancellation on reset. Compared the Android APK against the previous version to verify only the bundled `game.js` and `index.html` changed. Signed with the existing PKCS#12 signing certificate. No physical-device animation verification yet.
+
 ## 2026-10-25 — Start reaction clock after spawn-in, not on page load
 
 **User request:** Prevent a slow first tap after the page loads from distorting average Reaction, and report the time from the end of the 320 ms spawn animation until first contact.
