@@ -25,6 +25,7 @@
   const TAP_PULSE_MS = 145;
   const TAP_PULSE_SCALE = 1.10;
   const QUICK_SPIN_MS = 290;
+  const QUICK_STRIKE_SCALE = 1.5;
   const STAGE = 450;
   const TARGET_HALF = 40;
   const MAX_SPAWN_TILT_DEG = 45;
@@ -572,13 +573,20 @@
       const fade = 1 - pulseAge / TAP_PULSE_MS;
       pulseScale += (TAP_PULSE_SCALE - 1) * fade * fade;
     }
-    const scale = (popping ? 1 : Math.min(1, spawnScale)) * pulseScale;
+    // Keep Quick Strike at 150% for most of the spin, then ease smoothly
+    // to 100%; ordinary tap pulses still peak at 110%.
+    let quickScale = 1;
     let extraRotation = 0;
     const spinTime = now - quickSpinStartedAt;
     if (!popping && spinTime >= 0 && spinTime < QUICK_SPIN_MS) {
       const t = spinTime / QUICK_SPIN_MS;
       extraRotation = 360 * (1 - Math.pow(1 - t, 3));
+      const settle = Math.max(0, Math.min(1, (t - 0.6) / 0.4));
+      const smooth = settle * settle * (3 - 2 * settle);
+      quickScale = 1 + (QUICK_STRIKE_SCALE - 1) * (1 - smooth);
     }
+    const scale = (popping ? 1 : Math.min(1, spawnScale)) *
+      Math.max(pulseScale, quickScale);
     const flashTime = now - tapFlashStartedAt;
     if (flashTime >= 0 && flashTime < TAP_FLASH_MS) {
       const strength = 1 - flashTime / TAP_FLASH_MS;
