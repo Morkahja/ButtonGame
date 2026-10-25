@@ -597,6 +597,26 @@
       z-index: 6;
     }
 
+    /* Center-stage reversal at the same upper-center position as "Smash it!". */
+    .floater.reverse-37 {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 7;
+      font-size: 30px;
+      font-weight: normal;
+      color: #ffffff;
+      text-shadow: 0 0 14px rgba(0,255,255,0.8), 0 0 4px #ffffff;
+      backface-visibility: visible;
+      pointer-events: none;
+      transform-origin: center;
+      will-change: transform, color;
+    }
+    .floater.reverse-37.reverse-green {
+      color: #61ff94;
+      text-shadow: 0 0 12px rgba(65,255,120,0.95), 0 0 3px #d9ffe5;
+    }
+
     .floater.score-ready,
     .floater.big.score-ready,
     .floater.linger.score-ready,
@@ -829,7 +849,7 @@
     <button type="button" id="play-again" class="btn-cyan" hidden>Play again</button>
 
     <div id="stage" aria-label="Buttongame">
-      <div id="anleitung">Klick druff da!!!</div>
+      <div id="anleitung">Smash it!</div>
       <div id="point-source" aria-hidden="true"></div>
       <div id="float-layer" aria-hidden="true"></div>
       <div id="end-wrap">
