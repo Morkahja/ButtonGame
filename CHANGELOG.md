@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-25 — Subtle host leaderboard preview below the playfield
+
+- Added a **compact live high-score preview immediately below the game frame** while a round is active. It uses **50% opacity** and a **vertical transparency gradient** to reveal the first entries without obstructing the actual playfield or competing with the HUD.
+- The preview shows up to five ranked players' names and point totals in a minimal, borderless layout. Its height is permanently reserved, preventing the button/playfield from jumping when host scores arrive; it has no click/touch intercepts or scrollbar.
+- The preview uses only the **Android host's existing `GET /api/scores`** data. It fetches on page load and refreshes every 12 seconds during an active round. No guest-side score or statistics persistence. It remains hidden before the first tap, when scores are empty, or if the host cannot be reached.
+- At Game Over the preview disappears automatically, leaving the existing full-size scrolling leaderboard and Play Again controls undisturbed.
+- Web and Android APK HTML/JS assets updated in matching pairs. Automated DOM-mock tests confirmed host-only ranking, 5-row limit, no-scores and Game Over visibility, full leaderboard independence, and 50%/gradient CSS; JavaScript syntax checks passed. The cumulative APK was re-signed using the previous certificate, with ZIP and v2 content digest/signature independently verified. Device-level visual check still pending.
+- **Native score-storage limitation remains:** the signed cumulative APK still embeds the original Android `ScoreStore`, which saves names and points only. The updated Kotlin `ScoreStore.kt` and `GameServer.kt` files already support Reaction, APM, session duration, and a clean v2 host ledger, but the Android SDK/native compilation step has not yet been completed. The preview therefore shows only names and points, never invented extra metrics.
+- To reset scores in the **currently installed** host APK, use Android Settings → Apps → Button Game → Storage & cache → Clear storage/data (also clears the app's other local data). The future native v2 storage file is `scores-v2.json`; no in-game reset button exists yet.
+
 ## 2026-10-25 — Host-only leaderboard, hidden scrollbar, quieter sounds, later breakup
 
 - **Corrected authoritative leaderboard model:** all Wi-Fi guests submit high scores and final Reaction/APM/session-duration values to the **hosting Android device** through `/api/scores`; browsers and guests no longer persist or augment scores in localStorage. The leaderboard renders only host responses. A failed submission stays retryable; a failed leaderboard fetch shows the host is unavailable. Player nickname and mute preferences may still be stored on each device.
