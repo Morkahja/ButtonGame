@@ -1,5 +1,17 @@
 # Development log
 
+## 2026-10-25 — Shared gold time bank and jackpot eligibility colors
+
+**Intent:** Match the existing green score collector with a right-of-Time golden bonus collector. Make eligible special numbers visibly gold until their eligibility changes or their score is collected.
+
+**Golden states:** Added `.bonus-eligible` to non-inert floaters with values 7, 14, 21, 42, 37, or 73, and updated it whenever numbers merge. A stale `.score-ready` class is cleared on merging, so the new value's color wins. Added golden styling for the enlarged upper-center 37→73 and 21→42 displays until they become green. Time pickup and bank use the existing `#ffd24a` golden hue and soft glow. Green score pickups remain green.
+
+**HUD layout:** Added `time-hud-group` with a chamfered Time panel and a fixed-reserved-space golden `#time-buffer` to its right, anchored at the frame's top-right. The buffer reads `+3s`, `+6s`, etc. and fades out when empty. Updated the Time HUD physics exclusion region to match the grouped layout. Both green score and golden time pickups use the existing frame-level `#score-fly-layer`, ensuring foreground rendering and correct responsive-scale coordinate transforms.
+
+**Time ledger:** `grantTimeBonusFly` creates a golden pickup from the combination origin, easing into the buffer over `TIME_FLY_MS=690`. At its destination it deposits 3 integer seconds into one `timeBankSeconds` balance. The first deposit waits `TIME_HOLD_MS=350`, after which `updateTimeBank` debits whole seconds at `TIME_FEED_SECONDS_PER_SECOND=4` and increments the actual game `deadline` by exactly 1000 ms per second. Refill arrivals never restart the countdown or duplicate the ledger. The bonus flash remains on the Time display while seconds are being credited. Game Over requires both `timeFlies.length===0` and `timeBankSeconds===0`; reset clears both and restores the empty HUD.
+
+**Validation:** Node syntax and scripted mock-DOM simulation passed: elapsed 350ms hold, balance +6 and replenishment +3 mid-debit, exact 9-second total deadline increase, pickup foreground parent/initial geometry, gold eligibility and merge cleanup, zero-second round with pending flight/bank, eventual Game Over, Play Again clearing, and 21→42/37→73 tests. Repacked the immediately preceding APK with only `assets/www/game.js` and `assets/www/index.html` changed, signed with the existing PKCS#12 certificate, ZIP integrity checked. Physical Android visual test not performed; headless Chromium screenshot attempt timed out.
+
 ## 2026-10-25 — 21-to-42 special, enlargement of 37-to-73
 
 **Goal:** Give the value 21 a distinct three-phase transformation: 21 visible singles explode out, each splits into a second single for 42 total, and all converge on the upper-center “Smash it!” location to form a large 42. The finished 42 turns green and is transferred to the normal collector. Increase the 37→73's upper-center result by 20%.
