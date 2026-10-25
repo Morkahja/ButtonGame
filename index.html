@@ -468,10 +468,15 @@
     #play-again {
       display: none;
       position: absolute;
-      z-index: 4;
-      bottom: 28px;
+      /* Overlay the bottom Reaction/APM plate at Game Over. */
+      z-index: 12;
+      bottom: 10px;
       left: 50%;
       transform: translateX(-50%);
+      width: 15.5rem;
+      min-height: 54px;
+      text-align: center;
+      font-size: 1.2rem;
     }
 
     #play-again:not([hidden]) { display: inline-block; }
@@ -520,8 +525,10 @@
     }
 
     #leaderboard li {
-      margin: 0.2rem 0;
+      margin: 0.45rem 0;
     }
+    .score-entry-heading { color: var(--white); font-size: 0.82rem; }
+    .score-entry-details { color: #a5d5d8; font-size: 0.66rem; line-height: 1.4; }
 
     #leaderboard .empty {
       text-align: center;
