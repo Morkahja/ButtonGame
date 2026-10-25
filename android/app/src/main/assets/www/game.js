@@ -116,7 +116,8 @@
   const LOCAL_MUTE_KEY = "buttongame_muted_v1";
   const MAX_NAME = 16;
   const MAX_SCORES = 50;
-  const COMBO_BELL_AT = 7;
+  // Bell once whenever a NEW qualifying value is reached, not once per lineage.
+  const COMBO_BELL_VALUES = { 7: true, 14: true, 21: true, 37: true, 42: true, 73: true };
   const MASTER_VOL = 0.72;
 
   const soundToggleBtn = document.getElementById("sound-toggle");
@@ -255,11 +256,8 @@
     });
   }
 
-  function maybeComboBell(f) {
-    if (!f || f.bellPlayed) return;
-    if (f.value < COMBO_BELL_AT) return;
-    f.bellPlayed = true;
-    playRandomBell();
+  function ringJackpotBell(value) {
+    if (COMBO_BELL_VALUES[value]) playRandomBell();
   }
 
   applyMasterMute();
@@ -813,7 +811,6 @@
       value: value,
       // Track earned points separately from cosmetic jackpot shards.
       pendingValue: opts.pendingValue != null ? opts.pendingValue : (opts.visualOnly ? 0 : value),
-      bellPlayed: false,
       gx: g.gx,
       gy: g.gy,
       x: cx,
@@ -860,9 +857,8 @@
     el.textContent = "37";
     reversing37.push({
       el: el, start: performance.now(), x0: f.x, y0: f.y,
-      rotation: f.rot, value: 73,
+      rotation: f.rot, value: 73, resultBellPlayed: false,
     });
-    playRandomBell();
   }
 
   function update37Reversals(now) {
@@ -873,6 +869,11 @@
       const flipEnd = moveEnd + REVERSE_FLIP_MS;
       const holdEnd = flipEnd + REVERSE_HOLD_MS;
       const greenEnd = holdEnd + REVERSE_GREEN_MS;
+      // The newly visible 73 is a separate jackpot milestone from 37.
+      if (!fx.resultBellPlayed && elapsed >= moveEnd + REVERSE_FLIP_MS / 2) {
+        fx.resultBellPlayed = true;
+        ringJackpotBell(73);
+      }
       let x = REVERSE_CENTER_X;
       let y = REVERSE_CENTER_Y;
       let scale = SPECIAL_LABEL_SCALE;
@@ -954,9 +955,8 @@
     stageEl.appendChild(label);
     fusing42.push({
       start: performance.now(), lastUpdate: performance.now(),
-      parts: parts, label: label, value: 42,
+      parts: parts, label: label, value: 42, resultBellPlayed: false,
     });
-    playRandomBell();
   }
 
   function placeComboUnit(part, x, y, scale, opacity) {
@@ -997,6 +997,11 @@
       const gatherEnd = bounceEnd + COMBO42_GATHER_MS;
       const holdEnd = gatherEnd + COMBO42_HOLD_MS;
       const greenEnd = holdEnd + COMBO42_GREEN_MS;
+      // Sound the second bell when the assembled 42 becomes fully visible.
+      if (!fx.resultBellPlayed && elapsed >= gatherEnd) {
+        fx.resultBellPlayed = true;
+        ringJackpotBell(42);
+      }
       if (elapsed < bounceEnd) {
         let remaining = Math.min(64, Math.max(0, now - fx.lastUpdate));
         fx.lastUpdate = now;
@@ -1073,7 +1078,6 @@
 
     // Credit both the pending base and the 2x jackpot only after
     // the inert jackpot display finishes and fuses into the score.
-    playRandomBell();
     spawnFloater((f.pendingValue || 0) + bonus, {
       x: cx, y: cy,
       vx: rand(-30, 30), vy: rand(-30, 30),
@@ -1353,6 +1357,9 @@
     if (TIME_BONUS_AT[v]) {
       grantTimeBonusFly(fx, fy);
     }
+    // Each time an eligible sum is reached, play one randomly chosen bell.
+    // A 7 -> 14 -> 21 progression therefore rings at every milestone.
+    ringJackpotBell(v);
     if (v === 21) {
       begin21To42(f);
       return;
@@ -1365,7 +1372,6 @@
       explodeJackpot(f);
       return;
     }
-    maybeComboBell(f);
   }
 
   function seekOnesToTwenties(sec) {
@@ -1506,7 +1512,6 @@
     // Keep a, absorb b. Gravity stays with the survivor so clusters keep a direction.
     a.pendingValue += b.pendingValue;
     a.value += b.value;
-    a.bellPlayed = !!(a.bellPlayed || b.bellPlayed);
     a.x = (a.x + b.x) / 2;
     a.y = (a.y + b.y) / 2;
     a.vx = (a.vx + b.vx) / 2 - a.gx * 55;
