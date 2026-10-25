@@ -3,7 +3,7 @@
  * Developer: Babuni.dev
  *
  * - Timer starts on first target click.
- * - First click: +1 point + time bonus ≈ fade duration.
+ * - First click: +1 point. Only qualifying combinations award extra time.
  * - Extra clicks while fading: points only.
  * - Floating combat-text points that tumble, merge, and fade.
  */
@@ -58,9 +58,10 @@
   const REVERSE_GREEN_MS = 180;
   const REVERSE_CENTER_X = STAGE / 2;
   const REVERSE_CENTER_Y = 110;
-  // Exact totals that grant +3s (golden fly into Time).
-  const TIME_BONUS_AT = { 7: true, 14: true, 21: true, 42: true, 37: true, 73: true };
-  const TIME_BONUS_MS = 3000;
+  // Seconds awarded per exact value. 21/37 only trigger transformations;
+  // their 42/73 results grant the bonus.
+  const TIME_BONUS_SECONDS = { 7: 2, 14: 3, 42: 5, 73: 4 };
+  const TIME_BONUS_AT = TIME_BONUS_SECONDS;
   const TIME_FLY_MS = 690;
   const TIME_HOLD_MS = 350;
   const TIME_FEED_SECONDS_PER_SECOND = 4;
@@ -110,7 +111,8 @@
   const leaderboardBody = document.getElementById("leaderboard-body");
   const livePlayersEl = document.getElementById("live-players");
 
-  const LOCAL_SCORES_KEY = "buttongame_scores_v1";
+  // New beta record format: intentionally start with an empty leaderboard.
+  const LOCAL_SCORES_KEY = "buttongame_scores_v2";
   const LOCAL_NAME_KEY = "buttongame_name_v1";
   const LOCAL_SESSION_KEY = "buttongame_session_v1";
   const LOCAL_MUTE_KEY = "buttongame_muted_v1";
@@ -271,7 +273,7 @@
       playRandomBell();
       return;
     }
-    playBuffer(SPECIAL_REVEAL_FILE, { gain: 0.85, rate: 1 });
+    playBuffer(SPECIAL_REVEAL_FILE, { gain: 0.49, rate: 1 });
   }
 
   function playQuickStrikeImpact() {
@@ -283,7 +285,7 @@
       return;
     }
     const url = ready[(Math.random() * ready.length) | 0];
-    playBuffer(url, { gain: 0.62 + Math.random() * 0.1,
+    playBuffer(url, { gain: 0.37 + Math.random() * 0.06,
       rate: 0.98 + Math.random() * 0.04 });
   }
 
@@ -463,6 +465,7 @@
   }
 
   let score = 0;
+  let finalStats = null;
   let started = false;
   let deadline = 0;
   let startTime = 0;
@@ -909,6 +912,7 @@
       if (!fx.resultBellPlayed && elapsed >= moveEnd + REVERSE_FLIP_MS / 2) {
         fx.resultBellPlayed = true;
         playSpecialRevealSound();
+        grantTimeBonusFly(REVERSE_CENTER_X, REVERSE_CENTER_Y, 73);
       }
       let x = REVERSE_CENTER_X;
       let y = REVERSE_CENTER_Y;
@@ -1037,6 +1041,7 @@
       if (!fx.resultBellPlayed && elapsed >= gatherEnd) {
         fx.resultBellPlayed = true;
         playSpecialRevealSound();
+        grantTimeBonusFly(REVERSE_CENTER_X, REVERSE_CENTER_Y, 42);
       }
       if (elapsed < bounceEnd) {
         let remaining = Math.min(64, Math.max(0, now - fx.lastUpdate));
@@ -1296,17 +1301,18 @@
     renderTimeBank();
   }
 
-  function grantTimeBonusFly(fromX, fromY) {
-    if (!started || gameOver) return;
+  function grantTimeBonusFly(fromX, fromY, value) {
+    const seconds = TIME_BONUS_SECONDS[value] || 0;
+    if (!started || gameOver || seconds <= 0) return;
     const el = document.createElement("div");
     el.className = "time-fly";
-    el.textContent = "+3s";
+    el.textContent = "+" + seconds + "s";
     // Use the frame-level foreground HUD pickup layer, not the clipped stage.
     scoreFlyLayer.appendChild(el);
     const origin = scoreFlyOrigin(fromX, fromY);
     timeFlies.push({
       el: el,
-      seconds: TIME_BONUS_MS / 1000,
+      seconds: seconds,
       x0: origin.x,
       y0: origin.y,
       x: origin.x,
@@ -1364,7 +1370,7 @@
       fly.y = fly.y0 + (target.y - fly.y0) * eased;
       paintTimeFly(fly, 1, 1.15 - 0.15 * eased);
       if (t >= 1) {
-        // A second +3s pickup joins the existing balance even while it drains.
+        // Bonus pickups of differing amounts join the existing balance.
         depositTimeBonus(fly.seconds);
         fly.el.remove();
         timeFlies.splice(i, 1);
@@ -1391,7 +1397,7 @@
     const fy = f.y;
     applyLinger(f);
     if (TIME_BONUS_AT[v]) {
-      grantTimeBonusFly(fx, fy);
+      grantTimeBonusFly(fx, fy, v);
     }
     // Each time an eligible sum is reached, play one randomly chosen bell.
     // A 7 -> 14 -> 21 progression therefore rings at every milestone.
@@ -1646,15 +1652,30 @@
     localStorage.setItem(LOCAL_SCORES_KEY, JSON.stringify(list.slice(0, MAX_SCORES)));
   }
 
+  function safeScoreNumber(value) {
+    return Number.isFinite(value) ? Math.max(0, Math.round(value)) : 0;
+  }
+
+  function formatSessionTime(durationMs) {
+    const totalSeconds = Math.round(safeScoreNumber(durationMs) / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return minutes + ":" + String(seconds).padStart(2, "0");
+  }
+
   function normalizeScores(list) {
     return (list || [])
       .filter(function (e) {
-        return e && typeof e.name === "string" && typeof e.score === "number";
+        return e && typeof e.name === "string" && typeof e.score === "number" &&
+          Number.isFinite(e.score);
       })
       .map(function (e) {
         return {
           name: String(e.name).trim().slice(0, MAX_NAME) || "Player",
           score: Math.max(0, Math.floor(e.score)),
+          reactionMs: safeScoreNumber(e.reactionMs),
+          apm: safeScoreNumber(e.apm),
+          durationMs: safeScoreNumber(e.durationMs),
         };
       })
       .sort(function (a, b) {
@@ -1674,7 +1695,16 @@
     const ol = document.createElement("ol");
     for (let i = 0; i < scores.length; i++) {
       const li = document.createElement("li");
-      li.textContent = scores[i].name + " — " + scores[i].score;
+      const e = scores[i];
+      const heading = document.createElement("div");
+      heading.className = "score-entry-heading";
+      heading.textContent = e.name + " — " + e.score + " pts";
+      const detail = document.createElement("div");
+      detail.className = "score-entry-details";
+      detail.textContent = "Reaction " + (e.reactionMs ? e.reactionMs + " ms" : "—") +
+        " · APM " + e.apm + " · Time " + formatSessionTime(e.durationMs);
+      li.appendChild(heading);
+      li.appendChild(detail);
       ol.appendChild(li);
     }
     leaderboardBody.replaceChildren(ol);
@@ -1699,6 +1729,9 @@
     const entry = {
       name: getLiveName() || "Player",
       score: score,
+      reactionMs: finalStats ? finalStats.reactionMs : 0,
+      apm: finalStats ? finalStats.apm : 0,
+      durationMs: finalStats ? finalStats.durationMs : 0,
     };
     scoreStatus.textContent = "Saving…";
     submitScoreBtn.disabled = true;
@@ -1731,6 +1764,13 @@
   }
 
   function endGame() {
+    // Snapshot at Game Over, after all bonus and score settlement.
+    const durationMs = started ? Math.max(0, Math.round(performance.now() - startTime)) : 0;
+    finalStats = {
+      reactionMs: reactionSamples ? Math.round(reactionSumMs / reactionSamples) : 0,
+      apm: durationMs > 0 ? Math.round(hitCount * 60000 / durationMs) : 0,
+      durationMs: durationMs,
+    };
     setQuickStrikeActive(false);
     endEl.textContent = "Game Over";
     clearPopShards();
@@ -1750,6 +1790,7 @@
   function resetGame() {
     setQuickStrikeActive(false);
     score = 0;
+    finalStats = null;
     started = false;
     deadline = 0;
     startTime = 0;
@@ -1878,7 +1919,7 @@
     // uses a QuickStrikepoints recording, not an ordinary impact.
     playTapImpact();
     flupp = randomint(1, 22);
-    deadline += fadeDurationMs(flupp);
+    // No passive time extension from tapping or spawning buttons.
 
     setFeindVisual(true);
     addPoints(tapPoints());
@@ -1956,8 +1997,11 @@
 
     updateTimeHud();
     // Finish all time bonus and outstanding earned score transfers before Game Over.
-    if (remainingSeconds() <= 0 && timeFlies.length === 0 &&
-        timeBankSeconds === 0) roundExpired = true;
+    if (remainingSeconds() > 0) {
+      roundExpired = false; // A pending combination may have restored time.
+    } else if (timeFlies.length === 0 && timeBankSeconds === 0) {
+      roundExpired = true;
+    }
     if (roundExpired && !hasPendingScore()) endGame();
   }
 
