@@ -201,7 +201,34 @@
     }
     #score-buffer.is-visible { visibility: visible; opacity: 1; }
 
-    .hud-panel.time-panel { top: 22px; right: 22px; }
+    /* Reserve a right-side golden readout without shifting during deposits. */
+    .time-hud-group {
+      position: absolute;
+      top: 22px;
+      right: 22px;
+      z-index: 6;
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+      pointer-events: none;
+    }
+    .time-hud-group .hud-panel.time-panel {
+      position: relative;
+      top: auto;
+      right: auto;
+    }
+    #time-buffer {
+      flex: none;
+      min-width: 4.2rem;
+      margin-bottom: 10px;
+      color: #ffd24a;
+      text-align: left;
+      text-shadow: 0 0 10px rgba(255, 210, 74, 0.95), 0 0 3px #fff3c0;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.1s ease;
+    }
+    #time-buffer.is-visible { visibility: visible; opacity: 1; }
     .hud-panel.react-panel { top: auto; bottom: 22px; left: 22px; }
     .hud-panel.apm-panel { top: auto; bottom: 22px; right: 22px; }
 
@@ -573,6 +600,13 @@
       transform-origin: center center;
     }
 
+    /* An eligible bonus total glows gold while it lives or until it merges. */
+    .floater.bonus-eligible:not(.score-ready) {
+      color: #ffd24a;
+      text-shadow: 0 0 10px rgba(255, 210, 74, 0.95),
+                   0 0 3px #fff3c0, 1px 1px 0 #4a3800;
+    }
+
     .floater.big {
       color: #ffffff;
       text-shadow:
@@ -611,6 +645,11 @@
       pointer-events: none;
       transform-origin: center;
       will-change: transform, color;
+    }
+    .floater.reverse-37:not(.reverse-green) {
+      color: #ffd24a;
+      text-shadow: 0 0 14px rgba(255, 210, 74, 0.95),
+                   0 0 4px #fff3c0;
     }
     .floater.reverse-37.reverse-green {
       color: #61ff94;
@@ -830,13 +869,16 @@
       <div id="score-buffer" class="hud" aria-label="Pending score">+0</div>
     </div>
 
-    <div class="hud-panel time-panel">
-      <div class="hud-panel-mid">
-        <div class="hud-panel-face">
-          <span class="label">Time</span>
-          <div id="time" class="hud">60</div>
+    <div class="time-hud-group">
+      <div class="hud-panel time-panel">
+        <div class="hud-panel-mid">
+          <div class="hud-panel-face">
+            <span class="label">Time</span>
+            <div id="time" class="hud">60</div>
+          </div>
         </div>
       </div>
+      <div id="time-buffer" class="hud" aria-label="Pending bonus time">+0s</div>
     </div>
 
     <button type="button" id="sound-toggle" aria-pressed="false" aria-label="Mute sound" title="Sound">
