@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-25 — Pulsing central point-source dot
+
+- Added a tiny, 6 px cyan-white glowing dot directly at the center of the 450 × 450 game field, where normal floating score numbers originate.
+- The emitter gently pulses its glow and size on a 2-second cycle, with a faint radial halo.
+- The marker stays underneath floating point values and does not catch mouse or touch input. The reduced-motion setting disables the pulse.
+- Changes are CSS and HTML only; score fusion, button behavior, time bonuses and multiplayer are unchanged.
+- Android package repacked from the prior foreground-score update and signed with the same certificate. APK ZIP integrity, unchanged gameplay JavaScript and signature-v2 content digest verified. Visual behavior on a physical Android device not yet verified.
+
 ## 2026-10-25 — Foreground score pickups and right-hand bank
 
 - Move the combined green points bank outside and directly to the right of the Points HUD's chamfered box, at the same 22 px number size as the white total. The panel no longer expands to enclose the bank.
