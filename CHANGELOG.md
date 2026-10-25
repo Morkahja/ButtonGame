@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-25 — 150% Quick Strike spin
+
+- Increased the successful Quick Strike animation to **150% of the button's normal size** for the first 60% of its existing 290 ms spin, then smoothly returned to 100% by the end.
+- Retained the ordinary **110% tap pulse**; consecutive taps do not stack scaling beyond the Quick Strike peak.
+- Quick Strike eligibility (73 ms after 320 ms spawn animation), green emitter and double points per tap remain unchanged.
+- No enlargement is triggered automatically by the shatter effect.
+- Validated JavaScript syntax, simulated animation-scale transitions, repeat taps and shatter behavior, and APK ZIP integrity plus v2 signing digest with the same certificate as the preceding release. Physical Android visual testing remains pending.
+
 ## 2026-10-25 — Quick Strike reward and timing
 
 - Quick Strike opens **after** the button's existing 320 ms spawn-in animation completes, and remains available for 73 ms (320–393 ms after spawn).
