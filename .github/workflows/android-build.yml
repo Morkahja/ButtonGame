@@ -56,6 +56,12 @@ jobs:
           test -f app/src/main/assets/www/game.js
           test -f app/src/main/assets/www/index.html
 
+      - name: Test live guest-to-host leaderboard refresh
+        working-directory: .
+        run: |
+          node --check game.js
+          node tests/live-leaderboard-refresh.cjs
+
       - name: Build complete native debug and release APKs
         run: |
           chmod +x gradlew
