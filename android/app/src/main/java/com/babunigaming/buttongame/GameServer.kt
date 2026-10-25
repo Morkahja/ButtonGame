@@ -67,7 +67,10 @@ class GameServer(
             val obj = JSONObject(raw.ifBlank { "{}" })
             val name = obj.optString("name", "Player")
             val score = obj.optInt("score", 0)
-            val list = scores.add(name, score)
+            val reactionMs = obj.optInt("reactionMs", 0)
+            val apm = obj.optInt("apm", 0)
+            val durationMs = obj.optLong("durationMs", 0L)
+            val list = scores.add(name, score, reactionMs, apm, durationMs)
             json(scores.toJsonObject(list).toString())
         } catch (e: Exception) {
             jsonError(400, e.message ?: "bad request")
