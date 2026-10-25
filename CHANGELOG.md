@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-26 — Keep Game Over high scores live across Wi-Fi players
+
+- **Creator-reported bug:** a guest player could submit a new high score to the Android host while the host's Game Over screen was open, yet the host's visible list did not update. This was a **client display refresh bug**, not evidence that native score persistence failed: `loadLeaderboard()` ran on Game Over entry and after the local player's own submission, while the 12-second polling condition expressly excluded `gameOver`.
+- **Fix:** the host-owned `GET /api/scores` leaderboard now refreshes automatically **every 3 seconds while Game Over is visible**, including on the Android host. Resuming a backgrounded Game Over page also triggers immediate refresh. During a round, the existing subtle below-game preview still polls every 12 seconds; the idle welcome screen avoids polling. The guest submission endpoint and native `ScoreStore` are unchanged.
+- Updated `game.js` and `android/app/src/main/assets/www/game.js` in lockstep. Added `tests/live-leaderboard-refresh.cjs` to verify host Game Over polling, playback/idle polling, replay and foregrounding, and added the regression to Android GitHub Actions. Device verification still required: after a guest submits, the host's Game Over screen should display the score within three seconds, with no restart or Play Again.
+
 ## 2026-10-25 — FULL native Android host rebuild completed and release signed
 
 - Replaced the temporary web-asset-only APK workflow with a **working GitHub Actions Android Gradle build**, committed at `.github/workflows/android-build.yml`. It uses JDK 17, Android SDK 35 and the Gradle 8.9 wrapper to compile both Kotlin and web assets. First successful full debug build: [run 40243235351](https://github.com/babunidev/ButtonGame/actions/runs/40243235351); successful full debug+release build: [run 40243610565](https://github.com/babunidev/ButtonGame/actions/runs/40243610565).
