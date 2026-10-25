@@ -509,6 +509,33 @@
       z-index: 6;
     }
 
+    .floater.score-ready,
+    .floater.big.score-ready,
+    .floater.linger.score-ready,
+    .floater.jackpot-flash.score-ready {
+      color: #61ff94;
+      text-shadow: 0 0 9px rgba(60,255,128,0.8), 0 0 3px #d9ffe5;
+    }
+
+    .score-fly {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 8;
+      pointer-events: none;
+      font-family: "AR Essence", sans-serif;
+      font-size: 25px;
+      line-height: 1;
+      color: #61ff94;
+      white-space: nowrap;
+      text-shadow: 0 0 8px rgba(65,255,120,0.85), 0 0 2px #d9ffe5;
+      transform-origin: center center;
+      will-change: transform, opacity;
+    }
+    .score-fly.is-feeding {
+      text-shadow: 0 0 10px rgba(65,255,120,0.95), 0 0 3px #d9ffe5;
+    }
+
     #feind {
       position: absolute;
       left: 0;
