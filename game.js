@@ -66,12 +66,13 @@
   const SEEK_ONE_TO_TWENTY = 118;
   const SEEK_ACCEL = 980;
 
-  // Spawn-safe + collision AABBs for Points / Time / Reaction / APM panels (stage space).
+  // Collision AABBs in 450px stage coordinates, matching the tighter
+  // top-corner panels and single bottom-center Reaction/APM plate.
+  // Both top boxes include room for the incoming score/time balances.
   const HUD_BOXES = [
-    { l: 8, t: 8, r: 148, b: 78 },
-    { l: 228, t: 8, r: 442, b: 78 },
-    { l: 8, t: 372, r: 148, b: 442 },
-    { l: 302, t: 372, r: 442, b: 442 },
+    { l: 0, t: 0, r: 175, b: 65 },
+    { l: 275, t: 0, r: 450, b: 65 },
+    { l: 100, t: 385, r: 350, b: 450 },
   ];
 
   // Each floater picks one side as "down" so combos tumble every which way.
