@@ -164,7 +164,7 @@
     .hud-panel {
       position: absolute;
       z-index: 3;
-      width: 7.75rem;
+      width: 6.25rem;
       padding: 1px;
       background: var(--white);
       pointer-events: none;
@@ -173,12 +173,12 @@
     /* Place the green bank outside the clipped Points plate. */
     .points-hud-group {
       position: absolute;
-      top: 22px;
-      left: 22px;
+      top: 10px;
+      left: 10px;
       z-index: 6;
       display: flex;
       align-items: flex-end;
-      gap: 12px;
+      gap: 8px;
       pointer-events: none;
     }
     .points-hud-group .hud-panel.punkte-panel {
@@ -186,8 +186,8 @@
       top: auto;
       left: auto;
       width: max-content;
-      min-width: 7.75rem;
-      max-width: 15rem;
+      min-width: 6.25rem;
+      max-width: 12rem;
     }
     .punkte-panel .hud-panel-face { padding-right: 10px; }
     #score-buffer {
@@ -204,12 +204,12 @@
     /* Reserve a right-side golden readout without shifting during deposits. */
     .time-hud-group {
       position: absolute;
-      top: 22px;
-      right: 22px;
+      top: 10px;
+      right: 10px;
       z-index: 6;
       display: flex;
       align-items: flex-end;
-      gap: 12px;
+      gap: 8px;
       pointer-events: none;
     }
     .time-hud-group .hud-panel.time-panel {
@@ -219,28 +219,40 @@
     }
     #time-buffer {
       flex: none;
-      min-width: 4.2rem;
+      min-width: 3.4rem;
       margin-bottom: 10px;
       color: #ffd24a;
-      text-align: left;
+      text-align: right;
       text-shadow: 0 0 10px rgba(255, 210, 74, 0.95), 0 0 3px #fff3c0;
       visibility: hidden;
       opacity: 0;
       transition: opacity 0.1s ease;
     }
     #time-buffer.is-visible { visibility: visible; opacity: 1; }
-    .hud-panel.react-panel { top: auto; bottom: 22px; left: 22px; }
-    .hud-panel.apm-panel { top: auto; bottom: 22px; right: 22px; }
-
-    .hud-panel.react-panel .hud,
-    .hud-panel.apm-panel .hud {
-      font-size: 18px;
+    /* Single centered lower HUD plate, two metrics with cyan divider. */
+    .hud-panel.stats-panel {
+      bottom: 10px;
+      left: 50%;
+      width: 15.5rem;
+      transform: translateX(-50%);
+      z-index: 6;
     }
-
-    .hud-panel.apm-panel .label,
-    .hud-panel.apm-panel .hud {
-      text-align: right;
+    .stats-panel .hud-panel-face { padding: 8px 0 9px; }
+    .stats-layout { display: flex; align-items: stretch; }
+    .stats-cell {
+      flex: 1 1 0;
+      min-width: 0;
+      padding: 0 11px;
     }
+    .stats-cell.apm-cell { text-align: right; }
+    .stats-divider {
+      flex: none;
+      align-self: stretch;
+      width: 1px;
+      background: var(--cyan);
+      opacity: 0.75;
+    }
+    .stats-panel .hud { font-size: 18px; }
 
     .hud-panel-mid {
       padding: 1px;
@@ -248,7 +260,7 @@
     }
 
     .hud-panel-face {
-      padding: 8px 14px 9px;
+      padding: 8px 10px 9px;
       background: var(--panel-bg);
     }
 
@@ -870,6 +882,7 @@
     </div>
 
     <div class="time-hud-group">
+      <div id="time-buffer" class="hud" aria-label="Pending bonus time">+0s</div>
       <div class="hud-panel time-panel">
         <div class="hud-panel-mid">
           <div class="hud-panel-face">
@@ -878,7 +891,6 @@
           </div>
         </div>
       </div>
-      <div id="time-buffer" class="hud" aria-label="Pending bonus time">+0s</div>
     </div>
 
     <button type="button" id="sound-toggle" aria-pressed="false" aria-label="Mute sound" title="Sound">
@@ -890,20 +902,18 @@
       </svg>
     </button>
 
-    <div class="hud-panel react-panel">
+    <div class="hud-panel stats-panel" aria-label="Reaction time and actions per minute">
       <div class="hud-panel-mid">
-        <div class="hud-panel-face">
-          <span class="label">Reaction</span>
-          <div id="react" class="hud">—</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="hud-panel apm-panel">
-      <div class="hud-panel-mid">
-        <div class="hud-panel-face">
-          <span class="label">APM</span>
-          <div id="apm" class="hud">—</div>
+        <div class="hud-panel-face stats-layout">
+          <div class="stats-cell react-cell">
+            <span class="label">Reaction</span>
+            <div id="react" class="hud">—</div>
+          </div>
+          <div class="stats-divider" aria-hidden="true"></div>
+          <div class="stats-cell apm-cell">
+            <span class="label">APM</span>
+            <div id="apm" class="hud">—</div>
+          </div>
         </div>
       </div>
     </div>
