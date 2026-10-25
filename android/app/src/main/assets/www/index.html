@@ -544,6 +544,59 @@
       opacity: 0.7;
     }
 
+    /* Subtle host-high-score glimpse below the playfield while playing.
+       Always reserve its height so loading doesn't move the playfield. */
+    #live-leaderboard {
+      width: min(420px, calc(100vw - 2rem));
+      height: 114px;
+      flex: 0 0 auto;
+      align-self: center;
+      padding: 0 0.65rem;
+      color: #a5d8d9;
+      font-family: system-ui, sans-serif;
+      opacity: 0.5;
+      pointer-events: none;
+      user-select: none;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 24%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 0%, #000 24%, transparent 100%);
+    }
+    #live-leaderboard.is-hidden { visibility: hidden; }
+    #live-leaderboard h2 {
+      color: var(--cyan);
+      font-family: "AR Essence", sans-serif;
+      font-weight: normal;
+      font-size: 0.93rem;
+      letter-spacing: 0.12em;
+      margin: 0 0 0.35rem;
+      text-align: center;
+    }
+    #live-leaderboard ol {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.18rem;
+    }
+    #live-leaderboard li {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.8rem;
+      font-size: 0.79rem;
+      line-height: 1.35;
+    }
+    #live-leaderboard .preview-name {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #live-leaderboard .preview-points {
+      color: #d3ffff;
+      font-variant-numeric: tabular-nums;
+      flex: none;
+    }
+
     #react { color: var(--white); }
     #apm { color: var(--cyan); }
 
@@ -962,6 +1015,10 @@
     <div id="score-fly-layer" aria-hidden="true"></div>
   </div>
   </div>
+  <section id="live-leaderboard" class="is-hidden" aria-label="Current high scores" aria-hidden="true">
+    <h2>High scores</h2>
+    <ol id="live-leaderboard-list"></ol>
+  </section>
   <script src="game.js"></script>
 </body>
 </html>
