@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-25 — Three new audio recordings installed in Android APK
+
+- Received and verified `4273.ogg` (0.937 s), `QuickStrikepoints.ogg` (0.252 s), and `QuickStrikepoints1.ogg` (0.482 s), all stereo 44.1 kHz Ogg Vorbis.
+- Built an Android APK including all three recordings under `assets/www/assets/sfx/`. The previously committed sound-routing code plays `4273` exactly when the center-stage 42 assembles or 73 appears, replacing the bell for those reveals. Active Quick Strike button taps—including the activating tap—choose randomly between the two supplied impacts.
+- Ordinary taps still use four impacts; ordinary jackpot milestones still choose among three bells. Existing mute setting and other gameplay remain unchanged.
+- Passed JavaScript syntax, mocked sound routing, jackpot-bell, golden time-bank, and floating-number collision tests. ZIP integrity, the APK v2 signature digest, and signing certificate matching the preceding installed release were verified. No physical Android sound check performed.
+- **Distribution note:** The complete audio recordings are present in the downloadable APK, but the three binary OGG assets have **not yet been uploaded into the GitHub repository**; GitHub source already includes the sound hooks. Repository checkouts need these files in `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/` to reproduce the APK.
+
 ## 2026-10-25 — Prepared special reveal and Quick Strike audio routing (audio files pending)
 
 - Added a dedicated **`4273` reveal sound hook** for the assembled 42 at the upper-center `Smash it!` position and for the 73 when the 37→73 flip reveals the new digits. It **replaces** the normal bell at those two moments rather than doubling the playback. The original bell still plays when floating totals first reach 21 and 37.
