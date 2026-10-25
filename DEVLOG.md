@@ -1,5 +1,15 @@
 # Development log
 
+## 2026-10-25 — Package user-supplied 4273 and QuickStrikepoints recordings
+
+**Inputs:** Received `4273.ogg` (12,035 bytes; 0.937 s), `QuickStrikepoints.ogg` (6,967 bytes; 0.252 s), and `QuickStrikepoints1.ogg` (9,023 bytes; 0.482 s). All files successfully decoded as stereo, 44.1 kHz Ogg Vorbis audio. The files already use the case-sensitive paths named by `SPECIAL_REVEAL_FILE` and `QUICK_STRIKE_IMPACT_FILES`.
+
+**Integration:** Repacked the cumulative `ButtonGame-Jackpot-Bells-Update.apk` using the up-to-date local game JavaScript and included all three OGG assets as `assets/www/assets/sfx/{4273,QuickStrikepoints,QuickStrikepoints1}.ogg`. The code sends the fully assembled 42 and flipped 73 to the single 4273 clip, and randomly selects the two QuickStrikepoints clips for the first successful Quick Strike button tap and subsequent active taps. Normal taps and other bell milestones retain their prior recordings. If audio buffering is unavailable, the existing fallback remains.
+
+**Checks:** `node --check`; mocked sound/Quick Strike regression, milestone-bell regression, golden time-bank transfer and number-collision tests. APK ZIP integrity, audio bytes within the APK, Android v2 signature/content digest, and original signer certificate matching previous build all passed. No device-level sound audition.
+
+**Remaining repository task:** Text JS sound hooks are already on GitHub, but the OGG binary files are not. The produced APK is audio-complete; a future GitHub binary-asset commit is required for a clean checkout to have identical audio.
+
 ## 2026-10-25 — Audio trigger routing prepared; waiting for recordings
 
 **Requested files:** 4273 for the moment a special 73 or assembled 42 appears at the shared center-top; QuickStrikepoints and QuickStrikepoints1 for button taps while a Quick Strike is active.
