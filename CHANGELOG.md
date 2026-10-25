@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-25 — 21 → 42 scatter, duplicate, and fuse
+
+- Replaced the generic jackpot behavior for floating **21** with a new special transformation: explode into **21 individual “1” units**, duplicate into **42 visible units**, then gather them at the upper-center “Smash it!” location into one enlarged **42**.
+- The assembled **42** holds briefly, glows green, shrinks, and enters the existing green score pickup and shared score-bank countdown flow. It awards exactly **42 points once**, rather than the prior 21+42 generic jackpot total.
+- The **37 → 73** special’s upper-center number is now **20% larger**, from 2.2× to 2.64×, and the new assembled 42 uses the same 2.64× scale at the same stage coordinates (225,110).
+- All 21/42 visual pieces stay outside normal physics scoring, so they cannot merge into additional unintended jackpots; natural 42 and 73 totals retain existing generic jackpot behavior.
+- End-of-round settlement waits for in-progress 21→42 fusions and their green pickups. Play Again cancels all active special fragments.
+- Verified deterministic Node tests for 21→42 phases, exact 42 payout, normal green bank transfer, retained 37→73 payout, round-end settlement, and reset. Signed updated Android APK with the original signing certificate and checked ZIP integrity; physical Android display testing is pending.
+
 ## 2026-10-25 — “Smash it!” greeting and 37 → 73 reversal
 
 - Changed the initial and Play Again guidance from “Klick druff da!!!” to **“Smash it!”**.
