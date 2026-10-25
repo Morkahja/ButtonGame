@@ -1,5 +1,15 @@
 # Development log
 
+## 2026-10-25 — Distinct jackpot bell per reached value
+
+**Problem:** `maybeComboBell(f)` rang the first time a merged floating number reached any value of seven or higher, then set `bellPlayed` and inherited it through subsequent merges. A continuous chain like 7 → 14 → 21 therefore stopped ringing, even though each is an important milestone. The 21/37/42/73 special handlers separately played their own bell when triggered.
+
+**Change:** Replaced threshold/lineage behavior with an exact `COMBO_BELL_VALUES` map for 7, 14, 21, 37, 42, and 73 and a stateless `ringJackpotBell(value)` helper. `afterFloaterValue()` now calls the helper exactly once for each newly reached sum, before special transformation routing. Removed the obsolete `bellPlayed` floater flag and merge inheritance. Removed `playRandomBell()` calls from `begin21To42()`, `begin37Reverse()` and generic `explodeJackpot()`, preventing same-event double-rings.
+
+**Transformed results:** The 21 special rings at the moment it triggers and sounds a second, separately randomized bell when the fully assembled 42 first appears at the upper center. The 37 special rings when reached and a second time when its upper-center flip displays 73 (halfway through rotation). Each special effect tracks `resultBellPlayed` to guarantee at most one sound for its result even across repeated frames or frame skips. Scores still award exactly 42/73 once using the existing green score-bank transfer.
+
+**Tests:** A mocked DOM/clock harness intercepts the sound helper and simulates 6+1→7, then 7+7→14, then 14+7→21, then assembly into 42. It confirms distinct sounds at all four milestones, 36+1→37 then flip to 73, natural 41+1→42 and 72+1→73, and no sound from merged values 8/22/75. Existing `test_floater_bounds.cjs`, `test_bouncy_21_to_42.cjs`, `test_time_bonus_bank.cjs`, `test_37.cjs`, and JavaScript syntax checks passed. Android APK repacked from the prior cumulative collision-fix build with only `assets/www/game.js` changed, using the same PKCS#12 signing key; cryptographic APK v2 content digest, signature and ZIP checks passed. Not tested on physical Android.
+
 ## 2026-10-25 — Correct floating-number bounding boxes and pace merges
 
 **Observed bug:** Collision radius was `max(11, floaterFontSize(value)*scale*0.38)`, independent of the number's text length. For `+37`, `+123` and longer labels, the first glyph could collide while later digits extended past a wall or overlapped HUD boundaries. Visual scale was also aggressive (up to 2.4×), and the merge loop could immediately chain several collisions in one frame, pushing values rapidly into the hundreds.
