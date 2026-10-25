@@ -617,6 +617,28 @@
       text-shadow: 0 0 12px rgba(65,255,120,0.95), 0 0 3px #d9ffe5;
     }
 
+    /* Standalone, non-scoring visual pieces used only by the 21 -> 42 combo.
+       They live above the stage float layer and never enter physics merging. */
+    .combo-unit {
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 7;
+      pointer-events: none;
+      font-family: "AR Essence", sans-serif;
+      font-size: 20px;
+      line-height: 1;
+      white-space: nowrap;
+      color: #dbffff;
+      text-shadow: 0 0 9px rgba(0,255,255,0.85), 0 0 3px #fff;
+      transform-origin: center;
+      will-change: transform, opacity;
+    }
+    .combo-unit.combo-duplicate {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(125,255,255,0.95), 0 0 3px #fff;
+    }
+
     .floater.score-ready,
     .floater.big.score-ready,
     .floater.linger.score-ready,
