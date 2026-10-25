@@ -1,5 +1,13 @@
 # Development log
 
+## 2026-10-25 — Per-spawn randomized jacket-button tilt
+
+The button already accumulated a random `rotation += randomint(1,369)` after respawns, but the first button and the first button after restarting always began at zero. The accumulated full-circle orientation also gave no predictable range of subtle tilt.
+
+Implemented `randomSpawnRotation()` with an independent integer selection between -45° and +45° on **all three spawn paths**: initial bootstrap, reset/Play Again, and post-shatter respawn. Each target stores its selected angle in the existing `rotation` state. `applyFeindTransform()` uses it as a constant baseline, allowing the existing Quick Strike spin to remain additive. The fracture overlay and the 14 clipped SVG fragments are children of `#feind`, so they follow its rotation naturally without altering piece geometry or destruction timing.
+
+Validation: JavaScript syntax and deterministic simulated-DOM testing of first spawn, reset, 60 subsequent respawns, inherited shatter rotation, and full shard count. Android APK repackages the exact same existing application with only updated game.js; new signing uses the previously established update identity. APK signature v2 integrity checked. Not tested on a physical device.
+
 ## 2026-10-25 — Aggregated Points HUD counter
 
 **User request:** The green collection number should no longer sit next to the Points panel outside its border. It should live inside the panel to the right of the total, at the same font size, and combine arriving score pickups even as it counts down and credits the total.
