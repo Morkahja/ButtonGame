@@ -1,5 +1,15 @@
 # Development log
 
+## 2026-10-25 — 21-to-42 special, enlargement of 37-to-73
+
+**Goal:** Give the value 21 a distinct three-phase transformation: 21 visible singles explode out, each splits into a second single for 42 total, and all converge on the upper-center “Smash it!” location to form a large 42. The finished 42 turns green and is transferred to the normal collector. Increase the 37→73's upper-center result by 20%.
+
+**Implementation:** `afterFloaterValue(f)` hands merged 21 to `begin21To42(f)`, before generic jackpot logic. This retires the normal floater and allocates 21 independent, visual-only `.combo-unit` elements in `#stage`; `update21To42(now)` scatters them over 480 ms, duplicates 21 additional elements over 300 ms, and gathers all 42 into the shared upper-center landing point (225,110) over 580 ms. The individual units shrink and fade as one `42` label is revealed at `SPECIAL_LABEL_SCALE=2.64`. It holds for 180 ms, turns green and shrinks for 190 ms, then sends one `startScoreFly(42,225,110)` pickup into the score-bank pipeline. Neither visual shards nor the assembled display are ordinary floaters, preventing recursive jackpots or double credits. An eligible 21 still triggers its normal +3s time bonus.
+
+**Common special layout:** The existing 37→73 transformation now uses the common `SPECIAL_LABEL_SCALE=2.64` for both its moving/turning phase and its hold; it still sends one exact 73-point green pickup. Green shrink transitions to the same final size for both effects.
+
+**Lifecycle and verification:** `hasPendingScore()` accounts for both special queues, keeping Game Over pending until animated rewards are fully collected. `clearFloaters()` now clears 21→42 parts/label on reset, as it already does for 37→73. Node syntax and simulated-frame tests confirm initial 21 units, duplication to 42, gather at 2.64×, green phase, single exact +42 collection, 37→73 retaining +73 and growing 20%, end-of-round settlement, and safe Play Again cancellation. Repacked and APK-v2 signed from the previously installed Smash-It build with the same signing certificate, preserving all other game assets. Android device-level visuals not verified.
+
 ## 2026-10-25 — Special 37 → 73 transformation
 
 **Request:** Replace “Klick druff da” with “Smash it!” and implement the 37-to-73 special. When a floating number reaches 37, carry it to the upper center at the former instruction's position, enlarge, reverse the digits, and immediately send the green 73 into ordinary score collection.
