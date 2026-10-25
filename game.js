@@ -55,6 +55,9 @@
   // Exact totals that grant +3s (golden fly into Time).
   const TIME_BONUS_AT = { 7: true, 14: true, 21: true, 42: true, 37: true, 73: true };
   const TIME_BONUS_MS = 3000;
+  const TIME_FLY_MS = 690;
+  const TIME_HOLD_MS = 350;
+  const TIME_FEED_SECONDS_PER_SECOND = 4;
   const SCORE_FLY_MS = 690;
   const SCORE_HOLD_MS = 350;
   const SCORE_FEED_MIN_PER_SECOND = 18;
@@ -65,13 +68,10 @@
   // Spawn-safe + collision AABBs for Points / Time / Reaction / APM panels (stage space).
   const HUD_BOXES = [
     { l: 8, t: 8, r: 148, b: 78 },
-    { l: 302, t: 8, r: 442, b: 78 },
+    { l: 228, t: 8, r: 442, b: 78 },
     { l: 8, t: 372, r: 148, b: 442 },
     { l: 302, t: 372, r: 442, b: 442 },
   ];
-  // Time panel center in stage space (top-right HUD).
-  const TIME_PANEL_CX = (HUD_BOXES[1].l + HUD_BOXES[1].r) / 2;
-  const TIME_PANEL_CY = (HUD_BOXES[1].t + HUD_BOXES[1].b) / 2;
 
   // Each floater picks one side as "down" so combos tumble every which way.
   const GRAVITY_DIRS = [
@@ -88,6 +88,7 @@
   const stageEl = document.getElementById("stage");
   const scoreFlyLayer = document.getElementById("score-fly-layer");
   const timeEl = document.getElementById("time");
+  const timeBufferEl = document.getElementById("time-buffer");
   const apmEl = document.getElementById("apm");
   const reactEl = document.getElementById("react");
   const anleitungEl = document.getElementById("anleitung");
@@ -470,6 +471,9 @@
   let scoreBankHoldRemaining = 0;
   let scoreBankFraction = 0;
   let timeFlashUntil = 0;
+  let timeBankSeconds = 0;
+  let timeBankHoldRemaining = 0;
+  let timeBankFraction = 0;
   const popShards = [];
   const SHATTER_CELLS = [[[0,0],[20.53,0],[21.33,14.5],[15.14,19.14],[0,15.78]],[[20.53,0],[41,0],[38.5,15.83],[34.32,19.08],[21.33,14.5]],[[41,0],[62,0],[62,17.4],[53.45,20.82],[38.5,15.83]],[[0,40.03],[0,15.78],[15.14,19.14],[16.83,32.67]],[[16.83,32.67],[15.14,19.14],[21.33,14.5],[34.32,19.08],[33.75,30.47],[21.57,35.04]],[[33.75,30.47],[34.32,19.08],[38.5,15.83],[53.45,20.82],[47.75,35.65],[40.79,37.04]],[[62,17.4],[62,42.67],[59.76,42.85],[47.75,35.65],[53.45,20.82]],[[0,44.86],[0,40.03],[16.83,32.67],[21.57,35.04],[23.3,48.03],[18,52.57]],[[23.3,48.03],[21.57,35.04],[33.75,30.47],[40.79,37.04],[37.76,47.98],[35,50.22]],[[50.73,53.88],[37.76,47.98],[40.79,37.04],[47.75,35.65],[59.76,42.85]],[[18,62],[0,62],[0,44.86],[18,52.57]],[[35,62],[18,62],[18,52.57],[23.3,48.03],[35,50.22]],[[51.75,62],[35,62],[35,50.22],[37.76,47.98],[50.73,53.88]],[[62,42.67],[62,62],[51.75,62],[50.73,53.88],[59.76,42.85]]];
   const SVG_NS = "http://www.w3.org/2000/svg";
@@ -802,6 +806,7 @@
     el.style.fontSize = floaterFontSize(value) + "px";
     if (value >= 5) el.classList.add("big");
     if (f.inert) el.classList.add("jackpot-flash");
+    else if (TIME_BONUS_AT[value]) el.classList.add("bonus-eligible");
     floaters.push(f);
     paintFloater(f, 1);
     return f;
@@ -1190,43 +1195,82 @@
       floaters.some(function (f) { return f.alive && f.pendingValue > 0; });
   }
 
+  function timeBankTarget() {
+    if (timeBufferEl && typeof timeBufferEl.getBoundingClientRect === "function") {
+      const rect = timeBufferEl.getBoundingClientRect();
+      if (rect.width > 0 || rect.height > 0) {
+        return toScoreLayerPoint(rect.left + rect.width / 2,
+          rect.top + rect.height / 2);
+      }
+    }
+    return { x: 412, y: 58 };
+  }
+
+  function renderTimeBank() {
+    timeBufferEl.textContent = "+" + timeBankSeconds + "s";
+    timeBufferEl.classList.toggle("is-visible", timeBankSeconds > 0);
+  }
+
+  function depositTimeBonus(seconds) {
+    if (seconds <= 0) return;
+    const wasEmpty = timeBankSeconds === 0;
+    timeBankSeconds += seconds;
+    if (wasEmpty) {
+      timeBankHoldRemaining = TIME_HOLD_MS;
+      timeBankFraction = 0;
+    }
+    renderTimeBank();
+  }
+
   function grantTimeBonusFly(fromX, fromY) {
     if (!started || gameOver) return;
     const el = document.createElement("div");
     el.className = "time-fly";
     el.textContent = "+3s";
-    floatLayer.appendChild(el);
+    // Use the frame-level foreground HUD pickup layer, not the clipped stage.
+    scoreFlyLayer.appendChild(el);
+    const origin = scoreFlyOrigin(fromX, fromY);
     timeFlies.push({
       el: el,
-      x0: fromX,
-      y0: fromY,
-      x: fromX,
-      y: fromY,
+      seconds: TIME_BONUS_MS / 1000,
+      x0: origin.x,
+      y0: origin.y,
+      x: origin.x,
+      y: origin.y,
       age: 0,
-      life: 720,
-      applied: false,
     });
-    paintTimeFly(timeFlies[timeFlies.length - 1], 1);
+    paintTimeFly(timeFlies[timeFlies.length - 1], 1, 1.15);
   }
 
-  function paintTimeFly(fly, opacity) {
-    fly.el.style.opacity = String(opacity);
-    fly.el.style.transform =
-      "translate(" +
-      fly.x +
-      "px, " +
-      fly.y +
-      "px) translate(-50%, -50%) scale(" +
-      (0.95 + opacity * 0.15) +
-      ")";
+  function paintTimeFly(fly, opacity, scale) {
+    fly.el.style.opacity = String(Math.max(0, opacity));
+    fly.el.style.transform = "translate(" + fly.x + "px, " + fly.y +
+      "px) translate(-50%, -50%) scale(" + scale + ")";
   }
 
-  function applyDeadlineBonus() {
-    if (gameOver || !started) return;
-    deadline += TIME_BONUS_MS;
+  function applyDeadlineBonus(seconds) {
+    if (gameOver || !started || seconds <= 0) return;
+    deadline += seconds * 1000;
     updateTimeHud();
     timeFlashUntil = performance.now() + 480;
     timeEl.classList.add("time-bonus");
+  }
+
+  function updateTimeBank(dt) {
+    if (timeBankSeconds <= 0) return;
+    if (timeBankHoldRemaining > 0) {
+      timeBankHoldRemaining = Math.max(0, timeBankHoldRemaining - dt);
+      return;
+    }
+    // Integer seconds visibly move from the golden balance into the timer.
+    timeBankFraction += dt / 1000 * TIME_FEED_SECONDS_PER_SECOND;
+    const amount = Math.min(timeBankSeconds, Math.floor(timeBankFraction));
+    if (amount <= 0) return;
+    timeBankFraction -= amount;
+    timeBankSeconds -= amount;
+    applyDeadlineBonus(amount);
+    renderTimeBank();
+    if (timeBankSeconds === 0) timeBankFraction = 0;
   }
 
   function updateTimeFlies(dt) {
@@ -1239,30 +1283,29 @@
     for (let i = timeFlies.length - 1; i >= 0; i--) {
       const fly = timeFlies[i];
       fly.age += dt;
-      const t = Math.min(1, fly.age / fly.life);
-      // Ease-in toward the Time panel.
-      const e = t * t;
-      fly.x = fly.x0 + (TIME_PANEL_CX - fly.x0) * e;
-      fly.y = fly.y0 + (TIME_PANEL_CY - fly.y0) * e;
-      const opacity = t < 0.85 ? 1 : 1 - (t - 0.85) / 0.15;
-      paintTimeFly(fly, opacity);
-
+      const t = Math.min(1, fly.age / TIME_FLY_MS);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const target = timeBankTarget();
+      fly.x = fly.x0 + (target.x - fly.x0) * eased;
+      fly.y = fly.y0 + (target.y - fly.y0) * eased;
+      paintTimeFly(fly, 1, 1.15 - 0.15 * eased);
       if (t >= 1) {
-        if (!fly.applied) {
-          fly.applied = true;
-          applyDeadlineBonus();
-        }
+        // A second +3s pickup joins the existing balance even while it drains.
+        depositTimeBonus(fly.seconds);
         fly.el.remove();
         timeFlies.splice(i, 1);
       }
     }
+    updateTimeBank(dt);
   }
 
   function clearTimeFlies() {
-    for (let i = 0; i < timeFlies.length; i++) {
-      timeFlies[i].el.remove();
-    }
+    for (const fly of timeFlies) fly.el.remove();
     timeFlies.length = 0;
+    timeBankSeconds = 0;
+    timeBankHoldRemaining = 0;
+    timeBankFraction = 0;
+    renderTimeBank();
     timeEl.classList.remove("time-bonus");
     timeFlashUntil = 0;
   }
@@ -1437,6 +1480,9 @@
     a.el.textContent = floaterLabel(a.value);
     a.el.style.fontSize = floaterFontSize(a.value) + "px";
     a.el.classList.toggle("big", a.value >= 5);
+    // Golden glow only for currently eligible totals.
+    a.el.classList.toggle("bonus-eligible", !!TIME_BONUS_AT[a.value]);
+    a.el.classList.remove("score-ready");
     b.alive = false;
     b.el.remove();
     afterFloaterValue(a);
@@ -1822,7 +1868,8 @@
 
     updateTimeHud();
     // Finish all time bonus and outstanding earned score transfers before Game Over.
-    if (remainingSeconds() <= 0 && timeFlies.length === 0) roundExpired = true;
+    if (remainingSeconds() <= 0 && timeFlies.length === 0 &&
+        timeBankSeconds === 0) roundExpired = true;
     if (roundExpired && !hasPendingScore()) endGame();
   }
 
