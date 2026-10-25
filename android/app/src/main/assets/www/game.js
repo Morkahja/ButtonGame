@@ -15,7 +15,8 @@
   const BASE_DURATION_MS = 60000;
   const FADE_START_ALPHA = 100;
   const FADE_END_ALPHA = 5;
-  const QUICK_HIT_MS = 320;
+  const SPAWN_ANIM_MS = 320;
+  const QUICK_STRIKE_WINDOW_MS = 73;
   const POP_DURATION_MS = 580;
   const CRACK_PHASE_MS = 140;
   const BREAK_PHASE_MS = 230;
@@ -66,6 +67,7 @@
   ];
 
   const feind = document.getElementById("feind");
+  const pointSourceEl = document.getElementById("point-source");
   const punkteEl = document.getElementById("punkte");
   const scoreBufferEl = document.getElementById("score-buffer");
   const stageEl = document.getElementById("stage");
@@ -437,6 +439,7 @@
   let popUntil = 0;
   let tapFlashStartedAt = -Infinity;
   let quickSpinStartedAt = -Infinity;
+  let quickStrikeActive = false;
 
   /** @type {Array<{
    *  el: HTMLElement, value: number, x: number, y: number,
@@ -546,6 +549,15 @@
     }
   }
 
+  function setQuickStrikeActive(enabled) {
+    quickStrikeActive = enabled;
+    pointSourceEl.classList.toggle("is-quick-strike", enabled);
+  }
+
+  function tapPoints() {
+    return quickStrikeActive ? 2 : 1;
+  }
+
   function setFeindVisual(hit) {
     feind.classList.toggle("show-idle", !hit);
     feind.classList.toggle("show-hit", hit);
@@ -582,11 +594,13 @@
 
   function playSpawnIn() {
     spawnScale = 0.15;
-    spawnAnimUntil = performance.now() + 320;
+    spawnAnimUntil = performance.now() + SPAWN_ANIM_MS;
     applyFeindTransform();
   }
 
   function respawnTarget() {
+    // Return the center source to cyan when a new button spawns.
+    setQuickStrikeActive(false);
     popping = false;
     popStartedAt = 0;
     popUntil = 0;
@@ -701,7 +715,7 @@
     }
 
     if (now < spawnAnimUntil) {
-      const t = Math.min(1, 1 - (spawnAnimUntil - now) / 320);
+      const t = Math.min(1, 1 - (spawnAnimUntil - now) / SPAWN_ANIM_MS);
       // Ease-out back: pop in small → slight overshoot → settle at 1.
       const c1 = 1.70158;
       const c3 = c1 + 1;
@@ -1343,6 +1357,7 @@
   }
 
   function endGame() {
+    setQuickStrikeActive(false);
     endEl.textContent = "Game Over";
     clearPopShards();
     feind.classList.add("is-gone");
@@ -1359,6 +1374,7 @@
   }
 
   function resetGame() {
+    setQuickStrikeActive(false);
     score = 0;
     started = false;
     deadline = 0;
@@ -1412,6 +1428,7 @@
   }
 
   (function init() {
+    setQuickStrikeActive(false);
     try {
       const saved = localStorage.getItem(LOCAL_NAME_KEY);
       if (saved && playerNameInput) playerNameInput.value = saved;
@@ -1445,12 +1462,12 @@
     applyFeindTransform();
 
     if (popping) {
-      addPoints(1);
+      addPoints(tapPoints());
       return;
     }
 
     if (fading) {
-      addPoints(1);
+      addPoints(tapPoints());
       return;
     }
 
@@ -1466,7 +1483,10 @@
       if (!reactDisplay) reactDisplay = reactTarget;
     }
 
-    if (reactionMs != null && reactionMs <= QUICK_HIT_MS) {
+    // Only the first tap in the 73ms window after spawn completes qualifies.
+    if (reactionMs != null && now >= spawnAnimUntil &&
+        now <= spawnAnimUntil + QUICK_STRIKE_WINDOW_MS) {
+      setQuickStrikeActive(true);
       quickSpinStartedAt = now;
       triggerQuickFx();
     }
@@ -1475,7 +1495,7 @@
     deadline += fadeDurationMs(flupp);
 
     setFeindVisual(true);
-    addPoints(1);
+    addPoints(tapPoints());
     fading = true;
     updateTimeHud();
     applyFeindTransform();
