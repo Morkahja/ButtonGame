@@ -1,0 +1,75 @@
+name: Android native build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/android-build.yml'
+      - 'android/**'
+      - 'game.js'
+      - 'index.html'
+      - 'assets/**'
+  pull_request:
+    paths:
+      - 'android/**'
+      - 'game.js'
+      - 'index.html'
+      - 'assets/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Compile Kotlin host and Android web assets
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: android
+    steps:
+      - name: Checkout complete source
+        uses: actions/checkout@v4
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android platform and build tools
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0" "platform-tools"
+
+      - name: Validate host-owned high-score code is included
+        run: |
+          grep -q 'scores-v2.json' app/src/main/java/com/babunigaming/buttongame/ScoreStore.kt
+          grep -q 'durationMs' app/src/main/java/com/babunigaming/buttongame/GameServer.kt
+          grep -q 'reactionMs' app/src/main/java/com/babunigaming/buttongame/GameServer.kt
+          grep -q 'apm' app/src/main/java/com/babunigaming/buttongame/GameServer.kt
+          test -f app/src/main/assets/www/game.js
+          test -f app/src/main/assets/www/index.html
+
+      - name: Build full native Android APK
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon --stacktrace assembleDebug
+
+      - name: Verify APK compiled and contains game assets
+        run: |
+          apk=app/build/outputs/apk/debug/app-debug.apk
+          test -s "$apk"
+          unzip -l "$apk" | grep -q 'assets/www/game.js'
+          unzip -l "$apk" | grep -q 'assets/www/index.html'
+          echo "Compiled APK: $(wc -c < "$apk") bytes"
+
+      - name: Upload installable debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ButtonGame-Native-Android-Debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+          retention-days: 30
