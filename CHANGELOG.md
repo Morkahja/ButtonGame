@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-25 — Full-label floater collisions and slower numerical growth
+
+- Fixed floating-number wall and HUD collisions so they account for the **entire displayed +N label**, including all digits, its actual DOM-measured width/height, CSS scale, and rotation. Previously collisions used a small radius derived from font size, allowing second/third digits to clip outside the field.
+- Use the rotated text's full axis-aligned bounding rectangle for wall and HUD contacts. After HUD collision resolution, re-clamp the entire label within the 450px stage, maintaining a small edge margin.
+- Slowed floating-number **visual size growth**: `+1` remains 26px, later font sizes rise more gently to a 38px cap instead of 46px; merged scale grows gradually to at most 1.55× instead of 2.4×. Eligible linger growth is reduced.
+- Slowed floating-number **value growth**: newly spawned floaters wait 120ms before merging, and every completed merge imposes a short recovery period that increases with the total (roughly 480–780ms). Each floater can participate in at most one merge per frame, avoiding runaway same-frame chains into high values.
+- Preserved actual point totals, bonus eligibility, 21→42 and 37→73 specials, green score collection, golden time transfer, and current compact HUD.
+- Verified 1–4-digit rotated labels at all field edges, actual measured glyph widths, gradual merger pacing, eventual successful merging, and unchanged 21/37 triggers in a simulated DOM; existing 21→42 and golden bonus bank regression tests passed. Rebuilt APK, verified ZIP content and APK v2 signature/digest with the prior update's certificate. Physical Android visual testing pending.
+
 ## 2026-10-25 — Mirrored compact HUD and unified Reaction/APM panel
 
 - Slimmed the Points and Time panels from a 7.75rem baseline to 6.25rem, reduced their horizontal face padding, and moved them from a 22px inset to **10px from their frame edges**, flush with the inner stage boundary.
