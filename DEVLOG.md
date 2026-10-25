@@ -1,5 +1,15 @@
 # Development log
 
+## 2026-10-25 — Central point emitter indicator
+
+**Goal:** Give the origin of normal floating point numbers a subtle, recognizable visual landmark without interfering with the game.
+
+**Implementation:** Added `<div id="point-source" aria-hidden="true"></div>` to `#stage` immediately before `#float-layer`, styled with a 6 px cyan-white core, soft CSS `box-shadow`, and a 30 px radial-gradient pseudo-element halo. The element is absolutely positioned at 50%/50% inside the 450 px stage (225,225), matching the center used by `spawnFloater()` for normal floating points (with a small random spawn offset). The `point-source-breathe` CSS animation adjusts opacity and scale from 0.88 to 1.23 over 2 seconds, continuously repeating. A `prefers-reduced-motion` override disables the animation.
+
+**Layering:** The dot uses `z-index: 0` and `pointer-events: none`; `#float-layer` remains at `z-index: 5` so numbers emerge above the glow. No gameplay, scoring, collision, or input handlers changed.
+
+**Verification:** Confirmed exactly one DOM point-source marker, center-positioned styles, ordering beneath the score-float layer, and identical `game.js` bytes between the new and previous APK. Repackaged APK ZIP passed integrity checks; APK signing-scheme v2 content digest and same update certificate were verified. No physical Android rendering test performed.
+
 ## 2026-10-25 — Correct pickup overlay stacking and bank position
 
 **Issue:** The green pickup elements were appended to `#float-layer` inside `#stage`. Although `.score-fly` had `z-index: 8`, `#stage` creates a lower stacking context (`z-index: 0`, clipped with `overflow: hidden` and `clip-path`). Consequently, incoming pickups passed **behind** the absolutely positioned Points HUD, making the top of the flight difficult to see.
