@@ -37,7 +37,13 @@
   // Exact totals that hang around longer for more combos.
   const LINGER_AT = { 7: true, 14: true };
   // Exact jackpots: burst into ones + double that total added to the score.
-  const JACKPOT_AT = { 21: true, 42: true, 37: true, 73: true };
+  const JACKPOT_AT = { 21: true, 42: true, 73: true };
+  const REVERSE_MOVE_MS = 490;
+  const REVERSE_FLIP_MS = 360;
+  const REVERSE_HOLD_MS = 160;
+  const REVERSE_GREEN_MS = 180;
+  const REVERSE_CENTER_X = STAGE / 2;
+  const REVERSE_CENTER_Y = 110;
   // Exact totals that grant +3s (golden fly into Time).
   const TIME_BONUS_AT = { 7: true, 14: true, 21: true, 42: true, 37: true, 73: true };
   const TIME_BONUS_MS = 3000;
@@ -450,6 +456,7 @@
   const floaters = [];
   const timeFlies = [];
   const scoreFlies = [];
+  const reversing37 = [];
   let scoreBank = 0;
   let scoreBankHoldRemaining = 0;
   let scoreBankFraction = 0;
@@ -799,6 +806,79 @@
     f.el.classList.add("linger");
   }
 
+  // 37 is a special transformation, not a generic 2x jackpot.
+  // The transformed value (73) is paid once via the existing green pickup flow.
+  function begin37Reverse(f) {
+    if (!f || !f.alive) return;
+    const el = f.el;
+    f.alive = false;
+    stageEl.appendChild(el);
+    el.classList.remove("big", "linger", "score-ready", "jackpot-flash");
+    el.classList.add("reverse-37");
+    el.style.fontSize = "30px";
+    el.style.opacity = "1";
+    el.textContent = "37";
+    reversing37.push({
+      el: el, start: performance.now(), x0: f.x, y0: f.y,
+      rotation: f.rot, value: 73,
+    });
+    playRandomBell();
+  }
+
+  function update37Reversals(now) {
+    for (let i = reversing37.length - 1; i >= 0; i--) {
+      const fx = reversing37[i];
+      const elapsed = Math.max(0, now - fx.start);
+      const moveEnd = REVERSE_MOVE_MS;
+      const flipEnd = moveEnd + REVERSE_FLIP_MS;
+      const holdEnd = flipEnd + REVERSE_HOLD_MS;
+      const greenEnd = holdEnd + REVERSE_GREEN_MS;
+      let x = REVERSE_CENTER_X;
+      let y = REVERSE_CENTER_Y;
+      let scale = 2.2;
+      let angle = 0;
+      if (elapsed < moveEnd) {
+        const t = Math.min(1, elapsed / moveEnd);
+        const ease = 1 - Math.pow(1 - t, 3);
+        x = fx.x0 + (REVERSE_CENTER_X - fx.x0) * ease;
+        y = fx.y0 + (REVERSE_CENTER_Y - fx.y0) * ease;
+        scale = 1 + 1.2 * ease;
+        angle = fx.rotation * (1 - ease);
+      } else if (elapsed < flipEnd) {
+        const t = Math.min(1, (elapsed - moveEnd) / REVERSE_FLIP_MS);
+        // The first number turns edge-on; the reversed digits turn back
+        // from edge-on to face the player, avoiding mirrored text.
+        const half = t < 0.5 ? t * 2 : (t - 0.5) * 2;
+        const eased = half * half * (3 - 2 * half);
+        const tilt = t < 0.5 ? 90 * eased : -90 * (1 - eased);
+        fx.el.textContent = t < 0.5 ? "37" : "73";
+        fx.el.style.transform = "translate(" + x + "px, " + y +
+          "px) translate(-50%, -50%) rotateY(" + tilt +
+          "deg) scale(" + scale + ")";
+        continue;
+      } else if (elapsed < greenEnd) {
+        fx.el.textContent = "73";
+        fx.el.classList.add("reverse-green");
+        const t = elapsed < holdEnd ? 0 : (elapsed - holdEnd) / REVERSE_GREEN_MS;
+        scale = 2.2 - 1.15 * Math.min(1, t);
+      } else {
+        fx.el.remove();
+        reversing37.splice(i, 1);
+        // Do not spawn a new 73 floater: that would invoke another jackpot.
+        // Move the green 73 directly into the shared score-transfer pipeline.
+        startScoreFly(fx.value, REVERSE_CENTER_X, REVERSE_CENTER_Y);
+        continue;
+      }
+      fx.el.style.transform = "translate(" + x + "px, " + y +
+        "px) translate(-50%, -50%) rotate(" + angle + "deg) scale(" + scale + ")";
+    }
+  }
+
+  function clear37Reversals() {
+    for (let i = 0; i < reversing37.length; i++) reversing37[i].el.remove();
+    reversing37.length = 0;
+  }
+
   function explodeJackpot(f) {
     const total = f.value;
     const bonus = total * 2;
@@ -960,7 +1040,7 @@
   }
 
   function hasPendingScore() {
-    return scoreBank > 0 || scoreFlies.length > 0 ||
+    return reversing37.length > 0 || scoreBank > 0 || scoreFlies.length > 0 ||
       floaters.some(function (f) { return f.alive && f.pendingValue > 0; });
   }
 
@@ -1049,6 +1129,10 @@
     applyLinger(f);
     if (TIME_BONUS_AT[v]) {
       grantTimeBonusFly(fx, fy);
+    }
+    if (v === 37) {
+      begin37Reverse(f);
+      return;
     }
     if (JACKPOT_AT[v]) {
       explodeJackpot(f);
@@ -1176,6 +1260,7 @@
   }
 
   function clearFloaters() {
+    clear37Reversals();
     for (let i = 0; i < floaters.length; i++) {
       floaters[i].el.remove();
     }
@@ -1424,7 +1509,7 @@
     setFeindVisual(false);
     playSpawnIn();
     setScore(0);
-    anleitungEl.textContent = "Klick druff da!!!";
+    anleitungEl.textContent = "Smash it!";
     endEl.textContent = "";
     endWrap.classList.remove("visible");
     scoreForm.hidden = true;
@@ -1598,6 +1683,7 @@
     updateFx(ts);
     tweenReactDisplay(dt);
     updateFloaters(dt);
+    update37Reversals(ts);
     updateScoreFlies(dt);
     updatePopShards(ts);
     if (
