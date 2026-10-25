@@ -1,5 +1,17 @@
 # Development log
 
+## 2026-10-25 — Refine 21-to-42: outward throw, wall physics, ones become twos
+
+**Requested flow:** Twenty-one single-digit numbers pop from the 21 at their normal spawn size, blast outward, rebound repeatedly against the stage boundaries, then each becomes a 2 while moving. All 21 twos eventually gather at the “Smash it!” / 37→73 upper-center position and form a larger golden 42, hold, and turn green before regular score pickup and bank fusion.
+
+**Implementation:** Replaced the previous scripted scatter / duplication of 21 ones into 42 ones with physics-assisted visual parts. `begin21To42` creates exactly 21 independent, non-scoring `.combo-unit` elements at the 21's former position, with `floaterFontSize(1)` (26px), evenly distributed outward angles, and initial speed between 780 and 1180 stage pixels per second. `bounceComboUnit` integrates movement in ≤16ms steps and reflects x/y velocities on collision with all four bounds (16..434), retaining 90% speed. Each unit is stagger-converted from '1' to '2' about 630–850ms after the burst, uses the natural 2-floater font size, and briefly pops to 115% to make the change legible. These transformations occur while the particles continue freely bouncing.
+
+At 1140ms, moving positions are snapshotted once and particles smoothly converge for 690ms onto (225,110) using smoothstep easing. Pieces shrink/fade near the end of this flight while the large golden `42` fades into place at `SPECIAL_LABEL_SCALE=2.64`. It holds 360ms at full size, turns green and shrinks over 250ms, and calls `startScoreFly(42,225,110)` exactly once. No physics scoring floaters are generated from the visual fragments, so no double credit, accidental merges, or recursive special triggers are possible. The 21's independent +3s golden time bonus remains intact.
+
+**Lifecycle:** `hasPendingScore` already includes in-progress `fusing42` effects; resets clear all moving pieces and the result label. The score bank credits the final 42 in the usual delayed fashion. The existing 37→73 flow and golden time balance are unchanged.
+
+**Verification:** Node syntax; simulated frame-by-frame tests of 21 visible normal-size units, early wall rebounds, all units converting to 2s, no extra nodes, assembly size, hold and green transition, exactly 42 points entering the green collector, late Game Over waiting and reset cleanup; plus previous golden bonus bank and 37→73 regression tests. APK ZIP integrity and APK-v2 RSA signature/content digest verified cryptographically, including exact same signer as the preceding golden-time-bank APK. Android visual test pending.
+
 ## 2026-10-25 — Shared gold time bank and jackpot eligibility colors
 
 **Intent:** Match the existing green score collector with a right-of-Time golden bonus collector. Make eligible special numbers visibly gold until their eligibility changes or their score is collected.
