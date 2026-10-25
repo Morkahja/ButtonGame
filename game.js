@@ -40,9 +40,8 @@
   const TIME_BONUS_MS = 3000;
   const SCORE_FLY_MS = 690;
   const SCORE_HOLD_MS = 350;
-  const SCORE_FEED_MS = 560;
-  const SCORE_PANEL_X = 155;
-  const SCORE_PANEL_Y = 48;
+  const SCORE_FEED_MIN_PER_SECOND = 18;
+  const SCORE_FEED_MAX_PER_SECOND = 180;
   const SEEK_ONE_TO_TWENTY = 118;
   const SEEK_ACCEL = 980;
 
@@ -67,6 +66,8 @@
 
   const feind = document.getElementById("feind");
   const punkteEl = document.getElementById("punkte");
+  const scoreBufferEl = document.getElementById("score-buffer");
+  const stageEl = document.getElementById("stage");
   const timeEl = document.getElementById("time");
   const apmEl = document.getElementById("apm");
   const reactEl = document.getElementById("react");
@@ -438,6 +439,9 @@
   const floaters = [];
   const timeFlies = [];
   const scoreFlies = [];
+  let scoreBank = 0;
+  let scoreBankHoldRemaining = 0;
+  let scoreBankFraction = 0;
   let timeFlashUntil = 0;
   const popShards = [];
   const SHATTER_CELLS = [[[0,0],[20.53,0],[21.33,14.5],[15.14,19.14],[0,15.78]],[[20.53,0],[41,0],[38.5,15.83],[34.32,19.08],[21.33,14.5]],[[41,0],[62,0],[62,17.4],[53.45,20.82],[38.5,15.83]],[[0,40.03],[0,15.78],[15.14,19.14],[16.83,32.67]],[[16.83,32.67],[15.14,19.14],[21.33,14.5],[34.32,19.08],[33.75,30.47],[21.57,35.04]],[[33.75,30.47],[34.32,19.08],[38.5,15.83],[53.45,20.82],[47.75,35.65],[40.79,37.04]],[[62,17.4],[62,42.67],[59.76,42.85],[47.75,35.65],[53.45,20.82]],[[0,44.86],[0,40.03],[16.83,32.67],[21.57,35.04],[23.3,48.03],[18,52.57]],[[23.3,48.03],[21.57,35.04],[33.75,30.47],[40.79,37.04],[37.76,47.98],[35,50.22]],[[50.73,53.88],[37.76,47.98],[40.79,37.04],[47.75,35.65],[59.76,42.85]],[[18,62],[0,62],[0,44.86],[18,52.57]],[[35,62],[18,62],[18,52.57],[23.3,48.03],[35,50.22]],[[51.75,62],[35,62],[35,50.22],[37.76,47.98],[50.73,53.88]],[[62,42.67],[62,62],[51.75,62],[50.73,53.88],[59.76,42.85]]];
@@ -800,74 +804,112 @@
     }
   }
 
+  function renderScoreBank() {
+    scoreBufferEl.textContent = "+" + scoreBank;
+    scoreBufferEl.classList.toggle("is-visible", scoreBank > 0);
+  }
+
+  // Score HUD is above the stage. Convert its center into stage coordinates,
+  // including any scaling applied by the responsive phone layout.
+  function scoreBankTarget() {
+    if (stageEl && scoreBufferEl &&
+        typeof stageEl.getBoundingClientRect === "function" &&
+        typeof scoreBufferEl.getBoundingClientRect === "function") {
+      const stageRect = stageEl.getBoundingClientRect();
+      const bufferRect = scoreBufferEl.getBoundingClientRect();
+      if (stageRect.width > 0) {
+        const ratio = STAGE / stageRect.width;
+        return {
+          x: (bufferRect.left + bufferRect.width / 2 - stageRect.left) * ratio,
+          y: (bufferRect.top + bufferRect.height / 2 - stageRect.top) * ratio,
+        };
+      }
+    }
+    return { x: 105, y: 46 };
+  }
+
   function startScoreFly(amount, fromX, fromY) {
     if (amount <= 0) return;
     const el = document.createElement("div");
     el.className = "score-fly";
     el.textContent = "+" + amount;
     floatLayer.appendChild(el);
-    const lane = scoreFlies.length % 3;
-    const fly = {
-      el, value: amount, applied: 0, age: 0,
-      x0: fromX, y0: fromY, x: fromX, y: fromY,
-      targetX: SCORE_PANEL_X + (lane % 2) * 22,
-      targetY: SCORE_PANEL_Y + lane * 20,
-    };
+    const fly = { el: el, value: amount, age: 0,
+      x0: fromX, y0: fromY, x: fromX, y: fromY };
     scoreFlies.push(fly);
     paintScoreFly(fly, 1, 1);
   }
 
   function paintScoreFly(fly, opacity, scale) {
     fly.el.style.opacity = String(Math.max(0, opacity));
-    fly.el.style.transform = "translate(" + fly.x + "px, " + fly.y +
-      "px) translate(-50%, -50%) scale(" + scale + ")";
+    fly.el.style.transform = "translate(" + fly.x + "px, " + fly.y + "px) " +
+      "translate(-50%, -50%) scale(" + scale + ")";
+  }
+
+  function depositScore(amount) {
+    if (amount <= 0) return;
+    const wasEmpty = scoreBank === 0;
+    scoreBank += amount;
+    // New deposits replenish an active bank; do not restart its countdown.
+    if (wasEmpty) {
+      scoreBankHoldRemaining = SCORE_HOLD_MS;
+      scoreBankFraction = 0;
+    }
+    renderScoreBank();
+  }
+
+  function updateScoreBank(dt) {
+    if (scoreBank <= 0) return;
+    if (scoreBankHoldRemaining > 0) {
+      scoreBankHoldRemaining = Math.max(0, scoreBankHoldRemaining - dt);
+      return;
+    }
+    // Readable when small, fast enough to settle a larger accumulated bank.
+    const rate = Math.max(SCORE_FEED_MIN_PER_SECOND,
+      Math.min(SCORE_FEED_MAX_PER_SECOND, scoreBank * 1.5));
+    scoreBankFraction += (dt / 1000) * rate;
+    const amount = Math.min(scoreBank, Math.floor(scoreBankFraction));
+    if (amount <= 0) return;
+    scoreBankFraction -= amount;
+    scoreBank -= amount;
+    setScore(score + amount, false);
+    renderScoreBank();
+    if (scoreBank === 0) {
+      scoreBankFraction = 0;
+      pushPresence();
+    }
   }
 
   function updateScoreFlies(dt) {
-    const completedAt = SCORE_FLY_MS + SCORE_HOLD_MS + SCORE_FEED_MS;
     for (let i = scoreFlies.length - 1; i >= 0; i--) {
       const fly = scoreFlies[i];
       fly.age += dt;
-      if (fly.age < SCORE_FLY_MS) {
-        const t = Math.min(1, fly.age / SCORE_FLY_MS);
-        const eased = 1 - Math.pow(1 - t, 3);
-        fly.x = fly.x0 + (fly.targetX - fly.x0) * eased;
-        fly.y = fly.y0 + (fly.targetY - fly.y0) * eased;
-        paintScoreFly(fly, 1, 1 - 0.56 * eased);
-        continue;
-      }
-      fly.x = fly.targetX; fly.y = fly.targetY;
-      fly.el.classList.add("is-feeding");
-      if (fly.age < SCORE_FLY_MS + SCORE_HOLD_MS) {
-        paintScoreFly(fly, 1, 0.44);
-        continue;
-      }
-      // What leaves the green number arrives in the total that same frame.
-      const p = Math.min(1, (fly.age - SCORE_FLY_MS - SCORE_HOLD_MS) / SCORE_FEED_MS);
-      const credited = Math.floor(fly.value * p);
-      if (credited > fly.applied) {
-        setScore(score + credited - fly.applied, false);
-        fly.applied = credited;
-      }
-      const remaining = fly.value - fly.applied;
-      fly.el.textContent = remaining ? "+" + remaining : "+0";
-      paintScoreFly(fly, 1 - 0.72 * p, 0.44 * (1 - 0.15 * p));
-      if (fly.age >= completedAt) {
-        if (fly.applied < fly.value) setScore(score + fly.value - fly.applied, false);
+      const t = Math.min(1, fly.age / SCORE_FLY_MS);
+      const eased = 1 - Math.pow(1 - t, 3);
+      const target = scoreBankTarget();
+      fly.x = fly.x0 + (target.x - fly.x0) * eased;
+      fly.y = fly.y0 + (target.y - fly.y0) * eased;
+      paintScoreFly(fly, 1, 1.15 - 0.15 * eased);
+      if (t >= 1) {
+        depositScore(fly.value);
         fly.el.remove();
         scoreFlies.splice(i, 1);
-        pushPresence();
       }
     }
+    updateScoreBank(dt);
   }
 
   function clearScoreFlies() {
     for (let i = 0; i < scoreFlies.length; i++) scoreFlies[i].el.remove();
     scoreFlies.length = 0;
+    scoreBank = 0;
+    scoreBankHoldRemaining = 0;
+    scoreBankFraction = 0;
+    renderScoreBank();
   }
 
   function hasPendingScore() {
-    return scoreFlies.length > 0 ||
+    return scoreBank > 0 || scoreFlies.length > 0 ||
       floaters.some(function (f) { return f.alive && f.pendingValue > 0; });
   }
 
