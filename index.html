@@ -509,6 +509,18 @@
       animation: point-source-breathe 2s ease-in-out infinite;
     }
 
+    /* Quick Strike feedback remains green throughout the qualifying button. */
+    #point-source.is-quick-strike {
+      background: #b5ffd2;
+      box-shadow: 0 0 5px 2px rgba(74, 255, 117, 0.84),
+                  0 0 15px 4px rgba(47, 255, 102, 0.36);
+    }
+    #point-source.is-quick-strike::before {
+      background: radial-gradient(circle, rgba(46,255,111,0.33) 0%,
+                                           rgba(42,255,104,0.12) 48%,
+                                           transparent 70%);
+    }
+
     #point-source::before {
       content: "";
       position: absolute;
