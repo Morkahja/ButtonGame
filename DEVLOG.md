@@ -1,5 +1,15 @@
 # Development log
 
+## 2026-10-25 — Correct pickup overlay stacking and bank position
+
+**Issue:** The green pickup elements were appended to `#float-layer` inside `#stage`. Although `.score-fly` had `z-index: 8`, `#stage` creates a lower stacking context (`z-index: 0`, clipped with `overflow: hidden` and `clip-path`). Consequently, incoming pickups passed **behind** the absolutely positioned Points HUD, making the top of the flight difficult to see.
+
+**Fix:** Added a separate `#score-fly-layer` as a last child of `#frame` and sibling of the HUD panels and `#stage`, with `z-index: 9` and `pointer-events: none`. Only credit-bearing green pickup flights use this foreground overlay; normal physics floaters still collide within the stage. Origin and destination geometry are converted from DOM client rectangles into the overlay's local unscaled coordinates to account for responsive frame scaling.
+
+**HUD:** Introduced `.points-hud-group` as a shared layout for the rectangular Points plate and green bank. The `#score-buffer` is now a flex sibling **outside the panel's clip path**, to the right of it, bottom-aligned to the white points number. The panel stays compact as the bank accumulates values. No scoring arithmetic or time constants were changed.
+
+**Validation:** Node syntax, deterministic simulated DOM tests covering overlay parentage, pickup coordinate conversion, two simultaneous score transfers, bank refills during countdown, deferred taps, jackpot 21, end-of-round settlement. APK ZIP integrity and v2 signature digest checked against the previous update's certificate. Chromium headless navigation did not complete in this environment; physical Android layout still needs visual verification.
+
 ## 2026-10-25 — Per-spawn randomized jacket-button tilt
 
 The button already accumulated a random `rotation += randomint(1,369)` after respawns, but the first button and the first button after restarting always began at zero. The accumulated full-circle orientation also gave no predictable range of subtle tilt.
