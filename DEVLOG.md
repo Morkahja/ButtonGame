@@ -1,5 +1,17 @@
 # Development log
 
+## 2026-10-25 — Start reaction clock after spawn-in, not on page load
+
+**User request:** Prevent a slow first tap after the page loads from distorting average Reaction, and report the time from the end of the 320 ms spawn animation until first contact.
+
+**Change:** In `onClick()`, capture `alreadyStarted` before `startGame(now)`. Only add a reaction sample if the round was already underway, the button is receiving its first tap (`spawnTime != null`), and `now >= spawnAnimUntil`. The sample is `now - spawnAnimUntil`; earlier spawn-in taps are ignored for the average rather than recorded as 0 ms. Clear `spawnTime` on any first tap, so later taps do not create additional samples.
+
+**Quick Strike decoupling:** The previous code reused non-null `reactionMs` to decide Quick Strike eligibility. Since first-load and early taps may now have no reaction sample, the Quick Strike check uses `isFirstTapOnButton` independently. The 73 ms window after spawn-in, green dot, 150% spinning feedback and double points are unchanged, including eligibility of the initial button.
+
+**Reaction UI:** Still displays the running mean of valid first-tap samples with existing smoothing. It shows “—” until the first valid spawn-after-start sample.
+
+**Validation:** Node JavaScript syntax; deterministic simulated game tests for 10-second idle before start, new spawn taps at 319 ms (ignored), 320 ms (0 ms), 393 ms (73 ms), 400 ms (80 ms), averaging 0/80/73 → 51 ms, and Play Again resetting the samples. Compared APK entries to previous APK: only `assets/www/game.js` changed. Verified ZIP integrity and matching v2 signing identity/digest. Not device-tested.
+
 ## 2026-10-25 — High-impact Quick Strike scale
 
 The existing Quick Strike rotated the button through 360 degrees in 290 ms but reused the general 110% tap pulse, making the spin difficult to notice.
