@@ -111,6 +111,9 @@
   const submitScoreBtn = document.getElementById("submit-score");
   const scoreStatus = document.getElementById("score-status");
   const leaderboardBody = document.getElementById("leaderboard-body");
+  const previewEl = document.getElementById("live-leaderboard");
+  const previewListEl = document.getElementById("live-leaderboard-list");
+  let lastHostScores = [];
   const livePlayersEl = document.getElementById("live-players");
 
   const LOCAL_NAME_KEY = "buttongame_name_v1";
@@ -768,6 +771,7 @@
     startTime = now;
     deadline = now + BASE_DURATION_MS;
     anleitungEl.textContent = "";
+    syncScorePreview();
   }
 
   function triggerQuickFx() {
@@ -1674,9 +1678,34 @@
       .slice(0, MAX_SCORES);
   }
 
+  function syncScorePreview() {
+    // The host API is the only source. No private guest scoreboard.
+    previewEl.classList.toggle("is-hidden", !started || gameOver || !lastHostScores.length);
+  }
+
+  function renderScorePreview(scores) {
+    lastHostScores = scores;
+    const list = document.createElement("ol");
+    for (let i = 0; i < Math.min(5, scores.length); i++) {
+      const record = scores[i];
+      const row = document.createElement("li");
+      const name = document.createElement("span");
+      name.className = "preview-name";
+      name.textContent = (i + 1) + ". " + record.name;
+      const points = document.createElement("span");
+      points.className = "preview-points";
+      points.textContent = record.score + " pts";
+      row.append(name, points);
+      list.appendChild(row);
+    }
+    previewListEl.replaceChildren(...list.children);
+    syncScorePreview();
+  }
+
   function renderLeaderboard(list) {
     // Host is the sole owner of submitted high scores and final statistics.
     const scores = normalizeScores(list);
+    renderScorePreview(scores);
     if (!scores.length) {
       leaderboardBody.className = "empty";
       leaderboardBody.textContent = "No scores yet";
@@ -1714,6 +1743,7 @@
       .catch(function () {
         leaderboardBody.className = "empty";
         leaderboardBody.textContent = "Host leaderboard unavailable";
+        renderScorePreview([]);
       });
   }
 
@@ -1773,6 +1803,7 @@
     feind.classList.add("is-gone");
     gameOver = true;
     fading = false;
+    syncScorePreview();
     timeEl.textContent = "0";
     endWrap.classList.add("visible");
     scoreForm.hidden = false;
@@ -1792,6 +1823,7 @@
     startTime = 0;
     gameOver = false;
     roundExpired = false;
+    syncScorePreview();
     fading = false;
     flupp = 0;
     alpha = FADE_START_ALPHA;
@@ -1861,6 +1893,9 @@
     spawnTime = performance.now();
     pushPresence();
     setInterval(pushPresence, 900);
+    // Keep the lightweight preview current as guests finish rounds.
+    loadLeaderboard();
+    setInterval(function () { if (started && !gameOver) loadLeaderboard(); }, 12000);
   })();
 
   function onClick() {
