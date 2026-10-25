@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-25 — Correct reaction timing
+
+- Excluded the initial page-load button's first tap from Reaction statistics, including when starting a new round with Play Again. The Reaction panel remains “—” until a subsequent button contributes a valid sample.
+- Measure the interval from completion of the **320 ms spawn animation** to the **first tap** of each subsequent button, rather than measuring from the start of spawning.
+- First taps during spawn-in do not count as zero-millisecond reaction samples. Repeated hits to the same button are still ignored for the average.
+- Keep the existing **73 ms Quick Strike window**, 150% spin, green dot and per-tap double-point reward intact, including possible Quick Strikes on the initial button.
+- Verified with simulated-clock tests covering first load, reset, 319/320/393/400 ms timing and reaction averages; rebuilt from the prior signed APK using the same signing certificate and verified APK v2 signature, digest and file integrity. Device-level testing remains pending.
+
 ## 2026-10-25 — 150% Quick Strike spin
 
 - Increased the successful Quick Strike animation to **150% of the button's normal size** for the first 60% of its existing 290 ms spin, then smoothly returned to 100% by the end.
