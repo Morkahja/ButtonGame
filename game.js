@@ -1673,9 +1673,9 @@
         return {
           name: String(e.name).trim().slice(0, MAX_NAME) || "Player",
           score: Math.max(0, Math.floor(e.score)),
-          reactionMs: safeScoreNumber(e.reactionMs),
-          apm: safeScoreNumber(e.apm),
-          durationMs: safeScoreNumber(e.durationMs),
+          reactionMs: Number.isFinite(e.reactionMs) ? safeScoreNumber(e.reactionMs) : null,
+          apm: Number.isFinite(e.apm) ? safeScoreNumber(e.apm) : null,
+          durationMs: Number.isFinite(e.durationMs) ? safeScoreNumber(e.durationMs) : null,
         };
       })
       .sort(function (a, b) {
@@ -1685,7 +1685,20 @@
   }
 
   function renderLeaderboard(list) {
-    const scores = normalizeScores(list);
+    // Preserve this device's final stats when installed host still has the
+    // original name/points-only API; unseen remote entries show dashes.
+    const local = readLocalScores();
+    const enriched = (list || []).map(function (entry) {
+      if (!entry || entry.durationMs != null) return entry;
+      const match = local.slice().reverse().find(function (saved) {
+        return saved && saved.name === entry.name && saved.score === entry.score &&
+          Number.isFinite(saved.durationMs);
+      });
+      return match ? Object.assign({}, entry, {
+        reactionMs: match.reactionMs, apm: match.apm, durationMs: match.durationMs,
+      }) : entry;
+    });
+    const scores = normalizeScores(enriched);
     if (!scores.length) {
       leaderboardBody.className = "empty";
       leaderboardBody.textContent = "No scores yet";
@@ -1702,7 +1715,8 @@
       const detail = document.createElement("div");
       detail.className = "score-entry-details";
       detail.textContent = "Reaction " + (e.reactionMs ? e.reactionMs + " ms" : "—") +
-        " · APM " + e.apm + " · Time " + formatSessionTime(e.durationMs);
+        " · APM " + (e.apm == null ? "—" : e.apm) +
+        " · Time " + (e.durationMs == null ? "—" : formatSessionTime(e.durationMs));
       li.appendChild(heading);
       li.appendChild(detail);
       ol.appendChild(li);
@@ -1733,6 +1747,8 @@
       apm: finalStats ? finalStats.apm : 0,
       durationMs: finalStats ? finalStats.durationMs : 0,
     };
+    const localList = normalizeScores(readLocalScores().concat([entry]));
+    writeLocalScores(localList);
     scoreStatus.textContent = "Saving…";
     submitScoreBtn.disabled = true;
     pushPresence();
@@ -1748,13 +1764,16 @@
       })
       .then(function (data) {
         renderLeaderboard(data.scores || data);
-        scoreStatus.textContent = "Saved to host!";
+        const remote = data.scores || data;
+        const nativeSupportsStats = Array.isArray(remote) && remote.some(function (e) {
+          return e && Number.isFinite(e.durationMs);
+        });
+        scoreStatus.textContent = nativeSupportsStats ? "Saved to host!" :
+          "Score on host · details kept here";
         scoreForm.hidden = true;
       })
       .catch(function () {
-        const list = normalizeScores(readLocalScores().concat([entry]));
-        writeLocalScores(list);
-        renderLeaderboard(list);
+        renderLeaderboard(localList);
         scoreStatus.textContent = "Saved on this device";
         scoreForm.hidden = true;
       })
