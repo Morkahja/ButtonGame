@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-25 — Physical 21 → 42 bounce-and-transform animation
+
+- Reworked the special **21 → 42** animation: exactly **21 normally sized “1” digits** burst from the merged 21 at high velocity, bounce visibly against the 450px stage's four walls, and keep moving freely for approximately **1.14 seconds**.
+- Starting about 630 ms after the burst (staggered over 220 ms), each of the 21 “1” digits turns into an equally legible **“2”**, while continuing to bounce. The result is twenty-one 2s, representing 42 total points—**not forty-two 1s or 42 scoring floaters**.
+- All twenty-one 2s then travel inwards over approximately 690 ms and assemble into the same large golden 42 at stage center-top (225,110) as the 37→73 special's “Smash it!” position. The 42 holds for 360 ms, then turns green and shrinks during a 250 ms transition before entering the normal green score pickup/bank pipeline.
+- Maintained the enlarged 2.64× special-combo size and exact **42-point single payout**, existing +3s golden time bonus, 37→73 animation, and end-of-round settlement/reset safety.
+- Verified fast wall rebounds, full-size singles, transformation of all 21 units without duplicate elements, final assembly, single +42 credit, Game Over settlement, Play Again cleanup, golden-time-bank regressions, and 37→73 regressions with deterministic Node simulations. APK signature-v2 content digest/identity and ZIP checks passed; physical Android visual testing pending.
+
 ## 2026-10-25 — Golden time-bonus HUD and eligible combo glow
 
 - Eligible floating combination totals **7, 14, 21, 42, 37 and 73** receive the same golden glow as the +3-second bonus pickup while they remain eligible. The glow is removed if the floating number merges into a noneligible total or enters its green score-collection phase.
