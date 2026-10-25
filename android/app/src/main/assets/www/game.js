@@ -17,10 +17,12 @@
   const FADE_END_ALPHA = 5;
   const SPAWN_ANIM_MS = 320;
   const QUICK_STRIKE_WINDOW_MS = 73;
-  const POP_DURATION_MS = 580;
-  const CRACK_PHASE_MS = 140;
-  const BREAK_PHASE_MS = 230;
-  const SCATTER_FADE_MS = 460;
+  // Delay breakup while keeping each button's overall life unchanged.
+  const POP_DELAY_MS = 160;
+  const POP_DURATION_MS = 420;
+  const CRACK_PHASE_MS = 100;
+  const BREAK_PHASE_MS = 165;
+  const SCATTER_FADE_MS = 325;
   const TAP_FLASH_MS = 125;
   const TAP_PULSE_MS = 145;
   const TAP_PULSE_SCALE = 1.10;
@@ -111,8 +113,6 @@
   const leaderboardBody = document.getElementById("leaderboard-body");
   const livePlayersEl = document.getElementById("live-players");
 
-  // New beta record format: intentionally start with an empty leaderboard.
-  const LOCAL_SCORES_KEY = "buttongame_scores_v2";
   const LOCAL_NAME_KEY = "buttongame_name_v1";
   const LOCAL_SESSION_KEY = "buttongame_session_v1";
   const LOCAL_MUTE_KEY = "buttongame_muted_v1";
@@ -273,7 +273,7 @@
       playRandomBell();
       return;
     }
-    playBuffer(SPECIAL_REVEAL_FILE, { gain: 0.49, rate: 1 });
+    playBuffer(SPECIAL_REVEAL_FILE, { gain: 0.35, rate: 1 });
   }
 
   function playQuickStrikeImpact() {
@@ -285,7 +285,7 @@
       return;
     }
     const url = ready[(Math.random() * ready.length) | 0];
-    playBuffer(url, { gain: 0.37 + Math.random() * 0.06,
+    playBuffer(url, { gain: 0.26 + Math.random() * 0.04,
       rate: 0.98 + Math.random() * 0.04 });
   }
 
@@ -497,6 +497,7 @@
   let popping = false;
   let popStartedAt = 0;
   let popUntil = 0;
+  let pendingPopAt = 0;
   let tapFlashStartedAt = -Infinity;
   let quickSpinStartedAt = -Infinity;
   let quickStrikeActive = false;
@@ -676,6 +677,7 @@
     popping = false;
     popStartedAt = 0;
     popUntil = 0;
+    pendingPopAt = 0;
     clearPopShards();
     feind.style.filter = "none";
     tapFlashStartedAt = -Infinity;
@@ -693,6 +695,8 @@
   }
 
   function beginPopPhase() {
+    pendingPopAt = 0;
+    fading = false;
     popping = true;
     popStartedAt = performance.now();
     popUntil = popStartedAt + POP_DURATION_MS;
@@ -1638,20 +1642,6 @@
     spawnFloater(amount);
   }
 
-  function readLocalScores() {
-    try {
-      const raw = localStorage.getItem(LOCAL_SCORES_KEY);
-      const list = raw ? JSON.parse(raw) : [];
-      return Array.isArray(list) ? list : [];
-    } catch (e) {
-      return [];
-    }
-  }
-
-  function writeLocalScores(list) {
-    localStorage.setItem(LOCAL_SCORES_KEY, JSON.stringify(list.slice(0, MAX_SCORES)));
-  }
-
   function safeScoreNumber(value) {
     return Number.isFinite(value) ? Math.max(0, Math.round(value)) : 0;
   }
@@ -1685,20 +1675,8 @@
   }
 
   function renderLeaderboard(list) {
-    // Preserve this device's final stats when installed host still has the
-    // original name/points-only API; unseen remote entries show dashes.
-    const local = readLocalScores();
-    const enriched = (list || []).map(function (entry) {
-      if (!entry || entry.durationMs != null) return entry;
-      const match = local.slice().reverse().find(function (saved) {
-        return saved && saved.name === entry.name && saved.score === entry.score &&
-          Number.isFinite(saved.durationMs);
-      });
-      return match ? Object.assign({}, entry, {
-        reactionMs: match.reactionMs, apm: match.apm, durationMs: match.durationMs,
-      }) : entry;
-    });
-    const scores = normalizeScores(enriched);
+    // Host is the sole owner of submitted high scores and final statistics.
+    const scores = normalizeScores(list);
     if (!scores.length) {
       leaderboardBody.className = "empty";
       leaderboardBody.textContent = "No scores yet";
@@ -1734,7 +1712,8 @@
         renderLeaderboard(data.scores || data);
       })
       .catch(function () {
-        renderLeaderboard(readLocalScores());
+        leaderboardBody.className = "empty";
+        leaderboardBody.textContent = "Host leaderboard unavailable";
       });
   }
 
@@ -1747,8 +1726,6 @@
       apm: finalStats ? finalStats.apm : 0,
       durationMs: finalStats ? finalStats.durationMs : 0,
     };
-    const localList = normalizeScores(readLocalScores().concat([entry]));
-    writeLocalScores(localList);
     scoreStatus.textContent = "Saving…";
     submitScoreBtn.disabled = true;
     pushPresence();
@@ -1768,14 +1745,14 @@
         const nativeSupportsStats = Array.isArray(remote) && remote.some(function (e) {
           return e && Number.isFinite(e.durationMs);
         });
-        scoreStatus.textContent = nativeSupportsStats ? "Saved to host!" :
-          "Score on host · details kept here";
+        scoreStatus.textContent = nativeSupportsStats ? "Saved on host!" :
+          "Points on host · host update needed for stats";
         scoreForm.hidden = true;
       })
       .catch(function () {
-        renderLeaderboard(localList);
-        scoreStatus.textContent = "Saved on this device";
-        scoreForm.hidden = true;
+        scoreStatus.textContent = "Could not reach host — try again";
+        // Never claim a guest/device saved this score.
+        loadLeaderboard();
       })
       .finally(function () {
         submitScoreBtn.disabled = false;
@@ -1828,6 +1805,7 @@
     popping = false;
     popStartedAt = 0;
     popUntil = 0;
+    pendingPopAt = 0;
     tapFlashStartedAt = -Infinity;
     quickSpinStartedAt = -Infinity;
     feind.style.filter = "none";
@@ -1995,10 +1973,16 @@
       return;
     }
     if (!fading) return;
+    // Hold the button intact for another 160ms, then break it faster.
+    // Taps during this brief hold still count (including Quick Strike).
+    if (pendingPopAt) {
+      if (performance.now() >= pendingPopAt) beginPopPhase();
+      else applyFeindTransform();
+      return;
+    }
     alpha -= flupp;
     if (alpha <= FADE_END_ALPHA) {
-      fading = false;
-      beginPopPhase();
+      pendingPopAt = performance.now() + POP_DELAY_MS;
       return;
     }
     applyFeindTransform();
