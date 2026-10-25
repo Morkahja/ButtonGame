@@ -7,11 +7,23 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 
-data class ScoreEntry(val name: String, val score: Int)
+// New v2 scores deliberately do not carry over beta high-score records.
+data class ScoreEntry(
+    val name: String,
+    val score: Int,
+    val reactionMs: Int,
+    val apm: Int,
+    val durationMs: Long
+)
 
 class ScoreStore(context: Context) {
-    private val file = File(context.filesDir, "scores.json")
+    private val file = File(context.filesDir, "scores-v2.json")
     private val lock = Any()
+
+    init {
+        // The leaderboard format has changed and beta users requested a clean slate.
+        File(context.filesDir, "scores.json").delete()
+    }
 
     fun list(): List<ScoreEntry> = synchronized(lock) {
         if (!file.exists()) return emptyList()
@@ -23,7 +35,10 @@ class ScoreStore(context: Context) {
                     add(
                         ScoreEntry(
                             name = o.optString("name", "Player").trim().take(MAX_NAME).ifEmpty { "Player" },
-                            score = o.optInt("score", 0).coerceAtLeast(0)
+                            score = o.optInt("score", 0).coerceAtLeast(0),
+                            reactionMs = o.optInt("reactionMs", 0).coerceAtLeast(0),
+                            apm = o.optInt("apm", 0).coerceAtLeast(0),
+                            durationMs = o.optLong("durationMs", 0L).coerceAtLeast(0L)
                         )
                     )
                 }
@@ -33,26 +48,29 @@ class ScoreStore(context: Context) {
         }
     }
 
-    fun add(name: String, score: Int): List<ScoreEntry> = synchronized(lock) {
+    fun add(name: String, score: Int, reactionMs: Int, apm: Int, durationMs: Long): List<ScoreEntry> = synchronized(lock) {
         val cleaned = name.trim().take(MAX_NAME).ifEmpty { "Player" }
-        val next = (list() + ScoreEntry(cleaned, score.coerceAtLeast(0)))
-            .sortedByDescending { it.score }
-            .take(MAX_SCORES)
+        val entry = ScoreEntry(cleaned, score.coerceAtLeast(0),
+            reactionMs.coerceAtLeast(0), apm.coerceAtLeast(0), durationMs.coerceAtLeast(0L))
+        val next = (list() + entry).sortedByDescending { it.score }.take(MAX_SCORES)
         val arr = JSONArray()
-        next.forEach { e ->
-            arr.put(JSONObject().put("name", e.name).put("score", e.score))
-        }
+        next.forEach { e -> arr.put(asJson(e)) }
         file.writeText(arr.toString())
         next
     }
 
     fun toJsonObject(scores: List<ScoreEntry> = list()): JSONObject {
         val arr = JSONArray()
-        scores.forEach { e ->
-            arr.put(JSONObject().put("name", e.name).put("score", e.score))
-        }
+        scores.forEach { e -> arr.put(asJson(e)) }
         return JSONObject().put("scores", arr)
     }
+
+    private fun asJson(entry: ScoreEntry): JSONObject = JSONObject()
+        .put("name", entry.name)
+        .put("score", entry.score)
+        .put("reactionMs", entry.reactionMs)
+        .put("apm", entry.apm)
+        .put("durationMs", entry.durationMs)
 
     companion object {
         const val MAX_NAME = 16
