@@ -37,7 +37,15 @@
   // Exact totals that hang around longer for more combos.
   const LINGER_AT = { 7: true, 14: true };
   // Exact jackpots: burst into ones + double that total added to the score.
-  const JACKPOT_AT = { 21: true, 42: true, 73: true };
+  // 21 and 37 have dedicated, exact-value transforms. Natural 42/73 still
+  // use the legacy jackpot effect.
+  const JACKPOT_AT = { 42: true, 73: true };
+  const SPECIAL_LABEL_SCALE = 2.64; // 20% larger than the previous 2.2x 37/73
+  const COMBO42_SCATTER_MS = 480;
+  const COMBO42_DUPLICATE_MS = 300;
+  const COMBO42_GATHER_MS = 580;
+  const COMBO42_HOLD_MS = 180;
+  const COMBO42_GREEN_MS = 190;
   const REVERSE_MOVE_MS = 490;
   const REVERSE_FLIP_MS = 360;
   const REVERSE_HOLD_MS = 160;
@@ -457,6 +465,7 @@
   const timeFlies = [];
   const scoreFlies = [];
   const reversing37 = [];
+  const fusing42 = [];
   let scoreBank = 0;
   let scoreBankHoldRemaining = 0;
   let scoreBankFraction = 0;
@@ -835,14 +844,14 @@
       const greenEnd = holdEnd + REVERSE_GREEN_MS;
       let x = REVERSE_CENTER_X;
       let y = REVERSE_CENTER_Y;
-      let scale = 2.2;
+      let scale = SPECIAL_LABEL_SCALE;
       let angle = 0;
       if (elapsed < moveEnd) {
         const t = Math.min(1, elapsed / moveEnd);
         const ease = 1 - Math.pow(1 - t, 3);
         x = fx.x0 + (REVERSE_CENTER_X - fx.x0) * ease;
         y = fx.y0 + (REVERSE_CENTER_Y - fx.y0) * ease;
-        scale = 1 + 1.2 * ease;
+        scale = 1 + (SPECIAL_LABEL_SCALE - 1) * ease;
         angle = fx.rotation * (1 - ease);
       } else if (elapsed < flipEnd) {
         const t = Math.min(1, (elapsed - moveEnd) / REVERSE_FLIP_MS);
@@ -860,7 +869,7 @@
         fx.el.textContent = "73";
         fx.el.classList.add("reverse-green");
         const t = elapsed < holdEnd ? 0 : (elapsed - holdEnd) / REVERSE_GREEN_MS;
-        scale = 2.2 - 1.15 * Math.min(1, t);
+        scale = SPECIAL_LABEL_SCALE - (SPECIAL_LABEL_SCALE - 1.05) * Math.min(1, t);
       } else {
         fx.el.remove();
         reversing37.splice(i, 1);
@@ -877,6 +886,142 @@
   function clear37Reversals() {
     for (let i = 0; i < reversing37.length; i++) reversing37[i].el.remove();
     reversing37.length = 0;
+  }
+
+  // The 21 floating points are converted into 21 visible single units,
+  // duplicated into 42 units, then assembled into one green 42-point pickup.
+  // No physics floater or generic jackpot is created from the 42 label.
+  function begin21To42(f) {
+    if (!f || !f.alive) return;
+    f.alive = false;
+    f.el.remove();
+    const parts = [];
+    const originX = f.x;
+    const originY = f.y;
+    const spread = Math.random() * Math.PI * 2;
+    for (let i = 0; i < 21; i++) {
+      const angle = spread + i * (Math.PI * 2 / 21);
+      const radius = 65 + (i % 3) * 13;
+      const burstX = Math.max(18, Math.min(STAGE - 18, originX + Math.cos(angle) * radius));
+      const burstY = Math.max(18, Math.min(STAGE - 18, originY + Math.sin(angle) * radius));
+      const el = document.createElement("div");
+      el.className = "combo-unit";
+      el.textContent = "1";
+      stageEl.appendChild(el);
+      parts.push({ el: el, x0: originX, y0: originY,
+        x1: burstX, y1: burstY,
+        x2: burstX, y2: burstY, copy: false });
+    }
+    const label = document.createElement("div");
+    label.className = "floater reverse-37 combo-42";
+    label.textContent = "42";
+    label.style.fontSize = "30px";
+    label.style.opacity = "0";
+    stageEl.appendChild(label);
+    fusing42.push({ start: performance.now(), parts: parts,
+      duplicated: false, label: label, value: 42 });
+    playRandomBell();
+  }
+
+  function placeComboUnit(part, x, y, size, opacity) {
+    part.el.style.opacity = String(Math.max(0, Math.min(1, opacity)));
+    part.el.style.transform = "translate(" + x + "px, " + y +
+      "px) translate(-50%, -50%) scale(" + size + ")";
+  }
+
+  function update21To42(now) {
+    for (let i = fusing42.length - 1; i >= 0; i--) {
+      const fx = fusing42[i];
+      const elapsed = Math.max(0, now - fx.start);
+      const scatterEnd = COMBO42_SCATTER_MS;
+      const duplicateEnd = scatterEnd + COMBO42_DUPLICATE_MS;
+      const gatherEnd = duplicateEnd + COMBO42_GATHER_MS;
+      const holdEnd = gatherEnd + COMBO42_HOLD_MS;
+      const greenEnd = holdEnd + COMBO42_GREEN_MS;
+      if (elapsed >= scatterEnd && !fx.duplicated) {
+        // At this precise point there are 21 units; now each splits into two.
+        // The new 21 visibly separate from their source units.
+        const originals = fx.parts.slice();
+        for (let j = 0; j < originals.length; j++) {
+          const source = originals[j];
+          const angle = (j * Math.PI * 2 / 21) + 0.68;
+          const el = document.createElement("div");
+          el.className = "combo-unit combo-duplicate";
+          el.textContent = "1";
+          stageEl.appendChild(el);
+          fx.parts.push({ el: el, x0: source.x1, y0: source.y1,
+            x1: source.x1, y1: source.y1,
+            x2: Math.max(18, Math.min(STAGE - 18, source.x1 + Math.cos(angle) * 26)),
+            y2: Math.max(18, Math.min(STAGE - 18, source.y1 + Math.sin(angle) * 26)),
+            copy: true });
+        }
+        fx.duplicated = true;
+      }
+      if (elapsed < scatterEnd) {
+        const t = Math.min(1, elapsed / COMBO42_SCATTER_MS);
+        const eased = 1 - Math.pow(1 - t, 3);
+        for (const part of fx.parts) {
+          placeComboUnit(part,
+            part.x0 + (part.x1 - part.x0) * eased,
+            part.y0 + (part.y1 - part.y0) * eased,
+            0.75 + 0.27 * eased, 1);
+        }
+      } else if (elapsed < duplicateEnd) {
+        const t = Math.min(1, (elapsed - scatterEnd) / COMBO42_DUPLICATE_MS);
+        const eased = t * t * (3 - 2 * t);
+        for (const part of fx.parts) {
+          placeComboUnit(part,
+            part.x1 + (part.x2 - part.x1) * eased,
+            part.y1 + (part.y2 - part.y1) * eased,
+            part.copy ? 0.64 + 0.38 * eased : 1.02,
+            part.copy ? 0.7 + 0.3 * eased : 1);
+        }
+      } else if (elapsed < gatherEnd) {
+        const t = Math.min(1, (elapsed - duplicateEnd) / COMBO42_GATHER_MS);
+        const eased = t * t * (3 - 2 * t);
+        for (const part of fx.parts) {
+          placeComboUnit(part,
+            part.x2 + (REVERSE_CENTER_X - part.x2) * eased,
+            part.y2 + (REVERSE_CENTER_Y - part.y2) * eased,
+            Math.max(0.08, 1 - 0.92 * eased),
+            Math.max(0, 1 - Math.max(0, (t - 0.7) / 0.3)));
+        }
+        // Reveal the assembled result just as the single units converge.
+        const appear = Math.max(0, Math.min(1, (t - 0.72) / 0.28));
+        fx.label.style.opacity = String(appear);
+        fx.label.style.transform = "translate(" + REVERSE_CENTER_X + "px, " +
+          REVERSE_CENTER_Y + "px) translate(-50%, -50%) scale(" +
+          (SPECIAL_LABEL_SCALE * (0.88 + appear * 0.12)) + ")";
+      } else if (elapsed < greenEnd) {
+        // The 42 pieces have become one enlarged number in the same upper
+        // center position as the 37 -> 73 special.
+        if (fx.parts.length) {
+          for (const part of fx.parts) part.el.remove();
+          fx.parts.length = 0;
+        }
+        fx.label.style.opacity = "1";
+        const green = elapsed >= holdEnd;
+        if (green) fx.label.classList.add("reverse-green");
+        const t = green ? Math.min(1, (elapsed - holdEnd) / COMBO42_GREEN_MS) : 0;
+        const scale = SPECIAL_LABEL_SCALE - (SPECIAL_LABEL_SCALE - 1.05) * t;
+        fx.label.style.transform = "translate(" + REVERSE_CENTER_X + "px, " +
+          REVERSE_CENTER_Y + "px) translate(-50%, -50%) scale(" + scale + ")";
+      } else {
+        for (const part of fx.parts) part.el.remove();
+        fx.label.remove();
+        fusing42.splice(i, 1);
+        // A single exact 42-point reward, fed into the normal green score bank.
+        startScoreFly(fx.value, REVERSE_CENTER_X, REVERSE_CENTER_Y);
+      }
+    }
+  }
+
+  function clear21To42() {
+    for (const fx of fusing42) {
+      for (const part of fx.parts) part.el.remove();
+      fx.label.remove();
+    }
+    fusing42.length = 0;
   }
 
   function explodeJackpot(f) {
@@ -1040,7 +1185,8 @@
   }
 
   function hasPendingScore() {
-    return reversing37.length > 0 || scoreBank > 0 || scoreFlies.length > 0 ||
+    return reversing37.length > 0 || fusing42.length > 0 ||
+      scoreBank > 0 || scoreFlies.length > 0 ||
       floaters.some(function (f) { return f.alive && f.pendingValue > 0; });
   }
 
@@ -1129,6 +1275,10 @@
     applyLinger(f);
     if (TIME_BONUS_AT[v]) {
       grantTimeBonusFly(fx, fy);
+    }
+    if (v === 21) {
+      begin21To42(f);
+      return;
     }
     if (v === 37) {
       begin37Reverse(f);
@@ -1261,6 +1411,7 @@
 
   function clearFloaters() {
     clear37Reversals();
+    clear21To42();
     for (let i = 0; i < floaters.length; i++) {
       floaters[i].el.remove();
     }
@@ -1684,6 +1835,7 @@
     tweenReactDisplay(dt);
     updateFloaters(dt);
     update37Reversals(ts);
+    update21To42(ts);
     updateScoreFlies(dt);
     updatePopShards(ts);
     if (
