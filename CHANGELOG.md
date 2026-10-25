@@ -1,5 +1,17 @@
 # Changelog
 
+## 2026-10-25 — Variable jackpot time, final session stats, replay overlay, quieter special audio
+
+- **Time rebalance:** button taps and their respawn/shatter phases no longer grant time. Exact 7, 14, 42 and 73 results award **+2s, +3s, +5s and +4s** respectively. The 21 and 37 intermediates award **0s**; their 42 and 73 results award time upon appearing at the central result position. Golden time pickups show their actual values. The existing 60-second initial round remains.
+- **Session statistics:** snapshot final points, average measured reaction in milliseconds, final actions per minute (APM), and elapsed session time from the first click to final Game Over (including pending score/time settlement). No new in-game session timer. Leaderboard entries now present all four values, formatting duration as m:ss.
+- **Storage:** switched browser-local scores to a fresh `buttongame_scores_v2` key, deliberately abandoning the previous beta records. Changed Android `ScoreStore.kt` to `scores-v2.json` (and delete `scores.json`), and extended `ScoreEntry` and `GameServer.kt` POST/GET to save reactionMs, apm and durationMs. **These Kotlin changes are committed as source but are NOT in the signed APK**, which currently retains the previous native score API; a full Android native build is required.
+- **Legacy-host adaptation in APK:** the submitting browser/device keeps the complete score metadata in localStorage and displays its own details beside host-saved points; entries from other devices served by the old native API show missing detail as a dash rather than fabricated zero statistics. Shared Wi-Fi score metrics require recompiling the native host.
+- **Play Again:** raised the button over the shared bottom Reaction/APM panel at Game Over for both local host gameplay and Wi-Fi guests. Replay resets state and starts a new local round.
+- **Audio balance:** the three newly supplied clips measured ~4–6 dB louder on average than the existing clips; lowered `4273` playback gain from 0.85 to 0.49 and Quick Strike impacts from 0.62–0.72 to 0.37–0.43, retaining ordinary effects.
+- Existing golden bonus bank, number physics, collision fix, 21→42/37→73 animations, Quick Strike 2× scoring and score settlement remain.
+- Tests passed for all new timer amounts and transform timing, no tap-time bonus, frozen final stats, replay visibility, old-host local stat enrichment, prior special-combo and sound regressions. Signed APK ZIP/content/digest and prior signer verified. Physical Android testing remains outstanding.
+- **Repository audio follow-up:** the three OGGs are included in the signed APK but still need GitHub binary-asset upload; GitHub text code is committed.
+
 ## 2026-10-25 — Three new audio recordings installed in Android APK
 
 - Received and verified `4273.ogg` (0.937 s), `QuickStrikepoints.ogg` (0.252 s), and `QuickStrikepoints1.ogg` (0.482 s), all stereo 44.1 kHz Ogg Vorbis.
