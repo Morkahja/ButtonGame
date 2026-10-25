@@ -1479,20 +1479,28 @@
       return;
     }
 
+    // Ignore the initial page-load button in the Reaction average. Its
+    // first tap starts a round, regardless of how long the screen was open.
+    const alreadyStarted = started;
     if (!started) startGame(now);
 
-    let reactionMs = null;
-    if (spawnTime != null) {
-      reactionMs = Math.max(0, now - spawnTime);
-      reactionSumMs += reactionMs;
-      reactionSamples += 1;
+    const isFirstTapOnButton = spawnTime != null;
+    if (isFirstTapOnButton) {
+      // Reaction starts when the spawn animation finishes, not when it begins.
+      // Ignore taps before that moment rather than recording artificial 0ms.
+      if (alreadyStarted && now >= spawnAnimUntil) {
+        const reactionMs = now - spawnAnimUntil;
+        reactionSumMs += reactionMs;
+        reactionSamples += 1;
+        syncReactTarget();
+        if (!reactDisplay) reactDisplay = reactTarget;
+      }
       spawnTime = null;
-      syncReactTarget();
-      if (!reactDisplay) reactDisplay = reactTarget;
     }
 
-    // Only the first tap in the 73ms window after spawn completes qualifies.
-    if (reactionMs != null && now >= spawnAnimUntil &&
+    // Quick Strike still qualifies on the first tap in the same 73ms window,
+    // even for the initial button excluded from Reaction statistics.
+    if (isFirstTapOnButton && now >= spawnAnimUntil &&
         now <= spawnAnimUntil + QUICK_STRIKE_WINDOW_MS) {
       setQuickStrikeActive(true);
       quickSpinStartedAt = now;
