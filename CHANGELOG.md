@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-25 — Quick Strike reward and timing
+
+- Quick Strike opens **after** the button's existing 320 ms spawn-in animation completes, and remains available for 73 ms (320–393 ms after spawn).
+- Only the first tap on a new button can activate it; presses during spawn-in or after the narrow window do not qualify.
+- A successful Quick Strike retains the existing spin, flash and pulse, and now makes the central point-source dot **glow green** for that button's remaining lifespan, including its destruction sequence.
+- Every tap on that qualifying button creates **+2** floating points instead of +1, including repeated taps and taps during shattering. The existing delayed score collection and green score-bank fusion are unaffected.
+- The emitter changes back to cyan on the next spawn, restart, or Game Over.
+- Tested strict 319/320/393/394 ms boundaries, repeat/shatter doubling, deferred scoring and next-spawn reset in deterministic Node tests. Repacked signed Android APK preserves the previous signer and passes APK v2 content digest and ZIP integrity checks. Physical Android testing pending.
+
 ## 2026-10-25 — Pulsing central point-source dot
 
 - Added a tiny, 6 px cyan-white glowing dot directly at the center of the 450 × 450 game field, where normal floating score numbers originate.
