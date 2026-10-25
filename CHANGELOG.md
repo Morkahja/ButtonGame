@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-25 — FULL native Android host rebuild completed and release signed
+
+- Replaced the temporary web-asset-only APK workflow with a **working GitHub Actions Android Gradle build**, committed at `.github/workflows/android-build.yml`. It uses JDK 17, Android SDK 35 and the Gradle 8.9 wrapper to compile both Kotlin and web assets. First successful full debug build: [run 40243235351](https://github.com/babunidev/ButtonGame/actions/runs/40243235351); successful full debug+release build: [run 40243610565](https://github.com/babunidev/ButtonGame/actions/runs/40243610565).
+- Downloaded the **native compiled unsigned release** artifact, verified it contains the updated `scores-v2.json` host storage compiled into `classes.dex`, and packaged the three exact supplied audio recordings (`4273.ogg`, `QuickStrikepoints.ogg`, `QuickStrikepoints1.ogg`) under `assets/www/assets/sfx/`.
+- Signed the newly compiled full native release locally using the **existing** PKCS#12 project certificate, without putting the key or password in GitHub. Released `ButtonGame-Native-Host-Highscores-Full-Build.apk` (5,355,669 bytes; SHA-256 `09bfc6a34dc3f2f5dc3997b7ee5a49079b49a14f4553e9991c9de0ded1096097`). Verified APK ZIP integrity, cryptographic APK v2 signature/content digest, certificate SHA-256 `3f7a1386adb23903ebd09c54a4f7105d197b7a6611be4b5dd53c7fe5e0902392` matching prior releases, all new audio asset bytes, and native `scores-v2.json` marker.
+- **Host-owned four-stat persistence is now compiled into this signed release.** The app stores name, final points, reactionMs, apm and durationMs in host app-private `scores-v2.json`. All Wi-Fi guests POST and GET the host ledger; guests never save separate high scores. Existing beta `scores.json` records are deliberately not migrated; old file is removed when the new host starts.
+- Latest gameplay/web bundle includes variable jackpot time, no passive button time, quieter special SFX, later/faster shattering, Play Again, full Game Over ranking, scrollbar suppression and subtle 50%-opacity below-game live leaderboard preview.
+- **Still pending:** physical host/guest Android network test and permanent upload of three user-made binary OGG files to GitHub source folders. The locally signed full release APK already includes them, but unmodified future GitHub Actions artifacts will not until repository assets are added.
+
 ## 2026-10-25 — Subtle host leaderboard preview below the playfield
 
 - Added a **compact live high-score preview immediately below the game frame** while a round is active. It uses **50% opacity** and a **vertical transparency gradient** to reveal the first entries without obstructing the actual playfield or competing with the HUD.
