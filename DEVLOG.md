@@ -1,5 +1,15 @@
 # Development log
 
+## 2026-10-25 — Audio trigger routing prepared; waiting for recordings
+
+**Requested files:** 4273 for the moment a special 73 or assembled 42 appears at the shared center-top; QuickStrikepoints and QuickStrikepoints1 for button taps while a Quick Strike is active.
+
+**Audio architecture:** Introduced `SPECIAL_REVEAL_FILE = assets/sfx/4273.ogg` and `QUICK_STRIKE_IMPACT_FILES` containing `assets/sfx/QuickStrikepoints.ogg` and `assets/sfx/QuickStrikepoints1.ogg`, added all three to `preloadSfx`, and introduced `playSpecialRevealSound`, `playQuickStrikeImpact`, and `playTapImpact`. Existing audio assets remain available. Until the new recordings have been committed to the web and bundled Android asset trees, the new hooks fall back to the current bell and impact sounds; missing audio never breaks gameplay.
+
+**Trigger placement:** The special reveals previously played `ringJackpotBell(73)` halfway through the 37→73 flip and `ringJackpotBell(42)` when the bouncing 21→42 pieces finish gathering. Those spots now use `playSpecialRevealSound()`, resulting in one special sample rather than two simultaneous bells. The earlier 21 and 37 milestone bells remain unchanged. Moved ordinary impact routing in `onClick` to occur *after* the first-tap Quick Strike window check, ensuring the activating tap itself selects a QuickStrikepoints sample; fading and shattering branches route through the same active-state helper. No change to 2x points, colors, HUD, timing or score lifecycle.
+
+**Validation:** Local JS syntax, simulated active/inactive tap sounds, special reveal once, and fallback behavior passed. Existing milestone-bell and 21→42 special-regression tests passed. New files were not present in this turn's uploads or the known GitHub asset paths. **No signed APK published**, because such a release would not yet contain the requested audio. When received, transcode to supported audio if needed, commit originals/converted OGGs to `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/`, verify in runtime, then sign the complete APK using the existing certificate.
+
 ## 2026-10-25 — Distinct jackpot bell per reached value
 
 **Problem:** `maybeComboBell(f)` rang the first time a merged floating number reached any value of seven or higher, then set `bellPlayed` and inherited it through subsequent merges. A continuous chain like 7 → 14 → 21 therefore stopped ringing, even though each is an important milestone. The 21/37/42/73 special handlers separately played their own bell when triggered.
