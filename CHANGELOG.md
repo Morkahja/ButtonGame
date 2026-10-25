@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-25 — Random button orientation at spawn
+
+- Each newly spawned turquoise jacket button receives an independently chosen starting angle between -45° and +45°, including first page load, subsequent spawns, and the first target after pressing Play Again.
+- The angle is stable for the target's full lifespan. Quick Strike spins remain relative to that baseline orientation.
+- Crack overlay and all 14 shatter fragments inherit that same orientation because they are rendered inside the rotated button element, varying the final break without modifying the shatter timing or collision area.
+- Existing tap pulse, score fusion, and network rules are unchanged.
+- Verified initial/reset/60 respawns and unchanged shatter orientation in simulated runtime, JavaScript syntax, archive integrity, and v2 certificate consistency with the prior signed APK. Physical Android gameplay remains untested.
+
 ## 2026-10-25 — Shared in-panel score bank
 
 - Green point pickups now travel **inside the Points HUD**, to the right of the total score, instead of lining up outside the panel.
