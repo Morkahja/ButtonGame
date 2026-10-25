@@ -30,6 +30,11 @@
   const TARGET_HALF = 40;
   const MAX_SPAWN_TILT_DEG = 45;
   const MERGE_DIST = 34;
+  // Only one merge is allowed per short recovery period. Larger values
+  // take longer to become mergeable again, preventing instant cascades.
+  const MERGE_SPAWN_WAIT_MS = 120;
+  const MERGE_RECOVERY_BASE_MS = 320;
+  const MERGE_RECOVERY_PER_LOG_MS = 100;
   const FLOAT_LIFE = 3400;
   const FLOAT_GRAVITY = 480;
   const FLOAT_EDGE = 18;
@@ -761,11 +766,29 @@
   }
 
   function floaterFontSize(value) {
-    return 18 + Math.min(28, Math.log2(value + 1) * 8);
+    // +1 remains 26px, but multi-digit totals increase more gradually
+    // and stop growing at 38px instead of the old 46px ceiling.
+    return 23 + Math.min(15, Math.log2(value + 1) * 3);
   }
 
-  function floaterRadius(f) {
-    return Math.max(11, floaterFontSize(f.value) * f.scale * 0.38);
+  function floaterBounds(f) {
+    // DOM offset dimensions include the COMPLETE rendered text (+ and all
+    // digits), unlike the previous radius derived from font size alone.
+    // Offset dimensions are before CSS scale/rotation, as needed here.
+    const font = floaterFontSize(f.value);
+    const approximateWidth = font * (String(f.value).length + 1) * 0.66;
+    const rawWidth = Math.max(approximateWidth, f.el.offsetWidth || 0);
+    const rawHeight = Math.max(font * 1.17, f.el.offsetHeight || 0);
+    const halfWidth = rawWidth * f.scale * 0.5;
+    const halfHeight = rawHeight * f.scale * 0.5;
+    const angle = (f.rot || 0) * Math.PI / 180;
+    const cs = Math.abs(Math.cos(angle));
+    const sn = Math.abs(Math.sin(angle));
+    // Rotated bounding box: every digit and the plus sign are enclosed.
+    return {
+      hx: cs * halfWidth + sn * halfHeight + 3,
+      hy: sn * halfWidth + cs * halfHeight + 3,
+    };
   }
 
   function pickGravity() {
@@ -799,7 +822,8 @@
       vy: opts.vy != null ? opts.vy : Math.sin(angle) * speed,
       rot: rand(-40, 40),
       spin: rand(-520, 520),
-      scale: opts.scale != null ? opts.scale : rand(0.95, 1.35),
+      scale: opts.scale != null ? opts.scale : rand(0.95, 1.25),
+      mergeReadyAt: performance.now() + MERGE_SPAWN_WAIT_MS,
       age: 0,
       life: opts.life != null ? opts.life : FLOAT_LIFE + rand(-400, 500),
       alive: true,
@@ -818,7 +842,7 @@
     if (!LINGER_AT[f.value]) return;
     f.age = Math.min(f.age, 200);
     f.life = Math.max(f.life, FLOAT_LIFE + 1800) + 900;
-    f.scale = Math.min(2.2, f.scale * 1.08);
+    f.scale = Math.min(1.58, f.scale * 1.04);
     f.el.classList.add("linger");
   }
 
@@ -1387,11 +1411,10 @@
     return vel;
   }
 
-  function resolveAabb(f, r, box) {
-    const fl = f.x - r;
-    const fr = f.x + r;
-    const ft = f.y - r;
-    const fb = f.y + r;
+  function resolveAabb(f, bounds, box) {
+    const hx = bounds.hx, hy = bounds.hy;
+    const fl = f.x - hx, fr = f.x + hx;
+    const ft = f.y - hy, fb = f.y + hy;
     if (fr <= box.l || fl >= box.r || fb <= box.t || ft >= box.b) return;
 
     const penL = fr - box.l;
@@ -1399,52 +1422,57 @@
     const penT = fb - box.t;
     const penB = box.b - ft;
     const minPen = Math.min(penL, penR, penT, penB);
-
     if (minPen === penL) {
-      f.x = box.l - r;
+      f.x = box.l - hx;
       f.vx = bounceAxis(f.vx, true);
       f.spin *= -0.55;
     } else if (minPen === penR) {
-      f.x = box.r + r;
+      f.x = box.r + hx;
       f.vx = bounceAxis(f.vx, false);
       f.spin *= -0.55;
     } else if (minPen === penT) {
-      f.y = box.t - r;
+      f.y = box.t - hy;
       f.vy = bounceAxis(f.vy, true);
       f.spin *= -0.55;
     } else {
-      f.y = box.b + r;
+      f.y = box.b + hy;
       f.vy = bounceAxis(f.vy, false);
       f.spin *= -0.55;
     }
   }
 
   function collideFloatersWorld(f) {
-    const r = floaterRadius(f);
-    const min = FLOAT_EDGE + r * 0.15;
-    const max = STAGE - FLOAT_EDGE - r * 0.15;
+    const bounds = floaterBounds(f);
+    // HUD collisions use the same full rotated-text extents as the walls.
+    for (let i = 0; i < HUD_BOXES.length; i++) {
+      resolveAabb(f, bounds, HUD_BOXES[i]);
+    }
 
-    if (f.x < min) {
-      f.x = min;
+    // Re-clamp AFTER HUD contacts: HUD collision correction must never
+    // push even the last digit outside the clipped game field.
+    const minX = FLOAT_EDGE + bounds.hx;
+    const maxX = STAGE - FLOAT_EDGE - bounds.hx;
+    const minY = FLOAT_EDGE + bounds.hy;
+    const maxY = STAGE - FLOAT_EDGE - bounds.hy;
+    if (minX >= maxX) f.x = STAGE / 2;
+    else if (f.x < minX) {
+      f.x = minX;
       f.vx = bounceAxis(f.vx, false);
       f.spin *= -0.5;
-    } else if (f.x > max) {
-      f.x = max;
+    } else if (f.x > maxX) {
+      f.x = maxX;
       f.vx = bounceAxis(f.vx, true);
       f.spin *= -0.5;
     }
-    if (f.y < min) {
-      f.y = min;
+    if (minY >= maxY) f.y = STAGE / 2;
+    else if (f.y < minY) {
+      f.y = minY;
       f.vy = bounceAxis(f.vy, false);
       f.spin *= -0.5;
-    } else if (f.y > max) {
-      f.y = max;
+    } else if (f.y > maxY) {
+      f.y = maxY;
       f.vy = bounceAxis(f.vy, true);
       f.spin *= -0.5;
-    }
-
-    for (let i = 0; i < HUD_BOXES.length; i++) {
-      resolveAabb(f, r, HUD_BOXES[i]);
     }
   }
 
@@ -1484,7 +1512,9 @@
     a.vx = (a.vx + b.vx) / 2 - a.gx * 55;
     a.vy = (a.vy + b.vy) / 2 - a.gy * 55;
     a.spin = (a.spin + b.spin) / 2;
-    a.scale = Math.min(2.4, 0.95 + Math.log2(a.value + 1) * 0.28);
+    a.scale = Math.min(1.55, 1 + Math.log2(a.value + 1) * 0.075);
+    a.mergeReadyAt = performance.now() + MERGE_RECOVERY_BASE_MS +
+      Math.min(460, Math.log2(a.value + 1) * MERGE_RECOVERY_PER_LOG_MS);
     a.age = Math.min(a.age, b.age) * 0.45;
     a.life = Math.max(a.life, b.life) + 280;
     a.el.textContent = floaterLabel(a.value);
@@ -1532,17 +1562,20 @@
 
     updateTimeFlies(dt);
 
-    // Combine nearby floaters into bigger numbers.
+    // Combine nearby floaters gradually: a newly merged total cannot
+    // immediately swallow several neighbors in the same frame.
+    const mergeNow = performance.now();
     for (let i = 0; i < floaters.length; i++) {
       const a = floaters[i];
-      if (!a.alive || a.inert) continue;
+      if (!a.alive || a.inert || mergeNow < a.mergeReadyAt) continue;
       for (let j = i + 1; j < floaters.length; j++) {
         const b = floaters[j];
-        if (!b.alive || b.inert) continue;
+        if (!b.alive || b.inert || mergeNow < b.mergeReadyAt) continue;
         const dx = a.x - b.x;
         const dy = a.y - b.y;
         if (dx * dx + dy * dy < MERGE_DIST * MERGE_DIST) {
           mergeFloaters(a, b);
+          break; // respect the freshly applied recovery interval
         }
       }
     }
