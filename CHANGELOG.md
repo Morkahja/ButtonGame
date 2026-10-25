@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-25 — Mirrored compact HUD and unified Reaction/APM panel
+
+- Slimmed the Points and Time panels from a 7.75rem baseline to 6.25rem, reduced their horizontal face padding, and moved them from a 22px inset to **10px from their frame edges**, flush with the inner stage boundary.
+- The **Time panel is anchored at the right edge** and its golden +seconds bank moved to its **left**, mirroring Points on the left and its green +points bank on the right. Both green and gold balances remain outside the chamfered panels and preserve their existing transfer behavior.
+- Replaced the separate lower-left Reaction and lower-right APM boxes with **one 15.5rem bottom-center plate**. Reaction is left-aligned, APM right-aligned, with a thin full-height cyan dividing rule.
+- Adjusted physics' stage-space HUD collision bounds for the new two-corner-plus-bottom-center arrangement, including room for the bonus banks, so ordinary floating numbers avoid the relocated panels.
+- No point scoring, timers, bonuses, game-state, multiplayer, or Quick Strike behavior changed.
+- Verified new DOM IDs and ordering, single divider and bottom plate, frame-edge offsets, Node syntax, 21→42 animation, golden time-bonus bank, APK archive integrity and matching prior APK signing certificate. Headless browser screenshot did not complete in this environment; Android visual testing pending.
+
 ## 2026-10-25 — Physical 21 → 42 bounce-and-transform animation
 
 - Reworked the special **21 → 42** animation: exactly **21 normally sized “1” digits** burst from the merged 21 at high velocity, bounce visibly against the 450px stage's four walls, and keep moving freely for approximately **1.14 seconds**.
