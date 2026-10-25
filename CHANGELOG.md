@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-25 — Prepared special reveal and Quick Strike audio routing (audio files pending)
+
+- Added a dedicated **`4273` reveal sound hook** for the assembled 42 at the upper-center `Smash it!` position and for the 73 when the 37→73 flip reveals the new digits. It **replaces** the normal bell at those two moments rather than doubling the playback. The original bell still plays when floating totals first reach 21 and 37.
+- Prepared two randomly chosen Quick Strike tap recordings: **`QuickStrikepoints`** and **`QuickStrikepoints1`**, used from the *activating first tap* and all later taps while Quick Strike remains active, including during shattering. Ordinary taps keep the original four random impacts.
+- Audio preload now includes `assets/sfx/4273.ogg`, `assets/sfx/QuickStrikepoints.ogg`, and `assets/sfx/QuickStrikepoints1.ogg`. Existing sound mute, volume architecture, and other jackpot bells remain unchanged.
+- **Audio assets not yet supplied** (not in the conversation files or GitHub). Until those exact files are added, the game falls back to the former random bell for special reveals and ordinary impact for Quick Strike. This is **code wiring only, not an audio-complete APK release**.
+- Node sound-routing, existing milestone-bell, special 21→42, golden-bonus, and JS syntax tests passed on the locally mirrored source. Audio content and Android playback cannot be validated until the recordings are received.
+
 ## 2026-10-25 — Bell on every jackpot milestone
 
 - Combination bells now sound **each time a merged floating number reaches exactly 7, 14, 21, 37, 42, or 73**. Previously a merged lineage remembered its first bell, silencing later milestones (e.g. 7 → 14), and any value >=7 could ring regardless of eligibility.
