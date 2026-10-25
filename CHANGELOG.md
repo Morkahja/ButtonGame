@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-25 — Host-only leaderboard, hidden scrollbar, quieter sounds, later breakup
+
+- **Corrected authoritative leaderboard model:** all Wi-Fi guests submit high scores and final Reaction/APM/session-duration values to the **hosting Android device** through `/api/scores`; browsers and guests no longer persist or augment scores in localStorage. The leaderboard renders only host responses. A failed submission stays retryable; a failed leaderboard fetch shows the host is unavailable. Player nickname and mute preferences may still be stored on each device.
+- **Native host limitation:** the new Kotlin host-side `ScoreStore.kt`/`GameServer.kt` is committed and implements all four statistics, but today's APK still contains the earlier native `classes*.dex` because the Android SDK is unavailable. That APK saves **points only on the host**; host persistence of reaction, APM, and duration needs a native Android rebuild. Guest-local storage is **not** used as a substitute.
+- **Game Over leaderboard:** the scoreboard scrolls with wheel/trackpad/touch, but its visible scrollbar is suppressed with `scrollbar-width:none` and the WebKit scrollbar pseudo-selector.
+- **Sound balance:** reduced the three recently supplied sounds another ~3 dB in playback gain: 4273 from 0.49 to 0.35, and QuickStrikepoints variants from 0.37–0.43 to 0.26–0.30. Original OGG bytes and old sound settings remain unchanged.
+- **Button destruction:** delay the start of cracks/breakup by 160ms while still accepting taps, then accelerate the entire shatter from 580ms to 420ms. Crack phase is 100ms, initial break 165ms, and shatter fade begins 325ms after breakup. The overall fade-threshold-to-new-target interval remains 580ms.
+- Updated root and bundled Android web assets and verified eight current gameplay regression tests, syntax, APK ZIP entries and cryptographic v2 signature with the previous certificate. Physical Android QA remains pending.
+- **Still outstanding:** commit the three binary OGG recordings to GitHub; APK already contains them. Android native rebuild to enable host-owned storage for all four final leaderboard statistics.
+
 ## 2026-10-25 — Variable jackpot time, final session stats, replay overlay, quieter special audio
 
 - **Time rebalance:** button taps and their respawn/shatter phases no longer grant time. Exact 7, 14, 42 and 73 results award **+2s, +3s, +5s and +4s** respectively. The 21 and 37 intermediates award **0s**; their 42 and 73 results award time upon appearing at the central result position. Golden time pickups show their actual values. The existing 60-second initial round remains.
