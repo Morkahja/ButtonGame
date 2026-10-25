@@ -1,5 +1,17 @@
 # Development log
 
+## 2026-10-25 — Compact, mirrored HUD and combined lower statistics
+
+**Layout request:** Narrow the four corner panels, move Points and Time nearer the outer game frame, mirror the Time golden bonus readout to the left of the right-anchored Time plate, and combine Reaction/APM into one centered lower plate with a vertical separator.
+
+**Implementation:** The top panels use a nominal 6.25rem instead of 7.75rem width and 10px rather than 14px horizontal inner padding. Points and Time groups anchor 10px from their respective top/side frame edges instead of 22px; the extra padding corresponds to the frame's 10px inset, so panels visually abut the 450px field boundary. Points keeps its right-hand green `#score-buffer`; the Time group orders `#time-buffer` **before** the time panel, reserves bank width to stabilize the position, and right-aligns the gold text next to the panel. Gold pick-ups still target the buffer using its measured DOM rectangle (no hardcoded flight target changes).
+
+**Lower statistics:** A single chamfered `.hud-panel.stats-panel` is horizontally centered at the field's bottom edge, with two flex cells: left `#react` and right `#apm`. A 1px cyan `.stats-divider` separates them from top to bottom of the inner face. Existing element IDs and JS setters are retained, so reaction smoothing, APM updates, and presence payloads are unchanged.
+
+**Collision handling:** The old four `HUD_BOXES` are now three stage-relative AABBs, matching the two top HUD groups and the combined lower-center plate. Existing physics exclusion, collision and button spawn avoidance use the revised regions.
+
+**Validation:** Confirmed HTML order (points→green on left, gold→time on right), one shared bottom panel and divider, original IDs, CSS widths/anchors, root+Android APK asset parity, JavaScript syntax and existing scripted bouncy 21→42 / gold time-bank regressions. Signed APK uses the same PKCS#12 certificate as the preceding user-installed build, ZIP entries checked. Chromium screenshot attempt timed out; mobile display not physically tested.
+
 ## 2026-10-25 — Refine 21-to-42: outward throw, wall physics, ones become twos
 
 **Requested flow:** Twenty-one single-digit numbers pop from the 21 at their normal spawn size, blast outward, rebound repeatedly against the stage boundaries, then each becomes a 2 while moving. All 21 twos eventually gather at the “Smash it!” / 37→73 upper-center position and form a larger golden 42, hold, and turn green before regular score pickup and bank fusion.
