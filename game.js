@@ -1895,7 +1895,13 @@
     setInterval(pushPresence, 900);
     // Keep the lightweight preview current as guests finish rounds.
     loadLeaderboard();
+    // Game Over is a shared live leaderboard too: guest submissions may arrive
+    // after this player's round has ended, without the host submitting again.
+    setInterval(function () { if (gameOver) loadLeaderboard(); }, 3000);
     setInterval(function () { if (started && !gameOver) loadLeaderboard(); }, 12000);
+    document.addEventListener("visibilitychange", function () {
+      if (!document.hidden && gameOver) loadLeaderboard();
+    });
   })();
 
   function onClick() {
