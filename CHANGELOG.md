@@ -1,5 +1,15 @@
 # Changelog
 
+## 2026-10-25 — Deferred points and green score fusion
+
+- Replaced immediate per-tap score increases: each tap creates uncredited floating points that can merge until their lifespan ends.
+- At the end, earned numbers turn green, shrink and travel to the score HUD, pause briefly, then count down in sync with the total score counting up.
+- Removed the old pop-and-fade ending for scoring floaters; values are conserved across merged and simultaneous transfers.
+- Preserved jackpot bonus arithmetic by deferring both pending base points and the jackpot bonus until the inert jackpot display finishes. Cosmetic 1-shards cannot credit the same tapped points again.
+- The round locks taps at zero time and waits for any pending scoring transfers before showing Game Over or submitting a high score.
+- Kept existing time-bonus flow, multiplayer presence, jacket-button tap pulse and shatter behavior unchanged.
+- Verified JavaScript syntax, score conservation for normal taps and jackpot, timer-expiry settlement with a simulated JavaScript clock, APK ZIP integrity and APK v2 signature using the prior signing identity. Actual Android-device installation and visual animation performance remain untested.
+
 ## 2026-10-24 — Tap size pulse
 
 - Each button press now briefly scales the turquoise jacket button to 110% of its normal 62 px artwork and eases it back to 100% over 145 ms.
