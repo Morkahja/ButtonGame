@@ -816,7 +816,9 @@
     started = true;
     startTime = now;
     trapsEnabled = !!trapToggleEl.checked;
-    trapOptionEl.hidden = true;
+    // The rule is fixed for this round. Re-enable the control at Game Over.
+    trapToggleEl.disabled = true;
+    trapOptionEl.classList.add("is-locked");
     deadline = now + BASE_DURATION_MS;
     anleitungEl.textContent = "";
     syncScorePreview();
@@ -1729,7 +1731,10 @@
 
   function syncScorePreview() {
     // The host API is the only source. No private guest scoreboard.
-    previewEl.classList.toggle("is-hidden", !started || gameOver || trapEnding || !lastHostScores.length);
+    // The lower preview is also the welcome-screen leaderboard. On desktops
+    // it stays in the right-hand column, including at Game Over.
+    document.body.classList.toggle("game-over", gameOver || trapEnding);
+    previewEl.classList.toggle("is-hidden", !lastHostScores.length);
   }
 
   function appendTrapBadge(parent) {
@@ -1886,6 +1891,8 @@
     feind.classList.add("is-gone");
     gameOver = true;
     fading = false;
+    trapToggleEl.disabled = false;
+    trapOptionEl.classList.remove("is-locked");
     syncScorePreview();
     timeEl.textContent = "0";
     endWrap.classList.add("visible");
@@ -1903,7 +1910,8 @@
     trapEnding = false;
     trapLossAt = 0;
     trapsEnabled = false;
-    trapOptionEl.hidden = false;
+    trapToggleEl.disabled = false;
+    trapOptionEl.classList.remove("is-locked");
     score = 0;
     finalStats = null;
     started = false;
@@ -1962,7 +1970,8 @@
   (function init() {
     setQuickStrikeActive(false);
     setTrapActive(false);
-    trapOptionEl.hidden = false;
+    trapToggleEl.disabled = false;
+    trapOptionEl.classList.remove("is-locked");
     try {
       const saved = localStorage.getItem(LOCAL_NAME_KEY);
       if (saved && playerNameInput) playerNameInput.value = saved;

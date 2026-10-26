@@ -363,28 +363,37 @@
     #sound-toggle.is-muted .icon-on { display: none; }
     #sound-toggle.is-muted .icon-muted { display: block; }
 
+    /* One small mode selector beside Reaction/APM, visible at welcome and
+       Game Over. It stays visible but locked during a running round. */
     #trap-option {
       position: absolute;
-      z-index: 6;
-      left: 50%;
-      top: 144px;
-      transform: translateX(-50%);
+      z-index: 13;
+      left: 15px;
+      bottom: 16px;
       display: flex;
       align-items: center;
-      gap: 9px;
-      padding: 7px 12px;
-      background: rgba(5,14,16,.88);
-      border: 1px solid rgba(255,255,255,.48);
-      border-radius: 7px;
+      justify-content: center;
+      gap: 4px;
+      min-width: 79px;
+      min-height: 34px;
+      padding: 3px 5px;
+      background: rgba(5, 14, 16, 0.9);
+      border: 1px solid rgba(0, 255, 255, 0.5);
+      border-radius: 3px;
       color: var(--white);
-      font: 15px system-ui, sans-serif;
+      font: 12px system-ui, sans-serif;
       white-space: nowrap;
       cursor: pointer;
       touch-action: manipulation;
     }
-    #trap-option[hidden] { display: none !important; }
-    #trap-option img { width: 23px; height: 23px; }
-    #traps-toggle { width: 19px; height: 19px; accent-color: #e33b45; cursor: pointer; }
+    #trap-option img { width: 13px; height: 13px; flex: none; }
+    #trap-option.is-locked { opacity: 0.48; cursor: default; }
+    #traps-toggle {
+      width: 16px; height: 16px; margin: 0;
+      accent-color: #e53a45; cursor: pointer; flex: none;
+    }
+    #traps-toggle:disabled { cursor: default; }
+
     .trap-score-icon {
       display: inline-block; width: 15px; height: 15px; margin-left: 5px;
       vertical-align: -2px;
@@ -589,6 +598,10 @@
       mask-image: linear-gradient(to bottom, #000 0%, #000 24%, transparent 100%);
     }
     #live-leaderboard.is-hidden { visibility: hidden; }
+    @media (max-width: 1049px) {
+      /* On phones the full Game Over leaderboard replaces the faded preview. */
+      body.game-over #live-leaderboard { visibility: hidden; }
+    }
     #live-leaderboard h2 {
       color: var(--cyan);
       font-family: "AR Essence", sans-serif;
@@ -947,6 +960,50 @@
     .live-chip.is-self {
       border-color: var(--cyan);
     }
+    /* Widescreen: players | Button Game | persistent host leaderboard. */
+    @media (min-width: 1050px) and (min-height: 520px) {
+      body {
+        display: grid;
+        grid-template-columns: minmax(170px, 250px) 470px minmax(190px, 260px);
+        grid-template-areas: "players game scores";
+        align-items: center;
+        justify-content: center;
+        gap: clamp(12px, 1.8vw, 24px);
+        padding: 24px;
+      }
+      #live-wrap {
+        grid-area: players;
+        width: 100%;
+        min-width: 0;
+        align-self: center;
+      }
+      #live-players {
+        flex-direction: column;
+        overflow-x: hidden;
+        overflow-y: auto;
+        max-height: min(460px, 74vh);
+      }
+      .live-chip { min-width: 0; }
+      #scaler { grid-area: game; width: 470px; height: 470px; }
+      #live-leaderboard {
+        grid-area: scores;
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        min-height: 140px;
+        max-height: min(440px, 74vh);
+        align-self: center;
+        opacity: 0.85;
+        padding: 14px;
+        border: 1px solid var(--cyan-dim);
+        background: rgba(5, 14, 16, 0.55);
+        overflow-y: auto;
+        -webkit-mask-image: none;
+        mask-image: none;
+        pointer-events: auto;
+      }
+      #live-leaderboard h2 { text-align: left; }
+    }
   </style>
 </head>
 <body>
@@ -1016,15 +1073,16 @@
 
     <h1 id="title">Buttongame<span class="byline">by Babuni.dev</span></h1>
 
-    <button type="button" id="play-again" class="btn-cyan" hidden>Play again</button>
-
-    <div id="stage" aria-label="Buttongame">
-      <div id="anleitung">Smash it!</div>
-      <label id="trap-option" for="traps-toggle">
+    <label id="trap-option" for="traps-toggle">
         <img src="assets/button-red.svg" alt="" aria-hidden="true" />
         <span>Traps</span>
         <input id="traps-toggle" type="checkbox" aria-label="Enable red trap buttons" />
       </label>
+    <button type="button" id="play-again" class="btn-cyan" hidden>Play again</button>
+
+    <div id="stage" aria-label="Buttongame">
+      <div id="anleitung">Smash it!</div>
+
       <div id="point-source" aria-hidden="true"></div>
       <div id="float-layer" aria-hidden="true"></div>
       <div id="end-wrap">

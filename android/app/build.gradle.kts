@@ -11,8 +11,8 @@ android {
         applicationId = "com.babunigaming.buttongame"
         minSdk = 26
         targetSdk = 35
-        versionCode = 3
-        versionName = "1.0.2-beta"
+        versionCode = 4
+        versionName = "1.0.3-beta"
     }
 
     buildTypes {
