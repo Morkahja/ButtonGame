@@ -74,7 +74,8 @@ The above are research/design topics, **not release blockers or authorization to
 
 ## Historical research dependency — not a feature-development task
 
-- [ ] **Recover original archival evidence only if it becomes accessible:** the creator recalls a detailed red/trap/trip-button discussion and an earlier much larger to-do list, neither of which could be retrieved in the 2026-10-26 history audit. Seek the actual original conversation or creator-authored notes, then classify each recovered item individually as accepted, rejected, postponed, implemented, or merely proposed. **Do not implement red-button behavior, fabricate rules, or convert an inaccessible checklist into engineering tickets without that evidence.**
+- [x] **Preserve the recovered historical seven-category checklist** with the six documented Trap Mode requirements in [docs/HISTORICAL_CHECKLIST_2026-10-25.md](docs/HISTORICAL_CHECKLIST_2026-10-25.md). The source is creator-pasted historical text, **not** a retrieved full transcript.
+- [ ] **If accessible, obtain the complete original archived conversation or original creator-authored notes** to resolve trap spawning/timing/settlement details, historical debates and omissions from the condensed checklist. Do not invent those missing rules or convert archived ideas into new implementation tasks without the creator's current direction.
 
 Existing shipped-feature release work and the approved host-owned Wi-Fi model remain the practical roadmap. Any “future feature” mentioned only in a generated audit is not automatically creator-approved.
 
