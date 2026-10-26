@@ -32,6 +32,19 @@ The website **babuni.dev** is itself a portfolio project. Button Game should eve
 | Latest delivered, original-certificate Android build | Not established for newest Game Over fix | Do not present earlier signed APK as newest release |
 | Long archived development chat and original red/trap description | Not recovered | Do not invent dialogue or reconstructed mechanics |
 
+## Recovered in-game content and narrative beats
+
+This section describes **established historical game content**, not approved portfolio page copy or new features:
+
+- **Earlier Flash/remake presentation:** a black 450 × 450 stage with original German instructions/graphics, a simple appearing/fading cyan target and direct click-based point/time addition. The separate `ChatGPT Remake/README.md` says the source game lacked sound and a restart action. Preserve the distinction between this source-backed retrospective analysis and the creator's missing original conversations.
+- **Instruction wording:** the modern current-game text `Smash it!` explicitly replaced `Klick druff da` during the October 25 work on the 37→73 sequence. This language change marks the move to a more kinetic, international-feeling presentation; a broader branding rationale is not documented.
+- **Recognizable identity:** a turquoise four-hole button is not disposable scenery; it must remain visually identifiable while cracking, scattering and accepting late hits. Subtle central cyan emitter becomes green for a Quick Strike.
+- **Numerical theater:** the 37 moves upward, flips to 73 and is collected as exactly 73; the 21 animation first used duplication, later became 21 rebounding `1`s changing into `2`s to form a single 42. Ordinary totals also merge, glow, ring at exact milestones, become collectible green values and feed the visible score balance.
+- **Time and reward cues:** gold indicates number-based time eligibility. The currently established table is 7→2s, 14→3s, 42→5s, 73→4s; 21/37 are transitions, not themselves time payouts. Older journal entries awarded +3s more broadly—retain them as earlier builds rather than current rules.
+- **Co-presence:** Android `Serve on Wi-Fi`, QR joining, host-owned ranking, animated live players and a faded list beneath the running game are the local-social story, **not** a real-time synchronized shared playfield.
+
+**Unrecovered original content:** the red/trap/trip button's detailed rules and the archived larger to-do inventory are not available in the accessible dialogue or repository. Do not illustrate imagined red-button rules, label such sketches “approved,” or schedule them for implementation. The unrelated red camera trigger from another project is not Button Game evidence.
+
 ## Attribution and privacy
 
 Credit the creator for original game vision, direction, requirements, decisions, criticism and acceptance/rejection. Credit AI for concrete code generation, documentation synthesis and engineering proposals as applicable. Avoid raw private chats, personal details, passwords, signing credentials and unverified claims of user intent.
