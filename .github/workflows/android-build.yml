@@ -9,12 +9,16 @@ on:
       - 'game.js'
       - 'index.html'
       - 'assets/**'
+      - 'sfx/**'
+      - 'scripts/sync-www.sh'
   pull_request:
     paths:
       - 'android/**'
       - 'game.js'
       - 'index.html'
       - 'assets/**'
+      - 'sfx/**'
+      - 'scripts/sync-www.sh'
   workflow_dispatch:
 
 permissions:
@@ -31,6 +35,16 @@ jobs:
     steps:
       - name: Checkout complete source
         uses: actions/checkout@v4
+
+      - name: Synchronize complete web and sound assets
+        working-directory: .
+        run: |
+          bash scripts/sync-www.sh
+          git diff --exit-code -- index.html game.js assets android/app/src/main/assets/www
+          for sound in 4273.ogg QuickStrikepoints.ogg QuickStrikepoints1.ogg; do
+            cmp "sfx/$sound" "assets/sfx/$sound"
+            cmp "sfx/$sound" "android/app/src/main/assets/www/assets/sfx/$sound"
+          done
 
       - name: Set up Java 17
         uses: actions/setup-java@v4
@@ -78,6 +92,16 @@ jobs:
           test -s "$unsigned"
           unzip -l "$unsigned" | grep -q 'assets/www/game.js'
           unzip -l "$unsigned" | grep -q 'assets/www/index.html'
+          for sound in 4273.ogg QuickStrikepoints.ogg QuickStrikepoints1.ogg \
+                       Bell1.ogg Bell2.ogg Bell3.ogg \
+                       impact1.ogg impact2.ogg impact3.ogg impact4.ogg; do
+            for built in "$apk" "$unsigned"; do
+              entry="assets/www/assets/sfx/$sound"
+              unzip -Z -1 "$built" | grep -Fxq "$entry"
+              unzip -p "$built" "$entry" | cmp - "app/src/main/assets/www/assets/sfx/$sound"
+            done
+          done
+          echo "Both APKs contain all 10 source-identical OGG recordings."
 
       - name: Upload unsigned release for local developer signing
         uses: actions/upload-artifact@v4
