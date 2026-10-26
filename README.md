@@ -4,13 +4,14 @@
 
 A one-minute, arcade-style button-smashing game with roaming targets, physical-looking number combinations and deliberately theatrical score collection. The game is authored and creatively directed by **Babuni.dev**. This repository preserves the original Flash artifact, earlier HTML5 reconstruction, current browser game, and native Android Wi-Fi host.
 
-**Project status (26 October 2026): gameplay and real two-device Wi-Fi multiplayer tested and working according to Babuni.dev.** Reproducible sound packaging and the [latest full native Android CI build](https://github.com/babunidev/ButtonGame/actions/runs/40325603457) **passed**; only the new original-certificate signed APK/installation remains unverified.
+**Project status (26 October 2026): previously tested gameplay and real two-device Wi-Fi multiplayer work according to Babuni.dev.** The new optional **Red Trap Button** is now implemented in source after Babuni.dev's approval, with 10% subsequent red spawns and instant loss preserving earned pending points. The [new complete Android CI build and regression](https://github.com/babunidev/ButtonGame/actions/runs/40365295833) **passed** for version **1.0.2-beta**; original-certificate signing, in-place installation and physical Trap Mode testing are still pending.
 
 ## Play and hosting
 
 - The game begins when the player first presses the moving turquoise button; it starts with 60 seconds.
 - Each press generates a floating number. Nearby numbers combine, and earned values travel through visible score and bonus-time collection sequences.
 - A qualifying Quick Strike within the narrow post-spawn window awards double points on that button.
+- Optional **Traps** mode adds red buttons to 10% of subsequent spawns; resist tapping them to collect 3 points each ⅓ second. Red taps end play immediately, but already-earned pending points finish collecting. A red icon marks trap-enabled high scores on the Android host.
 - Specific combinations create unusual transformations, notably **21 → 42** and **37 → 73**.
 - An Android phone can host the browser version on its local Wi-Fi using **Serve on Wi-Fi**. Guests join through the displayed address or QR code and share the Android host's high-score list.
 
