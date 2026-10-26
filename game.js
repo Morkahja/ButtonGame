@@ -161,6 +161,36 @@
   let audioCtx = null;
   let masterGain = null;
   const buffers = Object.create(null);
+  // Media-element backup: the first click can arrive before the Web Audio
+  // decoders finish, or a browser may suspend the AudioContext until a gesture.
+  // Some browsers also lack Ogg/Vorbis: use the MP3 counterpart when supplied.
+  const canPlayOgg = !!document.createElement("audio")
+    .canPlayType('audio/ogg; codecs="vorbis"');
+  const warnedSoundErrors = Object.create(null);
+
+  function reportSoundIssue(message, error) {
+    if (warnedSoundErrors[message]) return;
+    warnedSoundErrors[message] = true;
+    console.warn("Button Game sound:", message, error || "");
+    if (soundToggleBtn && !soundMuted) {
+      soundToggleBtn.title = "Sound could not play — check browser audio settings";
+    }
+  }
+
+  function playMediaFallback(url, opts) {
+    if (soundMuted) return;
+    try {
+      const media = new Audio(canPlayOgg ? url : url.replace(/\.ogg$/i, ".mp3"));
+      media.volume = Math.min(1, Math.max(0, (opts.gain != null ? opts.gain : 0.8) * MASTER_VOL));
+      media.playbackRate = opts.rate != null ? opts.rate : 1;
+      const playing = media.play();
+      if (playing && playing.catch) {
+        playing.catch(function (error) { reportSoundIssue("Browser prevented or rejected audio playback", error); });
+      }
+    } catch (error) {
+      reportSoundIssue("Audio fallback unavailable", error);
+    }
+  }
 
   function applyMasterMute() {
     if (masterGain) {
@@ -224,8 +254,10 @@
           );
         });
       })
-      .catch(function () {
-        /* missing / decode fail — skip quietly */
+      .catch(function (error) {
+        // Never fail completely silently: the first tap still has the HTML
+        // media fallback, and the browser console explains the underlying cause.
+        reportSoundIssue("Couldn't preload " + url, error);
       });
   }
 
@@ -239,7 +271,10 @@
     opts = opts || {};
     const ctx = ensureAudio();
     const buf = buffers[url];
-    if (!ctx || !buf || !masterGain) return;
+    if (!ctx || !buf || !masterGain || ctx.state !== "running") {
+      playMediaFallback(url, opts);
+      return;
+    }
 
     const src = ctx.createBufferSource();
     src.buffer = buf;
