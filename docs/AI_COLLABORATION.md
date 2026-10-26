@@ -12,7 +12,7 @@ The creator owns the creative direction of Button Game. AI assistance is a tool 
 4. Retrospective summaries, including the creator-provided 2026-10-26 "Complete To-Do List".
 5. Inference or proposal, always clearly labelled and never turned into a historical fact.
 
-Missing archived messages must remain **unrecovered**, not paraphrased from imagination. The creator has now supplied a passage attributed to the original seven-category checklist that **recovers six Trap Mode requirements**, preserved at [HISTORICAL_CHECKLIST_2026-10-25.md](HISTORICAL_CHECKLIST_2026-10-25.md). This is not equivalent to accessing the entire original conversation or approving implementation.
+Missing archived messages must remain **unrecovered**, not paraphrased from imagination. The creator first supplied an earlier [seven-category checklist](HISTORICAL_CHECKLIST_2026-10-25.md) with six Trap Mode requirements, then a more detailed standalone [nine-item Red Trap Button specification](TRAP_MODE.md), including the explicit intent to reward patience and punish careless tapping. Neither document is equivalent to accessing the complete original conversation. The creator explicitly says the **entire feature is not started**, and supplied its design for documentation rather than a new implementation request.
 
 ## What each substantial entry records
 
