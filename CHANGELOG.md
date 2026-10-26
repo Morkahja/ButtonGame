@@ -1,23 +1,23 @@
 # Changelog
 
-## 2026-10-26 — Fix audio source packaging, re-run Android build, and accept creator QA results
+## 2026-10-26 — Fix audio source packaging, re-run Android build, and accept Babuni.dev QA results
 
-- **Creator-confirmed acceptance:** Button/Quick Strike, numerical physics/combinations, timer/HUD, sound volume and UI all tested and working. Two-device Android Wi-Fi hosting, live player list, four-stat host score persistence through hosting restart, guest score submission and three-second Game Over refresh all tested and working in the installed app.
+- **Babuni.dev-confirmed acceptance:** Button/Quick Strike, numerical physics/combinations, timer/HUD, sound volume and UI all tested and working. Two-device Android Wi-Fi hosting, live player list, four-stat host score persistence through hosting restart, guest score submission and three-second Game Over refresh all tested and working in the installed app.
 - **Scope correction:** Do not add score-submission retry as a new feature because an old bug occurred. No actual server startup errors or port conflicts reported. Removed speculative hardening and unapproved networking ideas from the active roadmap; keep the game simple. Bluetooth and peer-to-peer remain ideas only, elsewhere in historical concept documentation.
 - **Audio/source change:** Mirrored all ten original `sfx/` OGG files (including `4273.ogg`, `QuickStrikepoints.ogg`, `QuickStrikepoints1.ogg`) into `assets/sfx/` and the Android `www/assets/sfx/` bundle as exact Git blob copies. Updated `scripts/sync-www.sh` to use `sfx/` as canonical source.
 - **Build:** Updated `.github/workflows/android-build.yml` to synchronize and enforce source parity, trigger on original recordings and validate the complete OGG byte payload inside both assembled APK variants. Android normal-package version now `1.0.1-beta` / code 2; no separate TEST package.
-- **Verification:** [GitHub Actions 40325603457](https://github.com/babunidev/ButtonGame/actions/runs/40325603457) **passed** on [packaging commit 2fa4539](https://github.com/babunidev/ButtonGame/commit/2fa45393a9746366f80927382a628c2745b525c3). Complete web/audio sync, 10 exact OGG payload checks inside both APKs, Node leaderboard regression, native debug+unsigned-release compilation and both artifact uploads succeeded. The creator's reported device QA applies to their installed app; an original-certificate signed APK for this new source has **not** yet been produced by this change.
+- **Verification:** [GitHub Actions 40325603457](https://github.com/babunidev/ButtonGame/actions/runs/40325603457) **passed** on [packaging commit 2fa4539](https://github.com/babunidev/ButtonGame/commit/2fa45393a9746366f80927382a628c2745b525c3). Complete web/audio sync, 10 exact OGG payload checks inside both APKs, Node leaderboard regression, native debug+unsigned-release compilation and both artifact uploads succeeded. Babuni.dev's reported device QA applies to their installed app; an original-certificate signed APK for this new source has **not** yet been produced by this change.
 
 ## 2026-10-26 — Preserve complete nine-item Red Trap Button specification
 
-- The creator supplied a more detailed **Red Trap Button** specification and explicitly stated **entire feature not started**. The intended experience is “an optional game mode that rewards patience and punishes careless tapping.”
+- Babuni.dev supplied a more detailed **Red Trap Button** specification and explicitly stated **entire feature not started**. The intended experience is “an optional game mode that rewards patience and punishes careless tapping.”
 - Added [`docs/TRAP_MODE.md`](docs/TRAP_MODE.md) preserving all nine tasks: pre-game Traps checkbox/red icon; random red-button replacements; identical ordinary spawn position, lifespan, rotation and shatter; immediate Game Over on a trap tap; untouched trap expiry/shatter/next spawn; +3 passive points every ⅓ second (9/s); center-origin passive floaters with normal combination/expiry/fusion; host high-score mode flag; small red button beside relevant leaderboard names.
 - Updated concept, design, decisions, roadmap, architecture, devlog, README, contributor and portfolio/collaboration records to distinguish this complete design from the *earlier* six-part recovered historical checklist.
 - **Documentation only.** No Trap Mode feature code, host score format, UI behavior, Android asset, test or released APK was changed. The normal signed-APK release priority remains unchanged.
 
 ## 2026-10-26 — Recover original seven-category development checklist and Trap Mode
 
-- Preserved the creator-provided historical checklist at `docs/HISTORICAL_CHECKLIST_2026-10-25.md`, keeping its seven original categories separate from the live roadmap and later AI recommendations.
+- Preserved Babuni.dev-provided historical checklist at `docs/HISTORICAL_CHECKLIST_2026-10-25.md`, keeping its seven original categories separate from the live roadmap and later AI recommendations.
 - Updated concept, design, decisions, curated devlog, architecture, portfolio-content, authorship and contributor records with six recovered Trap Mode requirements: pre-game toggle/red icon; random red-button spawning; instant Game Over on trap tap; passive +3 points every 333 ms; normal floating-number physics/fusion; and trap-mode leaderboard marker.
 - Recorded that compatibility with old beta scores was cancelled, native Kotlin compilation later succeeded, current time bonuses are 2/3/5/4 seconds (7/14/42/73), and the three custom sound files are in source `sfx/` but not yet in packaged web/Android asset paths.
 - The full archived conversation remains inaccessible; undocumented Trap Mode edges remain unknown. Recovery does not approve implementation.
@@ -25,7 +25,7 @@
 
 ## 2026-10-26 — Establish full project documentation structure
 
-- Added root `README.md`, `CONCEPT.md`, `ROADMAP.md`, `AGENTS.md`, and `docs/{DEVLOG,DECISIONS,DESIGN,ARCHITECTURE,QA,CONTENT,AI_COLLABORATION}.md` to separate the creator's vision, accepted decisions, implemented code, testing evidence and unresolved future concepts.
+- Added root `README.md`, `CONCEPT.md`, `ROADMAP.md`, `AGENTS.md`, and `docs/{DEVLOG,DECISIONS,DESIGN,ARCHITECTURE,QA,CONTENT,AI_COLLABORATION}.md` to separate Babuni.dev's vision, accepted decisions, implemented code, testing evidence and unresolved future concepts.
 - Preserved the original root `DEVLOG.md` and all earlier changelog entries as historical primary sources; the structured journal is an editorial continuation rather than a replacement.
 - Corrected `INSTALL.md` and `SOUNDS.md` to reflect GitHub commit `d5ce766`: three custom recordings exist under `sfx/` but are not yet synchronized into packaged web/Android assets; the separate TEST app configuration had already been removed in `c46ee3f`.
 - Recorded the recovered red/trap button mention as an **unapproved concept without a recovered rule set**. Tracked unsigned native builds, original-certificate signing, physical two-device QA and host hardening as still open.
@@ -33,7 +33,7 @@
 
 ## 2026-10-26 — Keep Game Over high scores live across Wi-Fi players
 
-- **Creator-reported bug:** a guest player could submit a new high score to the Android host while the host's Game Over screen was open, yet the host's visible list did not update. This was a **client display refresh bug**, not evidence that native score persistence failed: `loadLeaderboard()` ran on Game Over entry and after the local player's own submission, while the 12-second polling condition expressly excluded `gameOver`.
+- **Babuni.dev-reported bug:** a guest player could submit a new high score to the Android host while the host's Game Over screen was open, yet the host's visible list did not update. This was a **client display refresh bug**, not evidence that native score persistence failed: `loadLeaderboard()` ran on Game Over entry and after the local player's own submission, while the 12-second polling condition expressly excluded `gameOver`.
 - **Fix:** the host-owned `GET /api/scores` leaderboard now refreshes automatically **every 3 seconds while Game Over is visible**, including on the Android host. Resuming a backgrounded Game Over page also triggers immediate refresh. During a round, the existing subtle below-game preview still polls every 12 seconds; the idle welcome screen avoids polling. The guest submission endpoint and native `ScoreStore` are unchanged.
 - Updated `game.js` and `android/app/src/main/assets/www/game.js` in lockstep. Added `tests/live-leaderboard-refresh.cjs` to verify host Game Over polling, gameplay/idle polling, replay and foregrounding, and added the regression to Android GitHub Actions. **Native debug/release build and regression passed:** [run 40245792000](https://github.com/babunidev/ButtonGame/actions/runs/40245792000). Device verification still required: after a guest submits, the host's Game Over screen should display the score within three seconds, with no restart or Play Again.
 
