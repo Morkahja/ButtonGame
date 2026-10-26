@@ -1,6 +1,6 @@
 # Button Game — Decisions and Open Questions
 
-**Notation:** Accepted = established creator direction or documented decision. Implemented = present in source. Verified = actually checked at the stated level. Proposed = not authorized. Retrospective entries rely on [original DEVLOG](../DEVLOG.md), [CHANGELOG](../CHANGELOG.md), and the creator-provided 2026-10-26 to-do list, not an invented transcript.
+**Notation:** Accepted = established Babuni.dev direction or documented decision. Implemented = present in source. Verified = actually checked at the stated level. Proposed = not authorized. Retrospective entries rely on [original DEVLOG](../DEVLOG.md), [CHANGELOG](../CHANGELOG.md), and Babuni.dev-provided 2026-10-26 to-do list, not an invented transcript.
 
 ## D-001 — Preserve original game identity while building a modern edition
 - **Direction:** Treat `Game.swf` and the earlier HTML5 reconstruction as stages in the project, not replaceable clutter.
@@ -9,7 +9,7 @@
 - **Alternative not taken:** Overwrite the original with an unrelated modernized game.
 
 ## D-002 — The button must break as the recognizable button
-- **Direction:** The creator rejected the first swollen, glowing shatter prototype.
+- **Direction:** Babuni.dev rejected the first swollen, glowing shatter prototype.
 - **Decision:** Use clipped fragments of the actual turquoise four-hole button with staged cracks/separation/scatter; still allow taps during destruction.
 - **State:** Implemented in `game.js` and `index.html`; documented tests in 2026-10-24 history; latest physical-device verification not established.
 - **Source:** [root DEVLOG](../DEVLOG.md) (2026-10-24).
@@ -28,13 +28,13 @@
 - **Source:** [root DEVLOG](../DEVLOG.md) (2026-10-25).
 
 ## D-005 — Correct the stationary Game Over screen, not the data model
-- **Observation:** Creator reported guest high score absent from host Game Over view until another local action.
+- **Observation:** Babuni.dev reported guest high score absent from host Game Over view until another local action.
 - **Decision:** Poll host scores every three seconds during Game Over and refresh on return; keep host data authority unchanged.
 - **State:** Implemented and CI-regression tested; real two-device confirmation open.
 - **Source:** [root DEVLOG](../DEVLOG.md) (2026-10-26).
 
 ## D-006 — Release the same installed app, not a new TEST app
-- **Direction:** Creator wants an original-certificate, normal-package APK update. Experimental TEST packaging was not requested; no need to preserve disposable test scores.
+- **Direction:** Babuni.dev wants an original-certificate, normal-package APK update. Experimental TEST packaging was not requested; no need to preserve disposable test scores.
 - **State:** The TEST build variant was introduced and subsequently removed in commits `31c2718` / `c46ee3f`. Signed and delivered latest update **open**.
 - **Do not reintroduce** an alternate package identity without explicit approval.
 
@@ -44,11 +44,11 @@
 - **Decision still to implement:** Reproducible copy/sync/check in release pipeline. Do not say this is already fixed.
 - **State:** Source recordings present; packaging open.
 
-## D-008 — Red Trap Button: complete creator-supplied feature specification
+## D-008 — Red Trap Button: complete Babuni.dev-supplied feature specification
 
-- **Creator's goal:** An optional mode that **rewards patience and punishes careless tapping**.
+- **Babuni.dev's goal:** An optional mode that **rewards patience and punishes careless tapping**.
 - **User-provided nine-item checklist, 26 October 2026:** pre-game Traps checkbox with red-button icon; some ordinary target spawns randomly become red targets; red buttons retain ordinary **position, lifespan, rotation and destruction** behavior; **a tap triggers immediate Game Over**; untouched traps **expire, shatter and permit the next spawn**; while active they produce **3 passive points every ⅓ second (9/s)**; passive points **emerge from center, combine, expire and fuse into the score normally**; store the active mode with each high score; show a **small red button beside leaderboard names** for Traps-enabled records.
-- **Evidence:** [Full creator-provided specification](TRAP_MODE.md), supplementing the earlier [six-item historical checklist](HISTORICAL_CHECKLIST_2026-10-25.md).
+- **Evidence:** [Full Babuni.dev-provided specification](TRAP_MODE.md), supplementing the earlier [six-item historical checklist](HISTORICAL_CHECKLIST_2026-10-25.md).
 - **Open details:** replacement probability, moment of passive emission relative to spawn/shatter, potential click/expiry races, and interaction between instant loss and unsettled points.
 - **State:** **Entire feature not started.** The user supplied its missing specification for historical preservation, **not an implementation instruction**. Do not label source/API changes as already made or treat the nine-item record as a newly accepted release milestone.
 
@@ -64,7 +64,7 @@
 
 ## D-011 — Rewrite the 21→42 transformation after the initial prototype
 - **Earlier implemented attempt:** throw out 21 `1`s, duplicate them into **42 units**, gather and assemble 42.
-- **Creator's later requested choreography:** emit **21 units**, rebound against walls and each change from `1` to `2` while moving, then gather into a large 42. They must remain non-scoring decoration until the one exact 42 pickup.
+- **Babuni.dev's later requested choreography:** emit **21 units**, rebound against walls and each change from `1` to `2` while moving, then gather into a large 42. They must remain non-scoring decoration until the one exact 42 pickup.
 - **Decision:** The latter replaces the former. This is a specific superseded concept, **not** two independently active modes.
 - **Status:** Implemented; simulated runtime checks recorded. On-device visuals unverified.
 - **Evidence:** [root DEVLOG](../DEVLOG.md), successive October 25 entries on 21→42.
@@ -88,26 +88,26 @@
 - **Evidence:** [root DEVLOG](../DEVLOG.md), October 25 bell/sound entries.
 
 ## D-015 — Keep a live ranking peripheral rather than obstructive
-- **Creator request:** Show the leading host high scores **underneath** the game with roughly **50%** opacity and a descending fade; do not replace the full Game Over leaderboard.
+- **Babuni.dev request:** Show the leading host high scores **underneath** the game with roughly **50%** opacity and a descending fade; do not replace the full Game Over leaderboard.
 - **AI interpretation:** `#live-leaderboard` sits below the framed playfield, has no pointer events, holds up to five names/point totals, and hides during Game Over when the full ranking takes over.
 - **State:** Implemented in web/Android HTML/JS; device visual check open.
 - **Evidence:** [root DEVLOG](../DEVLOG.md), October 25 live score ambience entry.
 
-## D-016 — Trap Mode history recovery: from inaccessible archive to detailed creator specification
+## D-016 — Trap Mode history recovery: from inaccessible archive to detailed Babuni.dev specification
 
 - **Earlier evidence gap:** The archived chat could not be read; the first recovered seven-category checklist held six high-level Trap Mode tasks.
-- **Further recovery:** The creator provided a standalone **nine-item “Red Trap Button” checklist** with explicit normal-lifecycle parity, untouched expiry/shatter, center-emitted passive points, and the red icon's location beside leaderboard names. See [TRAP_MODE.md](TRAP_MODE.md).
+- **Further recovery:** Babuni.dev provided a standalone **nine-item “Red Trap Button” checklist** with explicit normal-lifecycle parity, untouched expiry/shatter, center-emitted passive points, and the red icon's location beside leaderboard names. See [TRAP_MODE.md](TRAP_MODE.md).
 - **Still unknown:** The full archived conversation, precise random replacement distribution, rare event-order behavior, and reasoning not represented in the two recovered lists.
 - **Status:** **Defined concept, entire feature not started, no new implementation request.** Retain previous historical uncertainty records as records of what had been known at each step.
 
 
 ## D-017 — Completed physical QA is completed; keep Button Game simple
-- **Creator's direct report (2026-10-26):** Target/Quick Strike, physics/combos, timer/HUD, sound volume and actual UI all tested and work. Two-device Wi-Fi hosting, live players, guest → host high scores, automatic three-second leaderboard refresh, saved four statistics and persistence across hosting restarts are all reported working.
-- **Creator's decision:** Do not keep re-adding these QA items as unfinished. Do not invent a score-submission retry feature because one old submission failed, and do not promote speculative startup/port-conflict handling or other elaborate hardening to mandatory work. No startup/port conflicts have been observed. The game can remain simple.
-- **Creator's classification:** Bluetooth hosting and peer-to-peer are **future ideas, not milestones or roadmap tasks**. The already-defined Red Trap Button remains a separate unimplemented feature.
+- **Babuni.dev's direct report (2026-10-26):** Target/Quick Strike, physics/combos, timer/HUD, sound volume and actual UI all tested and work. Two-device Wi-Fi hosting, live players, guest → host high scores, automatic three-second leaderboard refresh, saved four statistics and persistence across hosting restarts are all reported working.
+- **Babuni.dev's decision:** Do not keep re-adding these QA items as unfinished. Do not invent a score-submission retry feature because one old submission failed, and do not promote speculative startup/port-conflict handling or other elaborate hardening to mandatory work. No startup/port conflicts have been observed. The game can remain simple.
+- **Babuni.dev's classification:** Bluetooth hosting and peer-to-peer are **future ideas, not milestones or roadmap tasks**. The already-defined Red Trap Button remains a separate unimplemented feature.
 - **Implementation of this decision:** Active roadmap and QA ledger corrected; canonical `sfx/` audio mirrored into web/Android and build verification enabled. Normal app ID preserved. See [ROADMAP.md](../ROADMAP.md) and [QA.md](QA.md).
 - **Verification boundary:** User report refers to already-tested installed game; the newly compiled `1.0.1-beta` APK still needs its CI result and original-certificate signing to be called delivered.
 
 ## Recording a new decision
 
-Use: **ID — date — creator request and reasons — AI suggestions and alternatives — accepted/rejected/deferred (with explicit evidence) — implementation file/commit — verification and uncertainty**. If no user approval occurred, record `pending`, not `accepted`.
+Use: **ID — date — Babuni.dev request and reasons — AI suggestions and alternatives — accepted/rejected/deferred (with explicit evidence) — implementation file/commit — verification and uncertainty**. If no user approval occurred, record `pending`, not `accepted`.
