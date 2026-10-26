@@ -65,7 +65,7 @@ See [docs/QA.md](docs/QA.md) for cases and current evidence.
 
 ## Historical and exploratory backlog — NOT scheduled for current release
 
-- **Trap Mode / red-button mechanic:** historical six-part specification **now recovered** (pre-game toggle/red icon; random trap spawns; instant Game Over on trap tap; +3 passive points/333 ms; normal floating-number physics/fusion; leaderboard mode indicator). **Not implemented and not a current release task.** Original timing edge cases remain unspecified. See [historical checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md).
+- **Red Trap Button / Trap Mode:** **entire feature NOT STARTED**. The creator recovered a complete [nine-item checklist](docs/TRAP_MODE.md): Traps checkbox/red icon; random replacements; normal spawn position/lifespan/rotation/destruction; immediate Game Over if tapped; untouched expiry/shatter/next spawn; +3 center-emitted passive points every ⅓ second (9/s) through ordinary physics, expiry and fusion; persistent mode flag on host high scores; small red button beside relevant leaderboard names. This is a documented future game mode, **not the immediate APK release task**.
 - Bluetooth hosting.
 - True peer-to-peer multiplayer.
 - Optional in-app reset of high scores.
@@ -74,8 +74,8 @@ The above are research/design topics, **not release blockers or authorization to
 
 ## Historical research dependency — not a feature-development task
 
-- [x] **Preserve the recovered historical seven-category checklist** with the six documented Trap Mode requirements in [docs/HISTORICAL_CHECKLIST_2026-10-25.md](docs/HISTORICAL_CHECKLIST_2026-10-25.md). The source is creator-pasted historical text, **not** a retrieved full transcript.
-- [ ] **If accessible, obtain the complete original archived conversation or original creator-authored notes** to resolve trap spawning/timing/settlement details, historical debates and omissions from the condensed checklist. Do not invent those missing rules or convert archived ideas into new implementation tasks without the creator's current direction.
+- [x] **Preserve the recovered historical seven-category checklist** with the earlier six documented Trap Mode requirements in [docs/HISTORICAL_CHECKLIST_2026-10-25.md](docs/HISTORICAL_CHECKLIST_2026-10-25.md). The source is creator-pasted historical text, **not** a retrieved full transcript.
+- [ ] **If accessible, obtain the complete original archived conversation or original creator-authored notes** to resolve remaining trap spawn probability, race conditions and Game Over score-settlement details, historical debates and omissions from the condensed checklist. Do not invent those missing rules or convert archived ideas into new implementation tasks without the creator's current direction.
 
 Existing shipped-feature release work and the approved host-owned Wi-Fi model remain the practical roadmap. Any “future feature” mentioned only in a generated audit is not automatically creator-approved.
 
