@@ -1,6 +1,6 @@
 # Button Game — Visual and Interaction Design
 
-Status: **as implemented in current HTML/CSS/JS**. The creator reports having tested gameplay, sound volume, UI layout and multiplayer on actual phones on 26 October 2026; installation of the next newly built/signed APK remains separate. This document describes existing presentation and intentional behavior; changes to the visual grammar require creator review.
+Status: **as implemented in current HTML/CSS/JS**. Babuni.dev reports having tested gameplay, sound volume, UI layout and multiplayer on actual phones on 26 October 2026; installation of the next newly built/signed APK remains separate. This document describes existing presentation and intentional behavior; changes to the visual grammar require Babuni.dev review.
 
 ## Stage, button and gesture
 
@@ -14,7 +14,7 @@ Status: **as implemented in current HTML/CSS/JS**. The creator reports having te
 
 - Predominantly black stage with cyan, white, green, and gold accents.
 - HUD: Points on top-left, Time on top-right; combined Reaction/APM plate near the bottom center. Green unsettled-score balance and gold unsettled-time balance are separate from the final displayed totals.
-- Button destruction is a sequence of visible cracks, separation, shatter, then fade using recognizable fragments of the SVG. The creator rejected arbitrary full-screen glowing fragments and destruction-driven enlargement.
+- Button destruction is a sequence of visible cracks, separation, shatter, then fade using recognizable fragments of the SVG. Babuni.dev rejected arbitrary full-screen glowing fragments and destruction-driven enlargement.
 - Floating values use directional gravity, bouncing and whole-label collision extents so digits stay inside the playfield. Gradual merges create distinct numerical milestones, rather than collapsing every cluster instantly.
 - Green score pickups and gold time pickups cross the foreground layer, deposit into collector balances and visibly decrement as totals rise.
 
@@ -43,13 +43,13 @@ Detailed credit conservation differs between transformations and ordinary merged
 - Phone scaling is controlled by `fitToPhone()`; check that the scaled playfield, collector flight paths, buttons and scrolling score view are aligned.
 - Target has keyboard interaction via Enter/Space in the browser. Focus visibility, language, small-screen legibility, reduced-motion accommodation, color contrast, and screen-reader clarity **have not been comprehensively audited**.
 - The four statistics must remain legible and separate; no overlay should block replay or intercept active target taps.
-- Creator-reported actual phone testing is complete; publication-quality screenshots/video can be captured for the portfolio when desired. See [QA.md](QA.md).
+- Babuni.dev-reported actual phone testing is complete; publication-quality screenshots/video can be captured for the portfolio when desired. See [QA.md](QA.md).
 
 ## Recovered visual iteration: from Flash precision to readable physical spectacle
 
 **Original/reference phase.** `Game.html` embeds a 450 × 450 Flash 9-era `Game.swf` on black; the earlier `ChatGPT Remake/README.md` describes a cyan target, original German text, fading/rotation and no sound. The legacy design served a direct click/point/second loop. The later current-game typography and HUD should not be retroactively described as original Flash art.
 
-**The rejected shatter.** The first AI proof of concept enlarged or flashed the entire target and released arbitrary glowing shapes. The creator objected because the recognizable four-hole jacket button itself should crack. The revised clipped-SVG fragments retain the real turquoise surface, white rings and dark holes, with the interaction area active during breakup. The earlier 580 ms staged sequence was subsequently rebalanced: keep the target intact and tappable for an additional 160 ms, then complete the fracture/shatter in approximately 420 ms. The visual choice came before the revised timings.
+**The rejected shatter.** The first AI proof of concept enlarged or flashed the entire target and released arbitrary glowing shapes. Babuni.dev objected because the recognizable four-hole jacket button itself should crack. The revised clipped-SVG fragments retain the real turquoise surface, white rings and dark holes, with the interaction area active during breakup. The earlier 580 ms staged sequence was subsequently rebalanced: keep the target intact and tappable for an additional 160 ms, then complete the fracture/shatter in approximately 420 ms. The visual choice came before the revised timings.
 
 **Shape and legibility correction.** The original floater wall collision used a value-derived circular radius, so multiple digits could cross the frame despite the center colliding. This was replaced with rotated **whole-label** bounds, HUD collision handling and final clamping. Aggressive visual growth (formerly up to about 2.4× for merged numbers) and instantaneous chain-merges were reduced: larger values remain dramatic but readable, and values recover briefly between merges. Record this as a legibility and pace correction, not as a new game mode.
 
@@ -65,4 +65,4 @@ Detailed credit conservation differs between transformations and ordinary merged
 
 While a trap is active, it generates **3 passive points every ⅓ second (9 points/sec)**. Those points appear **from the center**, pass through the **same number physics, merges, expiry and score fusion** as ordinary point effects. Scores earned with this mode active display a **small red button next to the player's name** in the leaderboard, and the mode-enabled flag is recorded with the host score.
 
-These requirements come from the creator's [nine-item specification](TRAP_MODE.md). They are **not implemented**. Spawn probability, specific red color/art geometry, race conditions at instant loss, pending-point settlement and screen-reader accommodation are not yet defined; do not invent them or mistake these notes for current UI.
+These requirements come from Babuni.dev's [nine-item specification](TRAP_MODE.md). They are **not implemented**. Spawn probability, specific red color/art geometry, race conditions at instant loss, pending-point settlement and screen-reader accommodation are not yet defined; do not invent them or mistake these notes for current UI.
