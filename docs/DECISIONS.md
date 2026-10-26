@@ -108,6 +108,17 @@
 - **Implementation of this decision:** Active roadmap and QA ledger corrected; canonical `sfx/` audio mirrored into web/Android and build verification enabled. Normal app ID preserved. See [ROADMAP.md](../ROADMAP.md) and [QA.md](QA.md).
 - **Verification boundary:** User report refers to already-tested installed game; the newly compiled `1.0.1-beta` APK still needs its CI result and original-certificate signing to be called delivered.
 
+## D-018 — AI organized Babuni.dev's first Button Game ideas; it did not originate the concept
+- **Recovered primary evidence (26 October 2026):** The privately supplied development-chat export begins with Babuni.dev describing an old game they **had remade locally**, saying they wanted to collect new ideas. Babuni.dev then independently described Quick Strike flash/spin, button-specific double points, visible bonus-time transfer, golden numbers, the 21→42 spectacle, 37→73, a jacket button and shattering. Only afterward did the assistant organize these creative requests into the first to-do lists.
+- **Attribution decision:** Credit **Babuni.dev** with the game's prior existence, expressed direction, requirements, critique and acceptance. Credit AI for structuring notes, generating prototypes, implementation, debugging and documentation.
+- **Source:** [Recovered creative origins](CREATIVE_ORIGINS.md). Original text export retained privately, not published.
+
+## D-019 — Green extra-time concept evolved into a golden mirrored collector
+- **Earliest user idea:** Place a **green** extra-seconds number by Time; make it count down as the actual timer increases. It was meant to make incoming rewards traceable, analogous to later green score points.
+- **Later direction:** Gold became the established visual identity for time-eligible numerical milestones. Babuni.dev then expressly requested **a golden shared bonus-time balance to the left of Time**, mirroring the green score collector to the right of Points. The bottom Reaction/APM elements also became a unified center panel.
+- **Status:** The first green-time proposal was **superseded**, not forgotten, and must not be reinstated as an active to-do. The final golden layout is implemented and creator-tested.
+- **Source:** [Creative origins](CREATIVE_ORIGINS.md), [visual design](DESIGN.md).
+
 ## Recording a new decision
 
 Use: **ID — date — Babuni.dev request and reasons — AI suggestions and alternatives — accepted/rejected/deferred (with explicit evidence) — implementation file/commit — verification and uncertainty**. If no user approval occurred, record `pending`, not `accepted`.

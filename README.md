@@ -37,6 +37,7 @@ The web game source is `index.html` and `game.js`, with assets under `assets/`. 
 - [ROADMAP.md](ROADMAP.md) — prioritized, status-labelled remaining work
 - [AGENTS.md](AGENTS.md) — rules for AI and other development contributors
 - [docs/DEVLOG.md](docs/DEVLOG.md) — curated journal continuation and entry point to the original journal
+- [docs/CREATIVE_ORIGINS.md](docs/CREATIVE_ORIGINS.md) — recovered original brainstorming and creator–AI iteration from the privately supplied development-chat export
 - [docs/DECISIONS.md](docs/DECISIONS.md) — recorded Babuni.dev decisions, rejected approaches and open choices
 - [docs/DESIGN.md](docs/DESIGN.md) — visual and interaction specifications
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — runtime and data flow
@@ -57,5 +58,7 @@ The active Android application ID is `com.babunigaming.buttongame`. The separate
 ## Creative record and unanswered ideas
 
 The creator supplied a recovered October 26 release to-do list emphasizing **finish the existing Android update before new modes**, with no need to preserve beta test high scores. Another recovered passage from the earlier conversation preserves the [original seven-category development checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md). It includes an earlier six-part red-button Trap Mode summary, now supplemented by Babuni.dev's **[complete nine-item Red Trap Button specification](docs/TRAP_MODE.md)**: pre-game Traps checkbox, random replacement red spawns, ordinary position/lifespan/rotation/shatter behavior, instant loss if tapped, harmless expiry and next spawn if untouched, passive +3 points every ⅓ second (9/s) emitted from center through regular physics/fusion, host-persisted mode flag, and a small red button beside names in the leaderboard. **The entire feature is not started.**
+
+The **opening of the original Button Game brainstorming conversation has now been recovered** through a privately supplied markdown export. Its earliest idea collection, visual corrections, rejected directions and human–AI development history are documented in [docs/CREATIVE_ORIGINS.md](docs/CREATIVE_ORIGINS.md), without publishing the private transcript or its sensitive contents.
 
 This website/game and its documented development process are intended to form part of the babuni.dev portfolio. The original journal remains intact to preserve changing decisions, including rejected prototypes and earlier technical limitations.

@@ -27,6 +27,14 @@ Missing archived messages must remain **unrecovered**, not paraphrased from imag
 | Verification | What actually ran and its result; distinguish CI from device testing |
 | Remaining uncertainty | Unverified behavior, missing source or unresolved approval |
 
+## Direct recovery of the original concept dialogue (26 October 2026)
+
+The original chat's **beginning** is now available through a private Babuni.dev-supplied markdown export. This is stronger provenance than the earlier seven-category retrospective checklist, while still not proof that every embedded image, attachment or exchange has been preserved. See [CREATIVE_ORIGINS.md](CREATIVE_ORIGINS.md).
+
+At the opening Babuni.dev explicitly identified an old game they had already remade locally, then delivered creative notes before asking for a to-do list. **AI's first role was organizing existing author instructions.** Babuni.dev chose the turquoise four-hole/white-ring button, rejected inaccurate AI color/detail proposals, controlled the shatter's fidelity, specified the points-as-physical-value interaction, and later reshaped the 21→42 animation after an already implemented first version. This sequence must remain credited to **Babuni.dev** rather than described as AI-devised features. AI implementations and error corrections are recorded separately.
+
+The raw export is **not safe to publish as-is** because it contains private text and signing-sensitive material. A reviewable edited account is committed instead; do not upload the raw transcript into this public repository.
+
 ## Concrete project examples
 
 - **Button shatter:** first AI-produced approximation enlarged the button and used arbitrary glowing shapes; Babuni.dev rejected that appearance. The revised solution fractured the recognizable turquoise jacket button into its actual pieces. This change of direction is part of the artwork.
@@ -46,7 +54,7 @@ Missing archived messages must remain **unrecovered**, not paraphrased from imag
 
 **One ledger and spectator freshness.** Babuni.dev specified that all Wi-Fi players submit to one Android-host-owned scoreboard. AI's temporary guest-local statistics cache was an incorrect attempt to bridge the old native host and was removed. Babuni.dev then discovered the stationary Game Over list did not update when another player submitted; AI found a polling condition that excluded Game Over and implemented a targeted 3-second refresh and CI check. Actual two-device verification remains a distinct task.
 
-**Evidence and boundaries.** The first 2026-10-26 search did not retrieve the archived red/trap discussion. A subsequent **Babuni.dev-supplied copy of an older seven-category checklist** recovers concrete Trap Mode requirements and is preserved at [HISTORICAL_CHECKLIST_2026-10-25.md](HISTORICAL_CHECKLIST_2026-10-25.md). This evidence is stronger than guessing from the name “trap,” but is still **not the full original conversation**, does not settle missing edge cases and does not authorize implementation. A red record button from an unrelated project is not valid evidence for Button Game. Future history entries should distinguish (a) user recollection, (b) Babuni.dev-pasted historical text, (c) directly quoted original archived dialogue if obtained, (d) retrospective GitHub logs, and (e) independently tested code.
+**Evidence and boundaries — earlier investigation.** The first 2026-10-26 search did not retrieve the archived red/trap discussion. A subsequent **Babuni.dev-supplied copy of an older seven-category checklist** recovered concrete Trap Mode requirements and is preserved at [HISTORICAL_CHECKLIST_2026-10-25.md](HISTORICAL_CHECKLIST_2026-10-25.md). **Later in the same day the privately uploaded transcript recovered the actual opening and original trap discussion**, summarized in [CREATIVE_ORIGINS.md](CREATIVE_ORIGINS.md). This still does not establish exact spawn probability, settle every edge case or authorize implementation. A red record button from an unrelated project is not valid evidence for Button Game. Future history entries should distinguish (a) user recollection, (b) Babuni.dev-pasted historical text, (c) directly quoted original archived dialogue if obtained, (d) retrospective GitHub logs, and (e) independently tested code.
 
 ## Publication rule
 

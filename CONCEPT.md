@@ -1,7 +1,7 @@
 # Button Game — Creative Concept
 
 **Author and creative direction:** Babuni.dev.  
-**State:** A reconstruction of the demonstrable concept, not a claim to recover every discussion from the inaccessible long development chat.  
+**State:** The original idea-collection opening and substantial creative-development dialogue have now been recovered from a **private creator-supplied export** and synthesized in [docs/CREATIVE_ORIGINS.md](docs/CREATIVE_ORIGINS.md). The export does not verify every screenshot, attachment or lost conversational detail.  
 **Last reviewed:** 2026-10-26.
 
 ## Core experience
@@ -46,6 +46,8 @@ The numbers are both mechanics and performers. One documented iteration imagined
 The earlier [seven-category checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md) recovered six Trap Mode tasks. Babuni.dev has now supplied the **complete nine-item feature checklist** in [docs/TRAP_MODE.md](docs/TRAP_MODE.md), including normal button lifecycle parity, untouched expiration and shatter, precisely where passive points emerge, and the red-icon location beside leaderboard names. The concept is documented; **the entire feature remains not started**.
 
 ## Historical roots
+
+**The recovered opening tells us how the modern collaboration actually began.** Babuni.dev already had an older game they had remade locally and wanted to collect ideas, not commission an AI-originated game concept. Their first notes proposed simultaneous flash/spin on Quick Strike, double points restricted to the particular button, a visible bonus-seconds transfer, gold-eligible numbers and a 21→42 scatter/duplicate animation. AI first **organized these notes into a to-do list**, later helping implement and revise them. The initial green extra-time indicator was subsequently superseded by a **gold time bank**; the first 21→42 count-doubling treatment was superseded by 21 bouncing 1s changing into 2s. See [the recovered creative process](docs/CREATIVE_ORIGINS.md).
 
 `Game.swf` and `Game.html` preserve an earlier Flash-era game. `ChatGPT Remake/` is a separate HTML5 reconstruction of that legacy artifact, with its own behavior and retrospective notes. The current game diverges through button graphics, score physics, special combinations, audio, Android hosting and the host-owned multiplayer leaderboard. Keep these stages distinct when telling the portfolio story.
 
