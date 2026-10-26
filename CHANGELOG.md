@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-26 — Recover original seven-category development checklist and Trap Mode
+
+- Preserved the creator-provided historical checklist at `docs/HISTORICAL_CHECKLIST_2026-10-25.md`, keeping its seven original categories separate from the live roadmap and later AI recommendations.
+- Updated concept, design, decisions, curated devlog, architecture, portfolio-content, authorship and contributor records with six recovered Trap Mode requirements: pre-game toggle/red icon; random red-button spawning; instant Game Over on trap tap; passive +3 points every 333 ms; normal floating-number physics/fusion; and trap-mode leaderboard marker.
+- Recorded that compatibility with old beta scores was cancelled, native Kotlin compilation later succeeded, current time bonuses are 2/3/5/4 seconds (7/14/42/73), and the three custom sound files are in source `sfx/` but not yet in packaged web/Android asset paths.
+- The full archived conversation remains inaccessible; undocumented Trap Mode edges remain unknown. Recovery does not approve implementation.
+- **Documentation-only update:** no JavaScript, Android code, audio, build workflow, executable or hardware verification changed.
+
 ## 2026-10-26 — Establish full project documentation structure
 
 - Added root `README.md`, `CONCEPT.md`, `ROADMAP.md`, `AGENTS.md`, and `docs/{DEVLOG,DECISIONS,DESIGN,ARCHITECTURE,QA,CONTENT,AI_COLLABORATION}.md` to separate the creator's vision, accepted decisions, implemented code, testing evidence and unresolved future concepts.

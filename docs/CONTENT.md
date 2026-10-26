@@ -19,7 +19,7 @@ The website **babuni.dev** is itself a portfolio project. Button Game should eve
 4. **Unexpected systems:** Quick Strike, milestone numbers, 21→42 and 37→73 transformations, gold time bank and green score collector.
 5. **Social layer:** Serve on Wi-Fi, QR joining and host-owned standings.
 6. **Development journal:** creator requests, AI interpretations, rejected prototypes, mistakes, recovered facts and actual tests.
-7. **Open questions:** the unrecovered red/trap-button idea and other deferred explorations, explicitly labelled as such.
+7. **Historical future designs:** recovered six-part Trap Mode specification, explicitly labelled **not implemented**; other deferred options such as Bluetooth and peer-to-peer are separately identified.
 
 ## Media/evidence inventory
 
@@ -30,7 +30,8 @@ The website **babuni.dev** is itself a portfolio project. Button Game should eve
 | Current HTML/JS and SVG target | Stored in repository | Suitable source for future captured screenshots |
 | Game Over, number merges, Android host joining | No publication-ready screenshots/video verified by this audit | Capture only after checking actual output |
 | Latest delivered, original-certificate Android build | Not established for newest Game Over fix | Do not present earlier signed APK as newest release |
-| Long archived development chat and original red/trap description | Not recovered | Do not invent dialogue or reconstructed mechanics |
+| Original seven-category checklist with Trap Mode rules | [Recovered historical checklist](HISTORICAL_CHECKLIST_2026-10-25.md) | Six design requirements recovered from creator-supplied excerpt; not implemented |
+| Full archived development conversation | Not directly recovered | Additional dialogue, rationale and unrecorded details remain unavailable |
 
 ## Recovered in-game content and narrative beats
 
@@ -43,7 +44,7 @@ This section describes **established historical game content**, not approved por
 - **Time and reward cues:** gold indicates number-based time eligibility. The currently established table is 7→2s, 14→3s, 42→5s, 73→4s; 21/37 are transitions, not themselves time payouts. Older journal entries awarded +3s more broadly—retain them as earlier builds rather than current rules.
 - **Co-presence:** Android `Serve on Wi-Fi`, QR joining, host-owned ranking, animated live players and a faded list beneath the running game are the local-social story, **not** a real-time synchronized shared playfield.
 
-**Unrecovered original content:** the red/trap/trip button's detailed rules and the archived larger to-do inventory are not available in the accessible dialogue or repository. Do not illustrate imagined red-button rules, label such sketches “approved,” or schedule them for implementation. The unrelated red camera trigger from another project is not Button Game evidence.
+**Recovered historical concept:** The earlier conversation's seven-category checklist, now supplied by the creator, includes a pre-game **Traps toggle/red icon**, **random red trap spawns**, **instant Game Over if tapped**, **+3 passive points every 333 ms** during the trap, **normal floating-number physics/fusion** for these points, and a **mode indicator on leaderboard entries**. This is historical design evidence, not an implemented mode or permission to illustrate invented details. The complete archived conversation and precise spawn/settlement rules are still unavailable. See [source checklist](HISTORICAL_CHECKLIST_2026-10-25.md).
 
 ## Attribution and privacy
 

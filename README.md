@@ -54,6 +54,6 @@ The active Android application ID is `com.babunigaming.buttongame`. The separate
 
 ## Creative record and unanswered ideas
 
-The creator supplied a recovered October 26 to-do list emphasizing **finish the existing Android update before new modes**, with no need to preserve beta test high scores. A **red button / trap or trip mechanic** is referenced as a future concept, but its original rules and approval are not available in the recovered record. **Do not invent or implement those rules.**
+The creator supplied a recovered October 26 release to-do list emphasizing **finish the existing Android update before new modes**, with no need to preserve beta test high scores. Another recovered passage from the earlier conversation preserves the [original seven-category development checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md). It includes a **six-part red-button Trap Mode design**: pre-game toggle, random traps, instant loss on trap tap, passive +3 points per 333 ms, normal floater/score fusion, and leaderboard mode indicator. The design is **historically documented but not implemented or newly approved**. The full original archived discussion and some rules remain unavailable.
 
 This website/game and its documented development process are intended to form part of the babuni.dev portfolio. The original journal remains intact to preserve changing decisions, including rejected prototypes and earlier technical limitations.

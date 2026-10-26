@@ -6,7 +6,7 @@ This is a creator-directed artwork and a software project. Preserve the user's a
 
 1. **Creator direction takes precedence.** Do not treat ideas proposed by an assistant as approved features. Never attribute the user's concepts or constraints to AI.
 2. **Do not redesign the game without approval.** The existing turquoise jacket-button interaction, physical number mergers, Quick Strike, special 21→42 / 37→73 effects, time/score collectors, and Wi-Fi host model are intentional.
-3. The recovered **red/trap button** reference has no reliable original rules. Mark it **proposed / unspec'd**. Do not implement a guessed version.
+3. The recovered [original seven-category checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md) now establishes **six historical Trap Mode requirements** (pre-game toggle/red icon; random red spawns; instant Game Over on trap tap; +3 points/333 ms during trap; normal number physics/fusion; leaderboard trap-mode marker). They are **not implemented** and are **not a new authorization** to change the current game. Preserve known requirements but do not invent unspecified edge cases.
 4. Immediate release priority: reproduce all custom sounds, compile and sign an update to the **existing** Android package, then verify real host/guest play. Do not create a separate TEST app. Beta high scores need not be preserved.
 5. Never replace or rewrite the archived Flash game or earlier reconstruction while editing the modern game.
 
