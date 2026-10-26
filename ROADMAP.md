@@ -72,6 +72,12 @@ See [docs/QA.md](docs/QA.md) for cases and current evidence.
 
 The above are research/design topics, **not release blockers or authorization to implement**.
 
+## Historical research dependency — not a feature-development task
+
+- [ ] **Recover original archival evidence only if it becomes accessible:** the creator recalls a detailed red/trap/trip-button discussion and an earlier much larger to-do list, neither of which could be retrieved in the 2026-10-26 history audit. Seek the actual original conversation or creator-authored notes, then classify each recovered item individually as accepted, rejected, postponed, implemented, or merely proposed. **Do not implement red-button behavior, fabricate rules, or convert an inaccessible checklist into engineering tickets without that evidence.**
+
+Existing shipped-feature release work and the approved host-owned Wi-Fi model remain the practical roadmap. Any “future feature” mentioned only in a generated audit is not automatically creator-approved.
+
 ## Already implemented: do not relist as missing features
 
 Current HTML5 game; Android NanoHTTPD hosting and QR join; native v2 host-owned score fields; POST/GET leaderboard API; three-second Game Over polling code and CI regression; in-play leaderboard preview; Quick Strike, shatter, floaters and combinations; replay; sound cue routing; native Android compilation. Separately track **integration, packaging, signing and verification** still required for these.
