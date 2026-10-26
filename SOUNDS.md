@@ -14,7 +14,7 @@ The custom files are referenced by `game.js` at relative paths inside `assets/sf
 ## Implementation notes
 
 - Playback uses the Web Audio API, preloaded buffers, impact pitch variation and softened attacks for frequent input.
-- The original special reveal and Quick Strike playback gains were adjusted during development to avoid drowning out ordinary cues. The creator reports **actual phone volume, gameplay and UI have been tested and work** in the installed version; a new rebuilt/signed APK has not yet been installed for independent confirmation.
+- The original special reveal and Quick Strike playback gains were adjusted during development to avoid drowning out ordinary cues. Babuni.dev reports **actual phone volume, gameplay and UI have been tested and work** in the installed version; a new rebuilt/signed APK has not yet been installed for independent confirmation.
 - A qualifying combination milestone plays the appropriate standard cue; the two center-stage special reveals choose `4273.ogg` instead of duplicating a standard bell at that exact moment.
 - Fallback keeps the game playable if a custom recording fails to load. Fallback is **not** evidence of complete sound packaging.
 
@@ -22,9 +22,9 @@ The custom files are referenced by `game.js` at relative paths inside `assets/sf
 
 1. **Done in source:** Canonical `sfx/` recordings mirror into both browser and Android asset folders.
 2. **Done in CI configuration:** Synchronization on each build, `sfx/**` change triggers and byte-for-byte checks inside both APKs.
-3. **Creator-reported done:** Sound output, volume balance, interface and gameplay tested on the phone.
+3. **Babuni.dev-reported done:** Sound output, volume balance, interface and gameplay tested on the phone.
 4. **Done:** CI compiled both Android APK variants and passed all exact sound checks. **Still pending:** original-certificate sign/install of the new release update.
 
-Do not remove or transcode the creator-supplied originals without approval.
+Do not remove or transcode Babuni.dev-supplied originals without approval.
 
 See [ROADMAP.md](ROADMAP.md) and [docs/QA.md](docs/QA.md).
