@@ -1,8 +1,10 @@
 # Button Game (Buttongame)
 
-A one-minute, arcade-style button-smashing game with roaming targets, physical-looking number combinations and deliberately theatrical score collection. The game is a creative project directed by its creator, **Babuni.dev**. This repository preserves the original Flash artifact, earlier HTML5 reconstruction, current browser game, and native Android Wi-Fi host.
+**Author:** Babuni.dev
 
-**Project status (26 October 2026): gameplay and real two-device Wi-Fi multiplayer tested and working according to the creator.** Reproducible sound packaging and the [latest full native Android CI build](https://github.com/babunidev/ButtonGame/actions/runs/40325603457) **passed**; only the new original-certificate signed APK/installation remains unverified.
+A one-minute, arcade-style button-smashing game with roaming targets, physical-looking number combinations and deliberately theatrical score collection. The game is authored and creatively directed by **Babuni.dev**. This repository preserves the original Flash artifact, earlier HTML5 reconstruction, current browser game, and native Android Wi-Fi host.
+
+**Project status (26 October 2026): gameplay and real two-device Wi-Fi multiplayer tested and working according to Babuni.dev.** Reproducible sound packaging and the [latest full native Android CI build](https://github.com/babunidev/ButtonGame/actions/runs/40325603457) **passed**; only the new original-certificate signed APK/installation remains unverified.
 
 ## Play and hosting
 
@@ -35,10 +37,10 @@ The web game source is `index.html` and `game.js`, with assets under `assets/`. 
 - [ROADMAP.md](ROADMAP.md) — prioritized, status-labelled remaining work
 - [AGENTS.md](AGENTS.md) — rules for AI and other development contributors
 - [docs/DEVLOG.md](docs/DEVLOG.md) — curated journal continuation and entry point to the original journal
-- [docs/DECISIONS.md](docs/DECISIONS.md) — recorded creator decisions, rejected approaches and open choices
+- [docs/DECISIONS.md](docs/DECISIONS.md) — recorded Babuni.dev decisions, rejected approaches and open choices
 - [docs/DESIGN.md](docs/DESIGN.md) — visual and interaction specifications
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — runtime and data flow
-- [docs/QA.md](docs/QA.md) — creator-confirmed device testing and release check ledger
+- [docs/QA.md](docs/QA.md) — Babuni.dev-confirmed device testing and release check ledger
 - [docs/CONTENT.md](docs/CONTENT.md) — future portfolio presentation and evidence inventory
 - [docs/AI_COLLABORATION.md](docs/AI_COLLABORATION.md) — authorship and AI collaboration conventions
 - [INSTALL.md](INSTALL.md) — APK and Wi-Fi use
@@ -54,6 +56,6 @@ The active Android application ID is `com.babunigaming.buttongame`. The separate
 
 ## Creative record and unanswered ideas
 
-The creator supplied a recovered October 26 release to-do list emphasizing **finish the existing Android update before new modes**, with no need to preserve beta test high scores. Another recovered passage from the earlier conversation preserves the [original seven-category development checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md). It includes an earlier six-part red-button Trap Mode summary, now supplemented by the creator's **[complete nine-item Red Trap Button specification](docs/TRAP_MODE.md)**: pre-game Traps checkbox, random replacement red spawns, ordinary position/lifespan/rotation/shatter behavior, instant loss if tapped, harmless expiry and next spawn if untouched, passive +3 points every ⅓ second (9/s) emitted from center through regular physics/fusion, host-persisted mode flag, and a small red button beside names in the leaderboard. **The entire feature is not started.**
+The creator supplied a recovered October 26 release to-do list emphasizing **finish the existing Android update before new modes**, with no need to preserve beta test high scores. Another recovered passage from the earlier conversation preserves the [original seven-category development checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md). It includes an earlier six-part red-button Trap Mode summary, now supplemented by Babuni.dev's **[complete nine-item Red Trap Button specification](docs/TRAP_MODE.md)**: pre-game Traps checkbox, random replacement red spawns, ordinary position/lifespan/rotation/shatter behavior, instant loss if tapped, harmless expiry and next spawn if untouched, passive +3 points every ⅓ second (9/s) emitted from center through regular physics/fusion, host-persisted mode flag, and a small red button beside names in the leaderboard. **The entire feature is not started.**
 
 This website/game and its documented development process are intended to form part of the babuni.dev portfolio. The original journal remains intact to preserve changing decisions, including rejected prototypes and earlier technical limitations.
