@@ -45,6 +45,20 @@ Detailed credit conservation differs between transformations and ordinary merged
 - The four statistics must remain legible and separate; no overlay should block replay or intercept active target taps.
 - Screenshot/video evidence and a two-phone UX evaluation remain open in [QA.md](QA.md).
 
+## Recovered visual iteration: from Flash precision to readable physical spectacle
+
+**Original/reference phase.** `Game.html` embeds a 450 × 450 Flash 9-era `Game.swf` on black; the earlier `ChatGPT Remake/README.md` describes a cyan target, original German text, fading/rotation and no sound. The legacy design served a direct click/point/second loop. The later current-game typography and HUD should not be retroactively described as original Flash art.
+
+**The rejected shatter.** The first AI proof of concept enlarged or flashed the entire target and released arbitrary glowing shapes. The creator objected because the recognizable four-hole jacket button itself should crack. The revised clipped-SVG fragments retain the real turquoise surface, white rings and dark holes, with the interaction area active during breakup. The earlier 580 ms staged sequence was subsequently rebalanced: keep the target intact and tappable for an additional 160 ms, then complete the fracture/shatter in approximately 420 ms. The visual choice came before the revised timings.
+
+**Shape and legibility correction.** The original floater wall collision used a value-derived circular radius, so multiple digits could cross the frame despite the center colliding. This was replaced with rotated **whole-label** bounds, HUD collision handling and final clamping. Aggressive visual growth (formerly up to about 2.4× for merged numbers) and instantaneous chain-merges were reduced: larger values remain dramatic but readable, and values recover briefly between merges. Record this as a legibility and pace correction, not as a new game mode.
+
+**The 21 choreography changed after the first implementation.** The initial scatter/duplicate/gather version created 21 `1`s, doubled their count to 42, then formed `42`. The subsequent requested version keeps the **particle count at 21**, throws the singles outward with reflected wall collisions, morphs each from `1` into `2` in motion, and only then gathers them at the top-center `Smash it!` location. The older version should remain visible in project history as an experiment that was superseded.
+
+**HUD composition developed through corrections.** The score-bank's green `+N` was initially a flying/parked pickup, then became an aggregated number *inside* the Points panel, later moved to a flex sibling outside its clipped plate so the green readout and foreground flights remained visible. The top Points/Time plates narrowed and moved closer to opposite frame edges, gold time was mirrored to the inner side of the right plate, and Reaction/APM became a single bottom-center plate separated by a cyan line. Its z-index once hid Play Again; raising the replay overlay repaired it. See dated entries in [root DEVLOG](../DEVLOG.md).
+
+**Audio as visual feedback.** The 42 and 73 reveals take a dedicated `4273.ogg` cue rather than doubling a generic bell. Ordinary milestone bells occur for **each** reached 7/14/21/37/42/73 value, not once per floater lineage. Quick Strike uses its two random custom impacts from the *activating* press onward, while ordinary presses keep their impact set. The supplied new recordings were comparatively louder and had playback gain reduced without modifying the recording bytes.
+
 ## Red/trap button
 
 There is **no verified visual, behavioral or accessibility specification** for this remembered concept. Its color is only a label in a recovered idea, not implementation authority.
