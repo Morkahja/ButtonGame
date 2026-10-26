@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-26 — Establish full project documentation structure
+
+- Added root `README.md`, `CONCEPT.md`, `ROADMAP.md`, `AGENTS.md`, and `docs/{DEVLOG,DECISIONS,DESIGN,ARCHITECTURE,QA,CONTENT,AI_COLLABORATION}.md` to separate the creator's vision, accepted decisions, implemented code, testing evidence and unresolved future concepts.
+- Preserved the original root `DEVLOG.md` and all earlier changelog entries as historical primary sources; the structured journal is an editorial continuation rather than a replacement.
+- Corrected `INSTALL.md` and `SOUNDS.md` to reflect GitHub commit `d5ce766`: three custom recordings exist under `sfx/` but are not yet synchronized into packaged web/Android assets; the separate TEST app configuration had already been removed in `c46ee3f`.
+- Recorded the recovered red/trap button mention as an **unapproved concept without a recovered rule set**. Tracked unsigned native builds, original-certificate signing, physical two-device QA and host hardening as still open.
+- **Verification scope:** repository/documentation audit only. No gameplay, build workflow or Android code was changed, no APK was signed or delivered, and no new device testing was performed.
+
 ## 2026-10-26 — Keep Game Over high scores live across Wi-Fi players
 
 - **Creator-reported bug:** a guest player could submit a new high score to the Android host while the host's Game Over screen was open, yet the host's visible list did not update. This was a **client display refresh bug**, not evidence that native score persistence failed: `loadLeaderboard()` ran on Game Over entry and after the local player's own submission, while the 12-second polling condition expressly excluded `gameOver`.

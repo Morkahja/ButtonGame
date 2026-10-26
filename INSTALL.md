@@ -1,62 +1,29 @@
-# Button Game — Android host build and installation
+# Button Game — Android Installation and Build
 
-Developer: **Babuni.dev**
+Developer / creative direction: **Babuni.dev**. Current normal package: `com.babunigaming.buttongame`.
 
-The Android app is the **single score authority** for every player in its Wi-Fi session. The host saves records in its own private app storage; guests send results to the host via `POST /api/scores` and read them through `GET /api/scores`. Guests do not maintain separate leaderboards.
+## Host a session
 
-## Install a signed release APK
+1. Install a correctly **release-signed** APK of the normal Button Game package.
+2. On the host Android phone choose **Serve on Wi-Fi**.
+3. Guests join the displayed `http://<host-ip>:8766/` URL or scan the QR code while on the same reachable network.
+4. Play from host and guest. The Android server owns the high-score database; guests submit final scores to it.
 
-Install the signed release build on the Android host by opening the APK in Files and approving installation by that source if Android asks. A build signed with the existing project release certificate upgrades the installed app without uninstalling it.
+Some guest/café Wi-Fi networks isolate clients; a personal hotspot may help. Client-to-host access and backgrounding must be verified on the actual devices.
 
-**Do not confuse the GitHub Actions debug APK with the project's release-signed APK.** The workflow's debug APK uses a different signing certificate and cannot upgrade an app signed with the existing release certificate. The unsigned release artifact also cannot be installed as-is; it needs local developer signing.
+## Release APK versus CI artifacts
 
-USB installation of the signed APK, if Android debugging/ADB is configured:
+The current GitHub Actions workflow builds an installable **debug-signed** APK and an **unsigned release** APK. Neither is an upgrade to an existing app signed with the creator's original release certificate. The historical independently signed APK documented in `DEVLOG.md` preceded the most recent guest Game Over refresh change; do not claim it is the newest update.
 
-```bash
-adb install -r ButtonGame-Native-Host-Highscores-Full-Build.apk
-```
+The earlier unrequested **`TEST` package variant has been removed** (commits `31c2718` / `c46ee3f`); current debug and release variants have the same base app ID, but different signatures. Attempting to install a debug APK over a release-signed copy will fail certificate matching. The creator does **not** require preserving expendable beta test scores; uninstalling may discard them, but is not itself a substitute for verifying proper release signing.
 
-## Host a Wi-Fi session
+Private original signing material must stay out of GitHub and logs. Confirm the signed release's certificate matches previous installed releases; increment `versionCode` for the release process (current source reports code 1 / name `1.0.0-beta`).
 
-1. Open Button Game on the Android host.
-2. Tap **Serve on Wi-Fi**.
-3. Players on the same Wi-Fi join using the host URL or QR code.
-4. The Android host and all guests play against the same high-score leaderboard.
+## Build current native source
 
-## What the host stores
+CI workflow: [Android native build](https://github.com/babunidev/ButtonGame/actions/workflows/android-build.yml).
 
-New records in `scores-v2.json` have five fields:
-
-- Player name (`name`)
-- Final points (`score`)
-- Final average reaction in milliseconds (`reactionMs`)
-- Final actions per minute (`apm`)
-- Elapsed time in milliseconds from first click until Game Over (`durationMs`)
-
-The Game Over UI shows the four *statistics*—points, reaction, APM, and elapsed time—alongside player name. The host owns and persists all five fields.
-
-This beta intentionally starts a new database: earlier `scores.json` records are not migrated. The v2 Android host deletes the old beta file on initialization.
-
-## Reset high scores
-
-Android Settings → Apps → Button Game → Storage & cache → **Clear storage / Clear data**. This deletes all host records, plus other app-private data/preferences. It does not uninstall Button Game.
-
-A guest browser cannot reset host records by deleting its own browsing data.
-
-## Build native Android code with GitHub Actions
-
-Workflow: [Android native build](https://github.com/babunidev/ButtonGame/actions/workflows/android-build.yml).
-
-Changes to `android/**`, `game.js`, `index.html`, `assets/**`, or the workflow trigger a full Gradle build. You can also launch it from the Actions tab using **Run workflow**.
-
-The GitHub Actions runner installs JDK 17, Android SDK platform 35, and Gradle 8.9 through the checked-in wrapper, then builds both debug and unsigned release APKs. Build artifacts are retained for 30 days:
-
-- `ButtonGame-Native-Android-Debug`: test APK, debug-signed; **cannot upgrade release-signed app**
-- `ButtonGame-Native-Android-Release-Unsigned`: compiled native release APK **requiring original release signing**
-
-**Private signing credentials are not stored in the GitHub repository or GitHub Actions.** The original PKCS#12 keystore is held separately by the developer and is used to sign the release artifact locally. A successful CI build proves Kotlin/Android compilation, not release signing or device behavior.
-
-To build locally instead (JDK 17 / Android SDK installed):
+For local Java 17 + Android SDK builds:
 
 ```bash
 ./scripts/sync-www.sh
@@ -64,5 +31,16 @@ cd android
 ./gradlew assembleDebug assembleRelease
 ```
 
-For a source-complete release, ensure the three user-supplied special sounds exist both in `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/`; GitHub's source currently lacks those binary recordings even though separately packaged APKs include them. Do not distribute a plain CI APK as audio-complete until those assets are added.
+**Known incomplete build step (26 October 2026):** The source recordings `sfx/4273.ogg`, `sfx/QuickStrikepoints.ogg` and `sfx/QuickStrikepoints1.ogg` are committed, but missing under `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/`. The current script only copies from `assets/sfx/`; the CI workflow does not run it before Gradle and does not watch `sfx/**`. Until corrected, a clean CI build has fallback sounds but is **not custom-audio complete**. See [ROADMAP.md](ROADMAP.md).
 
+GitHub currently has no published release entry for the newest corrected APK. CI's successful Kotlin/JavaScript compile does not prove signed-release installation or two-phone networking.
+
+## High-score ownership and format
+
+The Android host saves up to 50 sorted entries to its private `scores-v2.json`. Each entry has `name`, `score`, `reactionMs`, `apm`, `durationMs`. Guests send `POST /api/scores` and read `GET /api/scores`; no independent guest scoreboard. Earlier `scores.json` beta records are deliberately not migrated; the v2 native store deletes that file on initialization.
+
+To reset all host app data, Android Settings → Apps → Button Game → Storage → Clear data. This also deletes unrelated app-private preferences. Clearing guest browser cache does not reset host rankings.
+
+## Verification before distribution
+
+Inspect APK entry list for both `assets/www/game.js` and `assets/www/index.html` **and all ten intended audio OGG files**; confirm native classes, hash and signature. Install on a real device and run [docs/QA.md](docs/QA.md), especially guest score submission and automatic host Game Over refresh within about three seconds. A release artifact and successful device check must be recorded in [CHANGELOG.md](CHANGELOG.md) and [docs/DEVLOG.md](docs/DEVLOG.md).
