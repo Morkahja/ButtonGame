@@ -75,9 +75,13 @@ The 60-second `deadline` starts on the first tap. State updates include target/f
 
 **Identity and signing are interface contracts.** A proposed side-by-side `applicationIdSuffix = ".testing"` debug app was not requested and was reverted. The creator explicitly wants normal-package upgrades using the original release certificate and does not require beta test score preservation. A debug APK or unsigned release artifact does not satisfy that contract. Repository `sfx/` contains the custom files, but synchronized web/Android copies are not yet reproducible from the CI path.
 
-## Trap Mode architectural implications — recorded, not implemented
+## Red Trap Button dependencies — specified, not implemented
 
-The creator-provided [original checklist](HISTORICAL_CHECKLIST_2026-10-25.md) specifies pre-game Traps toggle/red icon, random red trap spawns, instant Game Over on trap tap, passive +3 points per 333 ms while a trap is active (through normal number physics and fusion), and a trap-mode marker on leaderboard records. **No trap logic or mode metadata exists in the current inspected game/host architecture.** If separately authorized in future, the host-owned leaderboard model will need a recorded mode flag, with compatible client/server changes; this is a dependency observation, **not** approval or an implemented schema.
+The creator's [complete nine-item spec](TRAP_MODE.md) describes an optional pre-game Traps checkbox, random red replacement spawns with **ordinary position, lifespan, rotation and shatter lifecycle**, **instant Game Over when pressed**, and unattended **expiration/shatter/next spawn**. While a red target exists, it emits **3 passive points every one-third second (9 points per second)** from the playfield **center**. These points must use the **existing floating-number collision, merge, expiry and score-fusion accounting**, not a direct `score += 3` shortcut.
+
+High-score persistence must eventually record whether Traps was enabled for each run, and display a **small red button beside matching names**. This implies a future client/server mode metadata contract, but **no field name, storage migration behavior, or API change has been approved or implemented**. A future implementation must define how immediate Game Over interacts with pending score settlement and network submission before altering current behavior.
+
+**Entire Trap Mode feature is not started.** This is a documentation-only technical dependency analysis, not executable architecture or an instruction to alter the current host.
 
 ## Known failure/abuse surfaces
 
