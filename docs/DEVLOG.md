@@ -2,6 +2,18 @@
 
 This is the structured continuation and reading guide to the original [root DEVLOG.md](../DEVLOG.md), which remains intact as a primary historical source. [CHANGELOG.md](../CHANGELOG.md) records implemented change chronology; this journal records *why*, revisions, creator direction, AI collaboration, and what remained unverified. Earlier events below are summaries grounded in repository documents rather than newly discovered transcripts.
 
+## 2026-10-26 — Creator supplies detailed nine-item Red Trap Button specification
+
+**Creator direction.** The creator provided a standalone feature titled **“Red Trap Button”** and explicitly stated **“Entire feature not started”**. Its core intention is **“An optional game mode that rewards patience and punishes careless tapping.”** This is additional recovered design information for the existing documentation effort, not a request to begin coding.
+
+**Detailed specification.** A pre-game Traps checkbox has a red-button icon. Enabled rounds randomly **replace some normal spawns** with red buttons. Red buttons **use the same position, lifespan, rotation and destruction behavior** as ordinary targets. **Tapping the trap immediately ends the round**; an untouched trap **expires, shatters and yields to the next spawn**. During its active life the trap grants **three passive points every one-third second (nine points per second)**; those emerge from the **center** and go through ordinary float, merge, expire and score-fusion machinery. The host-owned high-score record remembers whether Traps was active and a **small red button appears beside the corresponding leaderboard name**.
+
+**Creative iteration / recovered knowledge.** Earlier repository notes described the red trap as completely undocumented because the long original conversation was inaccessible. The creator then recovered six rules within an original seven-category checklist. The new nine-item version adds the missing **normal button lifecycle parity**, **what happens when ignored**, **center emergence**, **explicit expiry of passive numbers**, and **precise leaderboard icon placement**. The original historical checklist is preserved separately; subsequent specification must not be backdated or falsely represented as an old verbatim transcript.
+
+**AI contribution and action.** The assistant transcribed the creator's checklist as [TRAP_MODE.md](TRAP_MODE.md), cross-referenced it from design/concept/roadmap/decisions and retained the pending questions without invented answers.
+
+**Implementation and verification.** **Zero of nine tasks implemented.** No JS, Kotlin, UI, scores schema, automated test, APK, or actual device behavior was changed by the documentation work. The next signed Android update remains separate and higher priority.
+
 ## 2026-10-26 — Recovered original checklist and red Trap Mode
 
 **Creator input.** The creator supplied a passage attributed to the older, inaccessible Button Game development conversation. It stated that an assistant-generated updated to-do list had added its own recommendations and presented them as original; the earlier list instead had **seven categories dated 25 October 2026**, including a full Trap Mode section. The creator provided this recovered excerpt for preservation in the new documentation structure, not as authorization to implement the feature.
