@@ -114,6 +114,62 @@ jobs:
           done
           echo "Both APKs contain all 10 source-identical OGG recordings."
 
+      # Do not call an ephemeral GitHub debug build an update APK. Once the
+      # creator configures the ORIGINAL signing key as encrypted Actions
+      # secrets, a signed APK can be produced with the same certificate.
+      - name: Sign update with original release certificate (optional)
+        if: github.event_name != 'pull_request'
+        env:
+          BUTTON_GAME_KEYSTORE_B64: ${{ secrets.BUTTON_GAME_KEYSTORE_B64 }}
+          BUTTON_GAME_KEYSTORE_PASSWORD: ${{ secrets.BUTTON_GAME_KEYSTORE_PASSWORD }}
+          BUTTON_GAME_KEY_ALIAS: ${{ secrets.BUTTON_GAME_KEY_ALIAS }}
+          BUTTON_GAME_KEY_PASSWORD: ${{ secrets.BUTTON_GAME_KEY_PASSWORD }}
+        run: |
+          if [ -z "$BUTTON_GAME_KEYSTORE_B64" ] || [ -z "$BUTTON_GAME_KEYSTORE_PASSWORD" ]; then
+            echo "Original signing secrets not configured: unsigned release only."
+            exit 0
+          fi
+          umask 077
+          keyfile="$RUNNER_TEMP/Buttongame-signing-keystore.p12"
+          trap 'rm -f "$keyfile"' EXIT
+          printf '%s' "$BUTTON_GAME_KEYSTORE_B64" | base64 --decode > "$keyfile"
+          buildtools="$ANDROID_HOME/build-tools/35.0.0"
+          unsigned=app/build/outputs/apk/release/app-release-unsigned.apk
+          aligned="$RUNNER_TEMP/aligned.apk"
+          output=app/build/outputs/apk/release/ButtonGame-Signed-Update.apk
+          "$buildtools/zipalign" -f -p 4 "$unsigned" "$aligned"
+          if [ -n "$BUTTON_GAME_KEY_ALIAS" ]; then
+            "$buildtools/apksigner" sign --ks "$keyfile" --ks-type PKCS12 \
+              --ks-key-alias "$BUTTON_GAME_KEY_ALIAS" \
+              --ks-pass env:BUTTON_GAME_KEYSTORE_PASSWORD \
+              --out "$output" "$aligned"
+          else
+            "$buildtools/apksigner" sign --ks "$keyfile" --ks-type PKCS12 \
+              --ks-pass env:BUTTON_GAME_KEYSTORE_PASSWORD \
+              --out "$output" "$aligned"
+          fi
+          certificate=$("$buildtools/apksigner" verify --print-certs "$output" |
+            sed -n 's/^Signer #1 certificate SHA-256 digest: //p' |
+            head -n 1 | tr '[:upper:]' '[:lower:]')
+          # Public fingerprint of original PKCS#12 certificate, as documented
+          # in the historical DEVLOG. Never use a new CI debug certificate.
+          expected=3f7a1386adb23903ebd09c54a4f7105d197b7a6611be4b5dd53c7fe5e0902392
+          if [ "$certificate" != "$expected" ]; then
+            rm -f "$output"
+            echo "::error::Signer differs from the original release certificate; refusing incompatible update."
+            exit 1
+          fi
+          echo "Signed APK matches the original Button Game certificate."
+
+      - name: Upload original-certificate signed update (when configured)
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ButtonGame-Update-Original-Signing-Key
+          path: android/app/build/outputs/apk/release/ButtonGame-Signed-Update.apk
+          if-no-files-found: ignore
+          retention-days: 30
+
       - name: Upload unsigned release for local developer signing
         uses: actions/upload-artifact@v4
         with:
