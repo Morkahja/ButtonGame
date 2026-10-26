@@ -44,11 +44,13 @@
 - **Decision still to implement:** Reproducible copy/sync/check in release pipeline. Do not say this is already fixed.
 - **State:** Source recordings present; packaging open.
 
-## D-008 — Recovered historical Trap Mode requirements
-- **Source:** The creator supplied an excerpt attributed to the **25 October 2026 original seven-category checklist**, now preserved at [HISTORICAL_CHECKLIST_2026-10-25.md](HISTORICAL_CHECKLIST_2026-10-25.md). The full archived transcript remains inaccessible.
-- **Recovered specification:** Pre-game Traps toggle/red icon; randomly spawning red trap buttons; instant Game Over when tapped; passive +3 points every 333 ms during a trap; those points use ordinary number physics and fusion; trap-mode marker on leaderboard entries.
-- **Unknown:** Exact spawn chance, lifetime, passive-score termination, interaction of immediate Game Over with pending score settlement, and earlier creative arguments.
-- **Status:** Historical planned feature, **not implemented; no new approval to build it during the immediate release**. The earlier statement that all rules were unknown is superseded by this recovered excerpt. Additional details must not be invented.
+## D-008 — Red Trap Button: complete creator-supplied feature specification
+
+- **Creator's goal:** An optional mode that **rewards patience and punishes careless tapping**.
+- **User-provided nine-item checklist, 26 October 2026:** pre-game Traps checkbox with red-button icon; some ordinary target spawns randomly become red targets; red buttons retain ordinary **position, lifespan, rotation and destruction** behavior; **a tap triggers immediate Game Over**; untouched traps **expire, shatter and permit the next spawn**; while active they produce **3 passive points every ⅓ second (9/s)**; passive points **emerge from center, combine, expire and fuse into the score normally**; store the active mode with each high score; show a **small red button beside leaderboard names** for Traps-enabled records.
+- **Evidence:** [Full creator-provided specification](TRAP_MODE.md), supplementing the earlier [six-item historical checklist](HISTORICAL_CHECKLIST_2026-10-25.md).
+- **Open details:** replacement probability, moment of passive emission relative to spawn/shatter, potential click/expiry races, and interaction between instant loss and unsettled points.
+- **State:** **Entire feature not started.** The user supplied its missing specification for historical preservation, **not an implementation instruction**. Do not label source/API changes as already made or treat the nine-item record as a newly accepted release milestone.
 
 ## D-009 — Other exploratory multiplayer options
 - **Ideas:** Bluetooth hosting, genuine peer-to-peer network model, optional host score reset.
@@ -91,11 +93,12 @@
 - **State:** Implemented in web/Android HTML/JS; device visual check open.
 - **Evidence:** [root DEVLOG](../DEVLOG.md), October 25 live score ambience entry.
 
-## D-016 — Trap Mode information gap partially resolved by recovered checklist
-- **Earlier evidence gap:** The archived conversation and full original rationale could not be accessed. Initial documentation had only a vague "red/trap/trip button" mention.
-- **New evidence:** The creator has now supplied the seven-category checklist attributed to the earlier conversation, including **six concrete Trap Mode requirements**. See [historical checklist](HISTORICAL_CHECKLIST_2026-10-25.md) and **D-008**.
-- **Still unknown:** Additional details in the complete chat, precise probability/timing edge cases, explicit present-day implementation approval, and evolution of alternatives.
-- **Status:** Concept description **recovered in part**, code **not implemented**, active release scope **unchanged**. This correction should coexist with the historical account of why the earlier docs were incomplete.
+## D-016 — Trap Mode history recovery: from inaccessible archive to detailed creator specification
+
+- **Earlier evidence gap:** The archived chat could not be read; the first recovered seven-category checklist held six high-level Trap Mode tasks.
+- **Further recovery:** The creator provided a standalone **nine-item “Red Trap Button” checklist** with explicit normal-lifecycle parity, untouched expiry/shatter, center-emitted passive points, and the red icon's location beside leaderboard names. See [TRAP_MODE.md](TRAP_MODE.md).
+- **Still unknown:** The full archived conversation, precise random replacement distribution, rare event-order behavior, and reasoning not represented in the two recovered lists.
+- **Status:** **Defined concept, entire feature not started, no new implementation request.** Retain previous historical uncertainty records as records of what had been known at each step.
 
 
 ## Recording a new decision
