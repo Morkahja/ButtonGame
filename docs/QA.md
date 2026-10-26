@@ -1,10 +1,10 @@
 # Button Game — Verification and Release Status
 
-**Updated 26 October 2026.** Distinguish **creator-tested installed application** from **new source build**, CI verification and installation of a new signed APK.
+**Updated 26 October 2026.** Distinguish **Babuni.dev-tested installed application** from **new source build**, CI verification and installation of a new signed APK.
 
-## Creator-confirmed physical tests
+## Babuni.dev-confirmed physical tests
 
-The creator reported directly on 26 October 2026 that the following were **tested and work** on actual devices:
+Babuni.dev reported directly on 26 October 2026 that the following were **tested and work** on actual devices:
 
 | Area | Reported result |
 | --- | --- |
@@ -13,7 +13,7 @@ The creator reported directly on 26 October 2026 that the following were **teste
 | Timer bonuses, timer balance, HUD, Game Over, layout and replay | Tested; works |
 | Guest → Android-host score POST and shared ranking | Tested; works |
 | Already-open Game Over leaderboard auto-refresh | Tested; refreshes every 3 seconds |
-| Four final statistics persisted with scores | Creator reports saved correctly |
+| Four final statistics persisted with scores | Babuni.dev reports saved correctly |
 | Hosting restart persistence | Tested; survives restart |
 | Two-device Wi-Fi play, live player list and statistics | Tested; works |
 | Sound volume, gameplay and interface on actual phones | Tested; works |
@@ -39,6 +39,6 @@ A debug-signed APK or unsigned CI artifact is not an update for the installed re
 
 ## No unnecessary QA scope expansion
 
-No additional score retry feature, contrived server conflict reproduction, advanced anti-cheat, or new multiplayer architecture is required for this user-tested casual game unless a concrete issue arises and the creator asks to address it.
+No additional score retry feature, contrived server conflict reproduction, advanced anti-cheat, or new multiplayer architecture is required for this user-tested casual game unless a concrete issue arises and Babuni.dev asks to address it.
 
 Trap Mode is **entirely not started** and is documented separately at [TRAP_MODE.md](TRAP_MODE.md).
