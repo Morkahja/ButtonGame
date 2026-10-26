@@ -12,6 +12,15 @@ const serverKotlin = fs.readFileSync(path.join(root, "android/app/src/main/java/
 assert.equal(js, fs.readFileSync(path.join(root, "android/app/src/main/assets/www/game.js"), "utf8"));
 assert.equal(html, fs.readFileSync(path.join(root, "android/app/src/main/assets/www/index.html"), "utf8"));
 assert.match(html, /id="traps-toggle" type="checkbox"/);
+const controlPos = html.indexOf('<label id="trap-option"');
+const stagePos = html.indexOf('<div id="stage"');
+assert(controlPos >= 0 && controlPos < stagePos, "Trap toggle must sit outside playfield as a persistent frame control");
+assert.match(html, /grid-template-areas: "players game scores"/, "Widescreen player/game/highscore grid");
+assert.match(html, /body\.game-over #live-leaderboard/, "No duplicate preview below mobile Game Over");
+assert.match(js, /trapToggleEl\.disabled = true/, "Lock the mode during an active run");
+assert.match(js, /trapToggleEl\.disabled = false/, "Unlock the mode for replay");
+assert.match(js, /previewEl\.classList\.toggle\("is-hidden", !lastHostScores\.length\)/,
+  "Show persisted host highscores even on the welcome screen");
 assert.match(scoreKotlin, /val trapsEnabled: Boolean/);
 assert.match(scoreKotlin, /optBoolean\("trapsEnabled", false\)/);
 assert.match(scoreKotlin, /\.put\("trapsEnabled", entry\.trapsEnabled\)/);
