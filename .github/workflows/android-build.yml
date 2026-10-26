@@ -11,6 +11,7 @@ on:
       - 'assets/**'
       - 'sfx/**'
       - 'scripts/sync-www.sh'
+      - 'tests/**'
   pull_request:
     paths:
       - 'android/**'
@@ -19,6 +20,7 @@ on:
       - 'assets/**'
       - 'sfx/**'
       - 'scripts/sync-www.sh'
+      - 'tests/**'
   workflow_dispatch:
 
 permissions:
