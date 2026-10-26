@@ -28,6 +28,24 @@ For sharing publicly later, `index.html`, `game.js`, and `assets/` can be served
 
 New interface/layout source is **1.0.3-beta (versionCode 4)**. CI-produced debug APKs may use a newly generated debug certificate **on each runner**, so one CI debug build may not be able to update another one without uninstalling. A release-signed app certainly cannot be replaced by a differently signed debug APK. To keep the installed host scores, locally sign the new unsigned release with the **same key as the currently installed version**. Never upload private signing material.
 
+## Preserve host high scores before switching between differently signed APKs
+
+**Verified signing incompatibility:** The GitHub-built 1.0.2-beta debug APK delivered earlier and the new 1.0.3-beta debug APK have **different signing-certificate fingerprints**. Android cannot perform a normal in-place update between those specific binaries. Uninstalling an Android app can erase the host-owned saved high scores, even though they survive ordinary app and hosting restarts.
+
+If you have the *same certificate/private key used for the version currently installed*, locally signing the new unsigned release APK with that key is preferable. If you instead choose to uninstall and install a new debug APK, save the scores **first** while the old app's **Serve on Wi-Fi** host is running. The included utility uses the existing score API, preserving names, points, Reaction, APM, session duration and Traps-mode flags; it does **not** modify gameplay:
+
+```bash
+python3 scripts/transfer-host-scores.py backup http://PHONE_IP:8766/ scores-backup.json
+```
+
+Replace `PHONE_IP` with the IP address displayed in the old Android host. Keep `scores-backup.json` locally; the backup command refuses to overwrite an existing file. After installing the new app, enable Serve on Wi-Fi again and restore to its **empty** score list:
+
+```bash
+python3 scripts/transfer-host-scores.py restore http://PHONE_IP:8766/ scores-backup.json
+```
+
+The restore refuses to run if the new host already contains scores, to prevent duplicate imports. A local mock-server test verified backup/restore of scores and the Traps flag, but this is **not** proof of a physical-device transfer. Do not uninstall the old app until you have successfully backed up and checked the file.
+
 ## Host a session
 
 1. Install a correctly **release-signed** APK of the normal Button Game package.

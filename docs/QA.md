@@ -1,5 +1,11 @@
 # Button Game — Verification and Release Status
 
+## Signing comparison and developer-only score transfer
+
+Direct certificate-byte comparison of the **previous 1.0.2-beta debug APK** and newly compiled **1.0.3-beta debug APK** found **different SHA-256 signing certificate fingerprints**. An in-place debug APK update between these specific versions is therefore not possible. A newly compiled APK being correct does not justify uninstalling a working host and losing scores without a backup.
+
+Added `scripts/transfer-host-scores.py` to export the host's existing `GET /api/scores` list and restore it via sequential `POST /api/scores` submissions on an empty new host. A local mock HTTP server test exercised backup and restore and confirmed score + trap metadata conservation. This developer utility was **not** tested against a real phone yet; [INSTALL.md](../INSTALL.md) gives protective step-by-step instructions.
+
 ## Babuni.dev's installed Trap Mode acceptance and the next layout check
 
 **Reported device-tested on 2026-10-26 (installed 1.0.2-beta):** red taps immediately end play; pending points collect before submission; trap's +3 points pulse roughly every third of a second; mode icon appears on the leaderboard; hosting scores persist across closing/opening the app and stopping/restarting the Wi-Fi host. The 10% chance is approved for ongoing testing.

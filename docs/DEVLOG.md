@@ -1,5 +1,11 @@
 # Button Game — Curated Development Journal
 
+## 2026-10-26 — Prevent accidental loss of host high scores across signing changes
+
+The new browser/UI build passed native Android CI; its APK signing certificate was subsequently compared directly against the previous 1.0.2-beta CI debug APK. The certificates were different, which would prevent an **in-place update** if Babuni.dev installed the earlier debug build. This matters because Babuni.dev had just explicitly tested and valued host score persistence. The correct response is not to claim “just install the new APK” or quietly recommend uninstalling.
+
+The original private signing key is not available through the connected GitHub repository. AI therefore supplied a separate, opt-in local developer script to **back up existing scores from the old Android host** and, after clean installation, **restore** those records to an empty new host via its already-existing HTTP score API. The script does not change the game and refuses to overwrite an older backup or import onto a nonempty leaderboard. A local mock-server test confirmed score/Traps metadata preservation; physical Android transfer remains untested. A same-signature in-place update remains preferable when the original current signing key is available.
+
 ## 2026-10-26 — The first Trap Mode phone test inspires replay control and desktop composition
 
 Babuni.dev installed the first Trap Mode APK and **confirmed actual behavior on the phone**: the initial checkbox appeared; tapping the red target caused immediate Game Over while already-earned points completed their movement into the score balance; passive red-button +3 points appeared at approximately the intended frequency; the high-score row correctly displayed a small red button; and saved high scores persisted after the app was closed/reopened and Android hosting was stopped/restarted. The creator chose to **keep the 10% chance** while testing.
