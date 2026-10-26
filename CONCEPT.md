@@ -35,6 +35,16 @@ The creator's **Serve on Wi-Fi** direction lets one Android phone act as host wh
 
 Specific sizes, animation and positioning contracts are recorded in [docs/DESIGN.md](docs/DESIGN.md).
 
+## Recovered distinction: the original Flash game versus the evolving remake
+
+The retained earlier browser reconstruction, `ChatGPT Remake/README.md`, documents the rules it extracted from `Game.swf`: a 450 × 450 black stage, a 60-second timer that began immediately, an initially blank score, one point **and one additional second per successful click**, a target that fades by a random amount per approximately 15 FPS update, then relocates and rotates. It reports that the Flash original had **no sound and no restart button**. These are historical remake-analysis claims and preserved assets, **not proof that the present game should restore those mechanics**. The initial target, old German-language interface and original artwork belong to the earlier stage; exact authoring date and full original creative conversations are not available.
+
+The current redesign deliberately changes the experience from simple instant point/time rewards to visible, conserved point and time transfers. In the October 25 revisions, time granted merely for clicking or button fading was removed: selected numerical milestones now extend play, making combination play meaningful rather than endlessly sustaining a round with ordinary taps. Reaction measurement likewise became a measurement of first contact **after a new target finishes appearing**, not how long the first page was left open.
+
+The numbers are both mechanics and performers. One documented iteration imagined 21 bursting into 21 separate `1` units that duplicated into 42 singles; a later creator request replaced that with **exactly 21 physical-looking `1` units**, bouncing off walls and changing into `2`s before all converged to a larger `42`. The 37 event follows a different grammar—travel to a common upper-center stage, visibly reverse to 73, turn green, and enter the normal collector. These alternate approaches are part of the design history; only the later mechanics describe the present source.
+
+The remembered red/trap/trip-button discussion and original large to-do list cannot be reconstructed from this accessible record. No appearance, penalty, timing or interaction rule is to be inferred from the word “trap.” See [docs/DECISIONS.md](docs/DECISIONS.md) and [docs/DEVLOG.md](docs/DEVLOG.md) for provenance and status.
+
 ## Historical roots
 
 `Game.swf` and `Game.html` preserve an earlier Flash-era game. `ChatGPT Remake/` is a separate HTML5 reconstruction of that legacy artifact, with its own behavior and retrospective notes. The current game diverges through button graphics, score physics, special combinations, audio, Android hosting and the host-owned multiplayer leaderboard. Keep these stages distinct when telling the portfolio story.
