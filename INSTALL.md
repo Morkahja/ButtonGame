@@ -9,13 +9,13 @@ Developer / creative direction: **Babuni.dev**. Current normal package: `com.bab
 3. Guests join the displayed `http://<host-ip>:8766/` URL or scan the QR code while on the same reachable network.
 4. Play from host and guest. The Android server owns the high-score database; guests submit final scores to it.
 
-The creator has tested host-and-guest Wi-Fi play, live player statistics, high-score submission and automatic Game Over refresh on two actual devices and reports them working.
+Babuni.dev has tested host-and-guest Wi-Fi play, live player statistics, high-score submission and automatic Game Over refresh on two actual devices and reports them working.
 
 ## Release APK versus CI artifacts
 
-The current GitHub Actions workflow builds an installable **debug-signed** APK and an **unsigned release** APK. Neither is an upgrade to an existing app signed with the creator's original release certificate. The historical independently signed APK documented in `DEVLOG.md` preceded the most recent guest Game Over refresh change; do not claim it is the newest update.
+The current GitHub Actions workflow builds an installable **debug-signed** APK and an **unsigned release** APK. Neither is an upgrade to an existing app signed with Babuni.dev's original release certificate. The historical independently signed APK documented in `DEVLOG.md` preceded the most recent guest Game Over refresh change; do not claim it is the newest update.
 
-The earlier unrequested **`TEST` package variant has been removed** (commits `31c2718` / `c46ee3f`); current debug and release variants have the same base app ID, but different signatures. Attempting to install a debug APK over a release-signed copy will fail certificate matching. The creator does **not** require preserving expendable beta test scores; uninstalling may discard them, but is not itself a substitute for verifying proper release signing.
+The earlier unrequested **`TEST` package variant has been removed** (commits `31c2718` / `c46ee3f`); current debug and release variants have the same base app ID, but different signatures. Attempting to install a debug APK over a release-signed copy will fail certificate matching. Babuni.dev does **not** require preserving expendable beta test scores; uninstalling may discard them, but is not itself a substitute for verifying proper release signing.
 
 Private original signing material must stay out of GitHub and logs. Confirm the signed release's certificate matches previous installed releases; the source now reports `versionCode = 2` / `versionName = 1.0.1-beta` for this update.
 
@@ -33,7 +33,7 @@ cd android
 
 **Audio packaging fixed in source (26 October 2026):** All ten original OGG recordings, including `4273.ogg`, `QuickStrikepoints.ogg` and `QuickStrikepoints1.ogg`, are now present under `sfx/`, `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/`. `scripts/sync-www.sh` treats `sfx/` as the canonical originals and synchronizes both targets. GitHub Actions runs the script and checks actual audio bytes inside both APKs. **The complete new GitHub Actions build passed** in [run 40325603457](https://github.com/babunidev/ButtonGame/actions/runs/40325603457); both the debug APK and the unsigned release APK were uploaded as workflow artifacts.
 
-No newly signed APK for this source revision has yet been established. GitHub CI compiles debug and unsigned release packages; only the creator's original signing certificate (kept outside GitHub) can produce an installable update of the existing release-signed app. The existing installed app's two-phone behavior is confirmed by the creator, independently of the still-pending new-build signing.
+No newly signed APK for this source revision has yet been established. GitHub CI compiles debug and unsigned release packages; only Babuni.dev's original signing certificate (kept outside GitHub) can produce an installable update of the existing release-signed app. The existing installed app's two-phone behavior is confirmed by Babuni.dev, independently of the still-pending new-build signing.
 
 ## High-score ownership and format
 
@@ -43,4 +43,4 @@ To reset all host app data, Android Settings → Apps → Button Game → Storag
 
 ## Verification before distribution
 
-Inspect APK entry list for both `assets/www/game.js` and `assets/www/index.html` **and all ten intended audio OGG files**; confirm native classes, hash and signature. The existing installed app's phone checks have already been completed by the creator. For the **newly signed version**, a brief installation/launch/audio/Wi-Fi smoke test is enough. Refer to [docs/QA.md](docs/QA.md). A release artifact and successful device check must be recorded in [CHANGELOG.md](CHANGELOG.md) and [docs/DEVLOG.md](docs/DEVLOG.md).
+Inspect APK entry list for both `assets/www/game.js` and `assets/www/index.html` **and all ten intended audio OGG files**; confirm native classes, hash and signature. The existing installed app's phone checks have already been completed by Babuni.dev. For the **newly signed version**, a brief installation/launch/audio/Wi-Fi smoke test is enough. Refer to [docs/QA.md](docs/QA.md). A release artifact and successful device check must be recorded in [CHANGELOG.md](CHANGELOG.md) and [docs/DEVLOG.md](docs/DEVLOG.md).
