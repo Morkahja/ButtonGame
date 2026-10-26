@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-26 — More reliable desktop sound playback
+
+- **User observation:** A delivered 1.0.3-beta desktop session appeared entirely silent. Investigation of the actual share-with-nephew ZIP confirmed all ten original Ogg Vorbis files were present, nonempty, and valid. A missing-media packaging claim would be incorrect.
+- **Possible causes:** Browser mute choice is persisted in `localStorage`; Web Audio preloading/decoding begins before a user gesture and silently swallowed failures; some browsers lack the same Ogg/Vorbis behavior.
+- **AI changes:** When a buffer is unavailable or the audio context remains suspended, try a browser HTMLAudioElement path so the first user click can still play sounds. Choose MP3 instead of Ogg on browsers that do not advertise Ogg/Vorbis playback; stop swallowing Web Audio load/decode failures silently by warning in the browser console and updating the speaker-button tooltip. Respect existing mute preference. Add a Node regression test for sound fallback.
+- **Distribution:** The refreshed desktop sharing ZIP includes **the ten original Ogg clips plus ten transcoded MP3 fallback copies**, sound troubleshooting, and the unchanged Wi-Fi host. MP3 copies are ZIP distribution assets; the GitHub source continues to hold canonical original Ogg files. No change to scoring or trap probabilities.
+- **Verification boundary:** File-integrity and offline regression/HTTP checks pass; successful audible playback on Babuni.dev's/recipient's physical desktop browser still awaits testing. The exact cause of that person's silence is not asserted without their browser/audio settings.
+
 ## 2026-10-26 — Make release APK signing stable and explicitly verifiable
 
 - **User request:** Every future update APK must install over the same Button Game app rather than forcing a reinstall and potentially losing persistent scores. Earlier updates had done so.

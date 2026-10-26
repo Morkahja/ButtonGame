@@ -86,6 +86,7 @@ jobs:
           node --check game.js
           node tests/live-leaderboard-refresh.cjs
            node tests/trap-mode.cjs
+          node tests/sound-playback-fallback.cjs
 
       - name: Build complete native debug and release APKs
         run: |

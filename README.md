@@ -1,5 +1,7 @@
 # Button Game (Buttongame)
 
+**Desktop sound note:** The game remembers its speaker mute setting in the browser. A shared desktop session can appear silent when muted, the audio context is suspended, or samples cannot be decoded. The browser build now tries HTMLAudioElement fallback and logs failures; the externally packaged desktop test ZIP includes both the original Ogg recordings and MP3 fallback copies. Source `assets/sfx/` preserves the original Ogg masters.
+
 **Signing policy update (26 October 2026):** After Babuni.dev requested APKs that *always update the existing installed game*, the repository now includes a [guarded same-certificate signing helper](scripts/sign-android-update.sh) and optional original-key GitHub Actions release signing. **Debug-signed CI APKs are not guaranteed updates.** A one-time high-score-backed-up migration may be unavoidable if the current installation uses an ephemeral debug key. See [INSTALL.md](INSTALL.md). No newly original-signed APK is claimed until the private key is actually available.
 
 **Author:** Babuni.dev

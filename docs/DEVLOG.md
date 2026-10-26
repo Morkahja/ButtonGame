@@ -1,5 +1,15 @@
 # Button Game — Curated Development Journal
 
+## 2026-10-26 — Investigating a silent shared desktop session
+
+**Babuni.dev observation.** After receiving a compact, shareable desktop ZIP meant for the creator's nephew, Babuni.dev reported that the session **appeared to have no sound**. The original game relies on its distinctive tap, Quick Strike, bell and special-reveal recordings; a visually playable but silent session is not an acceptable finished share.
+
+**Investigation.** AI inspected the actual previously delivered ZIP rather than assuming the sounds had been omitted. All ten Ogg recordings were inside `assets/sfx/`, correctly named, nonempty and recognized as valid Vorbis files, with plausible short clip durations. The browser runtime, however, preloaded/decompressed sounds asynchronously and explicitly caught failures without reporting them, so a missing or blocked audio buffer could make gameplay silently skip effects. Additionally the mute setting persists across sessions, and browser policies or codec support may differ among the recipient's devices. These remain plausible causes; no physical-browser root cause was proven by the packaged file inspection alone.
+
+**Implementation.** Babuni.dev asked why the game was silent. AI responded by hardening the audio rather than inventing a missing file: preserve the primary Web Audio buffering path for rhythmic impact sounds, fall back to the browser media element when the selected buffer is not ready or the context is suspended, surface decode/playback errors in the browser console, and preserve the creator's deliberate mute control. The distributor ZIP now supplements ten unchanged original Ogg files with MP3 fallback transcodes for browsers without Ogg/Vorbis, plus readable sound troubleshooting instructions. Repository JS and Android mirror stay synchronized.
+
+**Verification.** Offline Node tests exercise codec-based fallback, mute, and suspended AudioContext; file/ZIP integrity and HTTP serving of all sounds were checked. Audible physical testing is pending. No Android APK is signed or released as part of this desktop sound fix.
+
 ## 2026-10-26 — Signing regressions interrupt the creator's expected Android update flow
 
 **Direction.** Babuni.dev explicitly requested that future APKs **update the already installed game**, not require repeated uninstall/reinstall cycles. The creator recalled that updates used to install normally and questioned why the new workflow had changed.

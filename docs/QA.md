@@ -1,5 +1,11 @@
 # Button Game — Verification and Release Status
 
+## Desktop sound investigation
+
+The shipped 1.0.3 share-with-nephew ZIP contained all ten expected Ogg files. Each was detected as valid Vorbis media; missing files are **not** established as the cause of the user's silent session. New audio regression verifies fallback to the native audio element if a Web Audio buffer/context is unavailable, choosing MP3 for browsers lacking Ogg support and respecting mute. The refreshed desktop ZIP includes matching Ogg and MP3 tracks and a dedicated audio help file.
+
+**Outstanding:** Ask Babuni.dev to confirm sound on the actual browser, check the in-game speaker (saved mute setting) and browser/system output if still silent. Offline tests do not prove real speakers emit audio. No new APK is signed from this fix.
+
 ## Android APK upgrade signing gate
 
 A Button Game APK is only a verified **in-place update** when it has the same `com.babunigaming.buttongame` package ID, **higher versionCode**, and **identical signing certificate** to the currently installed APK. A new helper `scripts/sign-android-update.sh` checks these properties, and the optional encrypted-secret CI signing step checks the historical original-release public SHA-256 fingerprint before publishing its special update artifact.
