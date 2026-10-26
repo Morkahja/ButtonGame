@@ -6,6 +6,14 @@ Direct certificate-byte comparison of the **previous 1.0.2-beta debug APK** and 
 
 Added `scripts/transfer-host-scores.py` to export the host's existing `GET /api/scores` list and restore it via sequential `POST /api/scores` submissions on an empty new host. A local mock HTTP server test exercised backup and restore and confirmed score + trap metadata conservation. This developer utility was **not** tested against a real phone yet; [INSTALL.md](../INSTALL.md) gives protective step-by-step instructions.
 
+## Desktop Wi-Fi host — implementation and test scope
+
+**Cause of failing localhost scores:** The previously suggested `python3 -m http.server 8000` host supplies only public static game files and cannot handle `POST /api/scores` or presence requests, so the browser reports “Could not reach host — try again.” This was confirmed by matching the web client API calls with the Android host implementation.
+
+**New backend tests:** `python3 -m unittest discover -s tests -p test_desktop_host.py` passed locally, covering score/Traps record submission, leaderboard sorting, persistence after desktop host restart, live player seats/labels, invalid requests, and preventing LAN access to private Git files and score data. CI now runs the same test. The earlier Android application was **not rebuilt** for this desktop-only change.
+
+**Still unverified:** Actual Nobara firewall/network reachability from a second device, and user-observed persistence on their machine. Public internet readiness is not claimed; this host is intentionally restricted to trusted local networks.
+
 ## Babuni.dev's installed Trap Mode acceptance and the next layout check
 
 **Reported device-tested on 2026-10-26 (installed 1.0.2-beta):** red taps immediately end play; pending points collect before submission; trap's +3 points pulse roughly every third of a second; mode icon appears on the leaderboard; hosting scores persist across closing/opening the app and stopping/restarting the Wi-Fi host. The 10% chance is approved for ongoing testing.

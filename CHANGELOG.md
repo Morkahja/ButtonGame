@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-26 — Desktop LAN host with persistent high scores (no Android version change)
+
+- **Observed by Babuni.dev:** Running the browser game via `python3 -m http.server 8000` allowed play but score submission failed with “Could not reach host — try again.” Babuni.dev asked whether friends could join over Wi-Fi and why rankings did not save.
+- **Diagnosis:** The static Python file server does not implement Button Game's `GET/POST /api/scores` and `GET/POST /api/presence`. The failure is a missing backend, not a defect in the score-collection animation.
+- **Implementation:** Added `scripts/serve-desktop.py`, a small, standard-library LAN server using the same browser client and Android-compatible score and player-presence endpoint shapes. Writes up to 50 host-owned scores with full statistics and Traps-mode flag in Git-ignored `.local-data/desktop-scores.json`. Live players expire after five seconds; public game assets alone are served to guests.
+- Added integration tests, desktop CI coverage and LAN instructions, explicitly separating PC scores from Android-host scores. **No Android code, version or APK was modified** for this desktop-only feature.
+- **Verification:** Local tests passed for score saving/restart, player list, field preservation and private-file restrictions; GitHub CI to be inspected separately. Babuni.dev's real multi-device LAN test remains outstanding.
+
 ## 2026-10-26 — Mode switching at Game Over and desktop sidebars (1.0.3-beta)
 
 - **Babuni.dev tested the installed prior APK:** Traps checkbox, red instant loss, pending score collection, passive +3 numbers, the red high-score icon, and host high-score persistence across app and server restarts worked. Kept the trap probability at 10%.

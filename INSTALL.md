@@ -12,9 +12,27 @@ git pull --ff-only origin main
 
 This updates the local **source**, not the already installed Android app. The older personal stash remains separate; do not blindly apply it over newer overlapping files. A new Android app needs a new compiled APK and a matching signing certificate to upgrade in place.
 
-## Play on a desktop computer
+## Desktop hosting with persistent high scores (26 October 2026)
 
-The game is already a browser game. Inside the updated Button Game folder, run:
+**Use this instead of** `python3 -m http.server 8000` if you want saved high scores, live players and LAN guests:
+
+```bash
+python3 scripts/serve-desktop.py
+```
+
+Open **http://localhost:8000/** on the hosting PC. From another phone or computer on the same reachable Wi-Fi/LAN, open **http://YOUR_COMPUTER_IP:8000/**. Find your computer's IPv4 address with `hostname -I` on Linux and use that LAN address, **not localhost**, on guest devices. Keep the host terminal running; **Ctrl+C** stops it. If guests cannot connect, check the PC firewall's TCP port **8000**, routing and Wi-Fi client isolation before changing game code.
+
+The new server uses only Python's standard library. It serves `index.html`, `game.js` and public `assets/` and implements the same JSON paths used by the Android host: `GET/POST /api/scores` and `GET/POST /api/presence`. As on Android, the **host machine** owns one score list; connected browser guests submit scores to the host and see live player statistics. Desktop scores are saved at `.local-data/desktop-scores.json` (Git-ignored and never served over HTTP). They persist through restarts of this Python server. They are **independent of Android app scores**.
+
+Why the old command failed: `python3 -m http.server 8000` returns a 404/unsupported response to `POST /api/scores`, which the client reports as **“Could not reach host — try again.”** It serves static files but implements no score or presence API. It **can** serve static pages over the LAN, but without shared rankings.
+
+**Security boundary:** The desktop host is for a trusted local network only. No accounts, authentication or internet-hardening have been added. Do not expose port 8000 directly to the public internet. Serving only the public game assets prevents LAN guests from fetching the repository's local `.git`, `.local-data`, documentation and private files. For a public website, a separate supported/deployed server design is needed.
+
+**Testing:** Local integration tests cover saving scores, preserving all four score statistics and Traps flag, sorting rankings, restarting the server, connecting players, and blocking private file access. GitHub Actions runs `python3 -m unittest discover -s tests -p test_desktop_host.py`. Physical two-device desktop hosting remains an acceptance step for Babuni.dev.
+
+## Play on a desktop computer (static-only alternative)
+
+The game is already a browser game. For **static-only play with no shared saved scores**, you can run:
 
 ```bash
 python3 -m http.server 8000

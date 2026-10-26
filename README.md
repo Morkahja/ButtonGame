@@ -8,6 +8,12 @@ A one-minute, arcade-style button-smashing game with roaming targets, physical-l
 
 **1.0.3-beta source update (26 October 2026):** Following Babuni.dev's successful 1.0.2-beta phone test, the small Traps checkbox has moved beside the bottom Reaction/APM and Play Again controls. It remains checked/unchecked through Game Over and can be changed before replay, but not mid-round. Saved host high scores are visible **before starting**, and a wide desktop browser now places players on the left, game in the center, scores on the right. New Android CI/install confirmation is tracked in [ROADMAP.md](ROADMAP.md).
 
+## Desktop LAN hosting now saves shared scores
+
+Following Babuni.dev's report that `python3 -m http.server 8000` showed “Could not reach host — try again,” a lightweight **desktop host** was added at [scripts/serve-desktop.py](scripts/serve-desktop.py). The plain Python static server had **no `/api/scores` or `/api/presence` handlers**; that explains the failure. The new Python-standard-library host provides the same **API contract** as Android for host-owned high scores, live players and Traps-mode metadata. Desktop-hosted scores persist in a **separate Git-ignored** `.local-data/desktop-scores.json` file on the computer, not on Android.
+
+Run `python3 scripts/serve-desktop.py`, visit `http://localhost:8000/` on that PC, and share `http://COMPUTER_LAN_IP:8000/` with friends on the same reachable home network. Use `hostname -I` to find the computer's address. This is **LAN-only**, not a secure public internet server; see [INSTALL.md](INSTALL.md).
+
 ## Play and hosting
 
 - The game begins when the player first presses the moving turquoise button; it starts with 60 seconds.

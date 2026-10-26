@@ -4,6 +4,14 @@
 
 **Inspected baseline:** GitHub `main` at `d5ce766`, 2026-10-26. Architectural descriptions below concern code paths; production behavior is not proven solely by reading source.
 
+## Desktop LAN host (26 October 2026)
+
+`scripts/serve-desktop.py` is now the supported desktop equivalent of Android's **Serve on Wi-Fi** for local play. It combines public web-asset serving and `GET/POST /api/scores` / `GET/POST /api/presence` with an independent, **host-owned desktop** score file, `.local-data/desktop-scores.json`. The same `game.js` browser client works unmodified, including Traps-mode metadata. Live presence is a transient in-memory five-second list; desktop scores are sorted and persisted to local JSON. Server and score state are not shared with the Android host. Its HTTP static routes are allowlisted to `/`, `index.html`, `game.js`, and public `assets/` to avoid serving local history, stored scores or other private repository files to LAN users.
+
+The original `python3 -m http.server 8000` command remains valid for **static-only** gameplay, but does not satisfy these API routes and therefore cannot save/shared scores. The desktop host instead starts with `python3 scripts/serve-desktop.py` on port 8000 by default and listens on the PC's LAN interfaces. It is intended for a **trusted network**, not direct exposure to the internet: API score submissions have no authentication, as with the original home-LAN Android host.
+
+**Implementation evidence:** Server code and integration tests are committed; unit tests exercise score/Traps persistence across restart, player API and blocked access to private paths. Real desktop/phone two-device use and firewall behavior on Babuni.dev's Nobara system are not yet verified.
+
 ## Runtime components
 
 ```text

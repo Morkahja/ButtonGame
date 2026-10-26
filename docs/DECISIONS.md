@@ -1,5 +1,13 @@
 # Button Game — Decisions and Open Questions
 
+## D-023 — Desktop LAN hosting needs the same score API, not a new game client
+
+- **User observation (26 October 2026):** Babuni.dev ran the HTML5 game on `localhost:8000`, found it playable but could not save high scores, and asked how to let other devices join over Wi-Fi.
+- **Diagnosis:** `python3 -m http.server` serves files only; it does not implement `/api/scores` or `/api/presence`. This accounts for the browser's “Could not reach host — try again” submission error.
+- **AI proposal/implementation:** A small Python-standard-library `scripts/serve-desktop.py` implementing the **existing** Android-compatible JSON score and presence API, with persistent local desktop high scores in a Git-ignored directory. The game remains the same web client, the Android application is untouched, and no new internet-facing service is assumed.
+- **Scope decision:** This is a practical local-LAN extension for desktop play. Its storage is separate from the Android phone's high scores; no automatic cross-host sync and no public account system are implied. Babuni.dev has not yet approved a public service architecture.
+- **Verification:** Local API/integration tests passed; a real multi-device desktop-host session is pending.
+
 ## D-022 — Persistent Trap selector for replay; three-column desktop presentation
 
 - **Direct 2026-10-26 Babuni.dev feedback:** 1.0.2-beta Trap Mode and host-score persistence tested successfully on a phone; retain the existing **10% chance**.

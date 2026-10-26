@@ -4,6 +4,16 @@
 
 This is a short **active work list**. Previously tested features must not be repeatedly returned as unfinished QA tasks. The original seven-category checklist is preserved [unchanged as historical evidence](docs/HISTORICAL_CHECKLIST_2026-10-25.md); the [complete Red Trap Button specification](docs/TRAP_MODE.md) is separate.
 
+## Desktop LAN high-score fix — 26 October 2026
+
+- [x] Diagnose Babuni.dev's `localhost:8000` high-score error: the standard Python `http.server` has no `POST /api/scores` or `/api/presence` support. The browser game was running but had no scores backend.
+- [x] Implement an optional **desktop Wi-Fi/LAN host** with the same score/presence endpoint shapes as Android and private **local, persistent desktop scores**.
+- [x] Keep Android high scores separate; preserve the existing Android application, version 1.0.3-beta and current APK rather than rebuilding Android for a desktop-only server.
+- [x] Add desktop integration tests for persistence, Traps metadata, live player API, and refusal to serve private files; wire them into CI.
+- [ ] Babuni.dev confirms a real desktop-host session with a second device and stored scores after PC server restart.
+
+**How to run:** `python3 scripts/serve-desktop.py` from the updated repository, then browse `http://localhost:8000/` or share `http://COMPUTER_LAN_IP:8000/` on the same reachable network. [Installation instructions](INSTALL.md). Do not open this unauthenticated test server directly to the public internet.
+
 ## Current interface update — 1.0.3-beta (26 October 2026)
 
 - [x] Babuni.dev **installed and tested 1.0.2-beta**: red taps end the game immediately; already-earned score finishes collecting; the red icon is saved; host high scores survive closing/reopening the app and stopping/restarting hosting. Passive +3 timing is observed; keep **10%** trap chance.
