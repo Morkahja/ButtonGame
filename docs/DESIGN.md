@@ -59,8 +59,10 @@ Detailed credit conservation differs between transformations and ordinary merged
 
 **Audio as visual feedback.** The 42 and 73 reveals take a dedicated `4273.ogg` cue rather than doubling a generic bell. Ordinary milestone bells occur for **each** reached 7/14/21/37/42/73 value, not once per floater lineage. Quick Strike uses its two random custom impacts from the *activating* press onward, while ordinary presses keep their impact set. The supplied new recordings were comparatively louder and had playback gain reduced without modifying the recording bytes.
 
-## Recovered Trap Mode interface (historical only)
+## Red Trap Button interface — defined, not started
 
-The original checklist describes a **pre-game Traps toggle with red-button icon**, and **random red trap buttons** during enabled play. Tapping a trap ends the game immediately. While a trap is active, it produces **three passive points every 333 ms**, represented through the **same floating-number physics, merges and score collector** as ordinary points. Runs using the mode need a **trap indicator alongside leaderboard entries**.
+**Intended experience:** an optional mode rewarding patience and punishing careless tapping. Before a round, a **Traps checkbox with red-button icon** enables red traps. During the round some normal button spawns are **randomly replaced with red buttons**. A trap uses the ordinary button's **position, lifespan, rotation and destruction** behavior. Tapping it ends the game **immediately**; leaving it alone means it **expires, shatters and allows the next spawn**.
 
-These are **historical design requirements, not current UI**. Precise button artwork, chance/duration of trap spawns, accessible distinction beyond color, pending-score behavior at instant Game Over and full animation treatment were not specified in the recovered excerpt. Do not infer or implement them without the creator's decision. See [source checklist](HISTORICAL_CHECKLIST_2026-10-25.md).
+While a trap is active, it generates **3 passive points every ⅓ second (9 points/sec)**. Those points appear **from the center**, pass through the **same number physics, merges, expiry and score fusion** as ordinary point effects. Scores earned with this mode active display a **small red button next to the player's name** in the leaderboard, and the mode-enabled flag is recorded with the host score.
+
+These requirements come from the creator's [nine-item specification](TRAP_MODE.md). They are **not implemented**. Spawn probability, specific red color/art geometry, race conditions at instant loss, pending-point settlement and screen-reader accommodation are not yet defined; do not invent them or mistake these notes for current UI.
