@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-26 — Author attribution
+
+- Credited **Babuni.dev** in the README and replaced generic author-role wording throughout current project documentation; added a naming rule to `AGENTS.md`.
+- This documentation-only attribution pass did not change gameplay, networking or build behavior.
+
 ## 2026-10-26 — Fix audio source packaging, re-run Android build, and accept Babuni.dev QA results
 
 - **Babuni.dev-confirmed acceptance:** Button/Quick Strike, numerical physics/combinations, timer/HUD, sound volume and UI all tested and working. Two-device Android Wi-Fi hosting, live player list, four-stat host score persistence through hosting restart, guest score submission and three-second Game Over refresh all tested and working in the installed app.
