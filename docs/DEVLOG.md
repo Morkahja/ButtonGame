@@ -2,6 +2,18 @@
 
 This is the structured continuation and reading guide to the original [root DEVLOG.md](../DEVLOG.md), which remains intact as a primary historical source. [CHANGELOG.md](../CHANGELOG.md) records implemented change chronology; this journal records *why*, revisions, Babuni.dev direction, AI collaboration, and what remained unverified. Earlier events below are summaries grounded in repository documents rather than newly discovered transcripts.
 
+## 2026-10-26 — Red Trap Button moves from approved plan to source implementation
+
+Babuni.dev explicitly authorized the **entire feature** and requested an updated APK for the existing Button Game, retaining **10% replacement frequency** for testing. The concept, timing and pending-score rule originated with Babuni.dev; AI provided technical implementation and integration. The preceding entry in this journal records the earlier **planning-only** instruction, which was subsequently superseded.
+
+**AI work and evolution.** The implementation adds a red counterpart to the existing four-hole jacket button, a Traps checkbox before play, 10% independently selected replacements after the initial normal start target, automatic retirement and shatter of untouched red traps, and +3 points every one-third second from the central emitter into the normal floating-number/score-bank system. A red tap shows Game Over and stops new emissions immediately; score transfers from already-earned values continue, with the final host submission offered after they finish. Session duration freezes at the fatal tap. Host-owned Kotlin scores and API now store a `trapsEnabled` flag, defaulting missing older values to false. Both regular and faded leaderboards display the red icon. Browser files are kept byte-identical with Android web assets and Android version advances to **1.0.2-beta (code 3)**.
+
+**Important correction during implementation.** The normal button starts fading only after a player tap. Applying that logic unchanged to a trap would make a red button stay on-screen indefinitely because tapping it is fatal. AI corrected this by starting a trap's normal retirement cycle automatically **after spawn-in**. The original turquoise flow was not rewritten.
+
+**Files and commits.** `game.js`, `index.html`, their Android mirrors, red SVG assets, native Kotlin `ScoreStore.kt` and `GameServer.kt`, Android Gradle version, `tests/trap-mode.cjs`, GitHub Actions; commits `93eb67a`, `7097fdd`, `db62674`, `f3a54d4`, `f31a4aa`.
+
+**Verification boundaries.** The code is committed; tests and a new native build run through GitHub Actions. CI success, access to the original app signing key, successful in-place installation and on-phone Trap Mode checks are distinct gates. Neither a newly compiled debug APK nor an unsigned release APK is a normal signed update.
+
 ## 2026-10-26 — Trap Mode design parameters settled; implementation remains deferred
 
 **Creator's direction.** After reviewing a small staged implementation plan for the original Red Trap Button concept, Babuni.dev selected **a 10% chance of replacing a normal spawn with a trap**, rather than AI-suggested 15% or 20% alternatives. Babuni.dev also made a deliberate choice about a trap-hit ending: **Game Over should happen immediately**, but points **already earned and still pending in the visible number/score collector should finish collecting** rather than being discarded.

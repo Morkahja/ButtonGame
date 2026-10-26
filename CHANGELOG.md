@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-26 — Red Trap Button implemented in source (1.0.2-beta)
+
+- On Babuni.dev's authorization, added the optional pre-game Traps toggle and a matching red four-hole button. The start-screen button stays normal; following spawns use a 10% independent red replacement probability.
+- Untouched red targets age out and shatter using existing mechanics; active red targets emit +3 pending points every one-third second via existing floaters, physics and score fusion.
+- Tapping red displays **Game Over immediately** and stops play and new passive points. Previously earned points finish collecting before score submission; session duration is frozen at the fatal tap.
+- Added a boolean Traps marker in Android host-owned score persistence/HTTP and red icons by names on both leaderboard views; old records without the flag default false.
+- Mirrored browser and Android assets, added a regression test and CI coverage, and bumped the Android version to **1.0.2-beta / code 3**.
+- **Release distinction:** Source committed; new CI results, original-certificate signing and on-device release installation must be checked separately.
+
 ## 2026-10-26 — Author attribution
 
 - Credited **Babuni.dev** in the README and replaced generic author-role wording throughout current project documentation; added a naming rule to `AGENTS.md`.

@@ -26,17 +26,22 @@ These results are **Babuni.dev-reported device verification of the installed ver
 - [ ] **Sign the new release using the original certificate** (held outside this repository) and verify update installation compatibility.
 - [ ] **Deliver/install the signed normal-package APK**; a brief smoke test of that *new build* is sufficient. Do not introduce a separate TEST app.
 
-## Red Trap Button — specified and planned, entirely not started
+## Red Trap Button — implemented in source; release/device acceptance pending
 
 The nine-item design is preserved without changing gameplay. [Full checklist and rules](docs/TRAP_MODE.md).
 
-- [ ] Pre-game Traps checkbox/red button icon.
-- [ ] Random red replacement spawns using normal position, lifespan, rotation and shatter.
-- [ ] Immediate Game Over if clicked; untouched traps shatter and allow next spawn.
-- [ ] Passive +3 points every ⅓ second (9/s) from center through ordinary number physics and fusion.
-- [ ] Save Traps-enabled state on host high scores and display the red icon beside qualifying names.
+- [x] Pre-game Traps checkbox and matching red four-hole SVG button (first target remains normal).
+- [x] Random red replacements on **10% of subsequent spawns**; ordinary geometry, rotation and shatter.
+- [x] Untouched red buttons automatically expire; red taps show **Game Over immediately**.
+- [x] Already-earned pending points continue collecting before the leaderboard form is enabled; no additional points created after a red tap.
+- [x] Emit +3 from the playfield center every ⅓ second during an active trap, through normal floaters and green score fusion.
+- [x] Store the Traps-mode boolean **on the Android host** and display a red icon beside leaderboard names, including the faded preview.
+- [x] Android asset mirrors, Kotlin source, regression test and version bump to **1.0.2-beta (code 3)** committed.
+- [ ] Confirm the **new Trap Mode CI build** and retrieve its APK artifact.
+- [ ] Sign with the **original Android signing certificate** and deliver a true update to the existing installed game.
+- [ ] A short physical-device check of Trap Mode, ordinary mode and the host/guest leaderboard icon.
 
-**Design decisions confirmed 26 October 2026:** When enabled, **10% of spawns** are red replacements. Tapping a red button causes **immediate Game Over**, while **already-earned pending points continue their existing score-fusion collection before the final leaderboard result is recorded**. See the [staged implementation plan](docs/TRAP_MODE.md). **Do not implement yet:** Babuni.dev explicitly requested planning only. The nine original tasks remain unchecked.
+**The full feature was authorized by Babuni.dev after the earlier planning-only phase.** Checkmarks here mean source implemented; they are **not** a claim that a replacement APK has been signed and installed. See [TRAP_MODE.md](docs/TRAP_MODE.md).
 
 ## Maintenance and portfolio documentation
 
