@@ -7,7 +7,7 @@ The website **babuni.dev** is itself a portfolio project. Button Game should eve
 - **Name:** Button Game / Buttongame
 - **Type:** Arcade game; historical Flash-to-HTML5 reconstruction; native Android Wi-Fi host
 - **Creative director / project creator:** Babuni.dev
-- **Current condition:** Playable beta in source; latest normal-app signed release update and on-device multiplayer acceptance remain open
+- **Current condition:** Creator reports completed real-device gameplay/audio/UI and two-device Wi-Fi multiplayer; the latest source update still needs successful CI confirmation and original-certificate signed release delivery.
 - **Repository:** https://github.com/babunidev/ButtonGame
 - **Primary evidence:** `Game.swf`, `ChatGPT Remake/`, `DEVLOG.md`, `CHANGELOG.md`, active code, GitHub commits and CI runs
 

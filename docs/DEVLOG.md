@@ -2,6 +2,18 @@
 
 This is the structured continuation and reading guide to the original [root DEVLOG.md](../DEVLOG.md), which remains intact as a primary historical source. [CHANGELOG.md](../CHANGELOG.md) records implemented change chronology; this journal records *why*, revisions, creator direction, AI collaboration, and what remained unverified. Earlier events below are summaries grounded in repository documents rather than newly discovered transcripts.
 
+## 2026-10-26 — Creator confirms device QA; simplify scope and repair complete OGG packaging
+
+**Creator direction and observed verification.** The creator corrected an overly broad to-do list. They explicitly confirmed on actual phones that categories **1 Button & Quick Strike, 2 Floating Numbers & Combinations, and 3 Timer & Interface** were tested and worked. The creator also tested guest-to-host high-score submission, three-second live Game Over refresh, apparently correct persistent four-stat host records, and persistence through hosting restart. Real **two-device Wi-Fi** joining, the connected-player list, and live statistics were tested and worked. They confirmed sound volume, UI, gameplay and multiplayer had already been tested on devices.
+
+**Scope correction.** The creator rejected a new submission-failure/retry feature simply because of an earlier one-time bug. No port binds or startup problems have occurred in their actual use. This is a small, deliberately simple game: hypothetical port conflicts, elaborate storage recovery, anti-cheat or other speculative hardening should not be repeatedly escalated to required milestones. **Bluetooth and peer-to-peer** remain future ideas, not roadmap work.
+
+**AI implementation.** Compared source `sfx/` with browser `assets/sfx/` and the Android mirrored `www/assets/sfx/`. All three custom originals had been committed to `sfx/` but not to the two build locations. Added the *same original Git blob bytes* for `4273.ogg`, `QuickStrikepoints.ogg` and `QuickStrikepoints1.ogg` into both destinations (all ten OGGs mirrored), updated `scripts/sync-www.sh` to copy from canonical `sfx/`, and updated Android GitHub Actions to run synchronization, catch source/mirror drift and verify all ten OGG payloads byte-for-byte inside debug/unsigned release APKs. Preserved the original Android application ID and removed no gameplay features. Bumped `versionCode` from 1 to 2, and `versionName` from `1.0.0-beta` to `1.0.1-beta`.
+
+**Validation and distinction.** Source/mirror SHA equality and CI workflow configuration were checked through GitHub. Native build [40325603457](https://github.com/babunidev/ButtonGame/actions/runs/40325603457) was initiated for the source patch; its outcome is a separate check. The creator's real phone testing supports the **working installed application**, not an as-yet unsigned/signed newly compiled APK. Original private signing material is unavailable through this repository; do **not** claim that an original-certificate signed update was produced or installed.
+
+**Decision.** Simplify [ROADMAP.md](../ROADMAP.md) and [QA.md](QA.md) to report completed device tests, only actual release work, and the still-unimplemented nine-item Red Trap Button. Do not convert recommendations into mandatory tasks.
+
 ## 2026-10-26 — Creator supplies detailed nine-item Red Trap Button specification
 
 **Creator direction.** The creator provided a standalone feature titled **“Red Trap Button”** and explicitly stated **“Entire feature not started”**. Its core intention is **“An optional game mode that rewards patience and punishes careless tapping.”** This is additional recovered design information for the existing documentation effort, not a request to begin coding.

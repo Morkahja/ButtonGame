@@ -58,9 +58,9 @@ The 60-second `deadline` starts on the first tap. State updates include target/f
 - Web source: root `index.html`, `game.js`, `assets/`.
 - Android packaged mirror: `android/app/src/main/assets/www/`. Root JS/HTML and packaged copies were byte-identical at this inspected head.
 - `scripts/sync-www.sh` currently mirrors HTML/JS and `assets/` files, including OGGs **only from `assets/sfx/`**.
-- Three custom source OGGs were added under root `sfx/` at `d5ce766`, but not under `assets/sfx/` or the Android mirror. Thus clean CI output does not yet include their intended cues.
-- Android Gradle config: Java 17, compile/target SDK 35, min SDK 26, `applicationId = com.babunigaming.buttongame`, `versionCode = 1` / `versionName = 1.0.0-beta`.
-- CI: `.github/workflows/android-build.yml` runs Node syntax and one leaderboard regression, then Gradle `assembleDebug assembleRelease`. It currently does **not** invoke the sync script and does **not** watch `sfx/**`.
+- All three custom OGGs were added under root `sfx/` at `d5ce766`; source patch `2fa4539` mirrored those exact original bytes into both `assets/sfx/` and the Android web bundle, and changed synchronization to use canonical `sfx/`.
+- Android Gradle config: Java 17, compile/target SDK 35, min SDK 26, `applicationId = com.babunigaming.buttongame`, `versionCode = 2` / `versionName = 1.0.1-beta`.
+- CI: `.github/workflows/android-build.yml` synchronizes web and original sounds, checks the source mirror, runs Node syntax/leaderboard regression and Gradle `assembleDebug assembleRelease`, then verifies all 10 OGGs exist byte-identically inside both APKs. It watches `sfx/**`.
 - CI release output is unsigned. A release-signed upgrade requires the creator's original certificate; credentials are not part of the repository. See [INSTALL.md](../INSTALL.md).
 
 ## Historical architecture evolution and failed shortcuts
@@ -90,4 +90,4 @@ High-score persistence must eventually record whether Traps was enabled for each
 - Direct score-file writes risk interruption. Presence IDs are client-supplied and transient.
 - `WebView.setWebContentsDebuggingEnabled(true)` is currently unconditionally enabled; restrict to development builds.
 
-These are source-review findings, not claims of reproduced crashes or proven exploits on a physical phone. Release gates and QA are tracked in [ROADMAP.md](../ROADMAP.md) and [QA.md](QA.md).
+These are **source-review observations, not reproduced bugs or active work requirements**. The creator reports no server startup or port conflicts and explicitly prefers simple, working software over speculative hardening. Only revisit if an actual user-observed issue merits work. Release gates and creator-confirmed device QA are tracked in [ROADMAP.md](../ROADMAP.md) and [QA.md](QA.md).

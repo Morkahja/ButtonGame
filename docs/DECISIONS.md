@@ -101,6 +101,13 @@
 - **Status:** **Defined concept, entire feature not started, no new implementation request.** Retain previous historical uncertainty records as records of what had been known at each step.
 
 
+## D-017 — Completed physical QA is completed; keep Button Game simple
+- **Creator's direct report (2026-10-26):** Target/Quick Strike, physics/combos, timer/HUD, sound volume and actual UI all tested and work. Two-device Wi-Fi hosting, live players, guest → host high scores, automatic three-second leaderboard refresh, saved four statistics and persistence across hosting restarts are all reported working.
+- **Creator's decision:** Do not keep re-adding these QA items as unfinished. Do not invent a score-submission retry feature because one old submission failed, and do not promote speculative startup/port-conflict handling or other elaborate hardening to mandatory work. No startup/port conflicts have been observed. The game can remain simple.
+- **Creator's classification:** Bluetooth hosting and peer-to-peer are **future ideas, not milestones or roadmap tasks**. The already-defined Red Trap Button remains a separate unimplemented feature.
+- **Implementation of this decision:** Active roadmap and QA ledger corrected; canonical `sfx/` audio mirrored into web/Android and build verification enabled. Normal app ID preserved. See [ROADMAP.md](../ROADMAP.md) and [QA.md](QA.md).
+- **Verification boundary:** User report refers to already-tested installed game; the newly compiled `1.0.1-beta` APK still needs its CI result and original-certificate signing to be called delivered.
+
 ## Recording a new decision
 
 Use: **ID — date — creator request and reasons — AI suggestions and alternatives — accepted/rejected/deferred (with explicit evidence) — implementation file/commit — verification and uncertainty**. If no user approval occurred, record `pending`, not `accepted`.

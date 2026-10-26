@@ -1,6 +1,6 @@
 # Button Game — Visual and Interaction Design
 
-Status: **as implemented in current HTML/CSS/JS**, with device layout and sound still requiring QA. This document describes existing presentation and intentional behavior; changes to the visual grammar require creator review.
+Status: **as implemented in current HTML/CSS/JS**. The creator reports having tested gameplay, sound volume, UI layout and multiplayer on actual phones on 26 October 2026; installation of the next newly built/signed APK remains separate. This document describes existing presentation and intentional behavior; changes to the visual grammar require creator review.
 
 ## Stage, button and gesture
 
@@ -43,7 +43,7 @@ Detailed credit conservation differs between transformations and ordinary merged
 - Phone scaling is controlled by `fitToPhone()`; check that the scaled playfield, collector flight paths, buttons and scrolling score view are aligned.
 - Target has keyboard interaction via Enter/Space in the browser. Focus visibility, language, small-screen legibility, reduced-motion accommodation, color contrast, and screen-reader clarity **have not been comprehensively audited**.
 - The four statistics must remain legible and separate; no overlay should block replay or intercept active target taps.
-- Screenshot/video evidence and a two-phone UX evaluation remain open in [QA.md](QA.md).
+- Creator-reported actual phone testing is complete; publication-quality screenshots/video can be captured for the portfolio when desired. See [QA.md](QA.md).
 
 ## Recovered visual iteration: from Flash precision to readable physical spectacle
 
