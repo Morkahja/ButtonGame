@@ -9,3 +9,4 @@ android/captures/
 dist/*.apk
 !dist/.gitkeep
 logs/
+.local-data/

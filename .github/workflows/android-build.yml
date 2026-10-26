@@ -11,6 +11,7 @@ on:
       - 'assets/**'
       - 'sfx/**'
       - 'scripts/sync-www.sh'
+      - 'scripts/serve-desktop.py'
       - 'tests/**'
   pull_request:
     paths:
@@ -20,6 +21,7 @@ on:
       - 'assets/**'
       - 'sfx/**'
       - 'scripts/sync-www.sh'
+      - 'scripts/serve-desktop.py'
       - 'tests/**'
   workflow_dispatch:
 
@@ -73,6 +75,10 @@ jobs:
            grep -q 'trapsEnabled' app/src/main/java/com/babunigaming/buttongame/GameServer.kt
           test -f app/src/main/assets/www/game.js
           test -f app/src/main/assets/www/index.html
+
+      - name: Test desktop LAN host scoring and presence
+        working-directory: .
+        run: python3 -m unittest discover -s tests -p test_desktop_host.py
 
       - name: Test live guest-to-host leaderboard refresh
         working-directory: .
