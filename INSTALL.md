@@ -1,5 +1,26 @@
 # Button Game — Android Installation and Build
 
+## Always-upgradable Android APKs — signing policy (26 October 2026)
+
+Android updates require the **same application ID**, **higher versionCode**, and **the same signing certificate as the currently installed app**. Earlier Button Game upgrades worked because we reused Babuni.dev's original signing key, `Buttongame-signing-keystore.p12`. GitHub Actions' ordinary debug builds generate new keys; those debug APKs **cannot reliably replace earlier installs**.
+
+**Current limitation:** The original P12 private key is not available in this workspace. Nor is the temporary private key from the 1.0.2-beta debug APK. If the phone currently runs that debug build, the original signing certificate **cannot** directly upgrade it. Android offers no safe bypass. Preserve scores using [scripts/transfer-host-scores.py](scripts/transfer-host-scores.py) before a **one-time** reinstall with the permanent original signer, then all subsequent higher-version releases using that signer can update normally.
+
+**Safe local update signing:** Obtain the latest **unsigned release APK**, your **original private P12**, and a reference APK signed with the same certificate as the app currently on the phone. With the Android SDK's `aapt`, `zipalign` and `apksigner` on PATH, run:
+
+```bash
+bash scripts/sign-android-update.sh app-release-unsigned.apk \
+  "/private/path/Buttongame-signing-keystore.p12" \
+  previous-installed-version.apk \
+  ButtonGame-update.apk
+```
+
+The signing tool prompts for your password; **never paste it into chat, command arguments or GitHub**. The helper checks the reference APK's signature, matching package name, increasing versionCode and matching **new** signer. It refuses to output an incompatible APK. The previous APK must actually represent your installed app's signing identity.
+
+**Optional automatic updates from GitHub:** The workflow now supports uploading an `ButtonGame-Update-Original-Signing-Key` artifact **only after you configure encrypted GitHub Actions secrets** for the original P12: `BUTTON_GAME_KEYSTORE_B64` (base64-encoded P12 bytes), `BUTTON_GAME_KEYSTORE_PASSWORD`, optionally `BUTTON_GAME_KEY_ALIAS`. This is opt-in; signing material stays outside the public repository. The runner verifies that the signed result matches the historically verified original public certificate SHA-256 `3f7a1386adb23903ebd09c54a4f7105d197b7a6611be4b5dd53c7fe5e0902392`. With secrets absent, GitHub continues to provide debug and unsigned APKs but **no genuine original-signed update**.
+
+**Do not uninstall your current app as a routine update step.** If you are using an old debug signer we no longer possess, first back up host high scores, verify the backup and make the one-time migration only after the correctly signed replacement exists.
+
 Developer / creative direction: **Babuni.dev**. Current normal package: `com.babunigaming.buttongame`.
 
 ## Pull the newest code locally

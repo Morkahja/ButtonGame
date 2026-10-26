@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-26 — Make release APK signing stable and explicitly verifiable
+
+- **User request:** Every future update APK must install over the same Button Game app rather than forcing a reinstall and potentially losing persistent scores. Earlier updates had done so.
+- **Diagnosis:** Older APKs reused the original PKCS#12 signing certificate. New GitHub Actions debug APKs were signed using different ephemeral CI certificates. Android refuses a package update across unrelated signing certificates, regardless of matching name or version.
+- **Changes:** Added a local `scripts/sign-android-update.sh` helper to sign unsigned Android releases with an existing private key and require matching signer, package and increased versionCode. GitHub Actions can optionally use the original key from **encrypted repository secrets** and publishes an explicitly named signed-update artifact **only if the original public certificate fingerprint matches**.
+- **Limitation:** Original P12 key is not currently available to this session; the ephemeral CI-debug key cannot be recovered from an APK. No newly original-signed update was generated. An installed debug build may need one backed-up migration before future seamless updates.
+- **Testing:** Shell script syntax checked; GitHub build and optional signing path require separate validation. No game logic or Android application code changed.
+
 ## 2026-10-26 — Desktop LAN host with persistent high scores (no Android version change)
 
 - **Observed by Babuni.dev:** Running the browser game via `python3 -m http.server 8000` allowed play but score submission failed with “Could not reach host — try again.” Babuni.dev asked whether friends could join over Wi-Fi and why rankings did not save.

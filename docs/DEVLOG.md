@@ -1,5 +1,15 @@
 # Button Game — Curated Development Journal
 
+## 2026-10-26 — Signing regressions interrupt the creator's expected Android update flow
+
+**Direction.** Babuni.dev explicitly requested that future APKs **update the already installed game**, not require repeated uninstall/reinstall cycles. The creator recalled that updates used to install normally and questioned why the new workflow had changed.
+
+**Historical explanation.** Earlier release builds were signed with the original private PKCS#12 key named `Buttongame-signing-keystore.p12`, with certificate identity deliberately preserved across releases. Later full-native GitHub Actions builds produced debug APKs using fresh CI keys. Although the application ID and versionCode remained consistent, Android signing identity did not. This was a mistake in release distribution rather than a gameplay change.
+
+**AI implementation.** A new local helper signs an unsigned APK with the existing key, verifies a reference APK's real signing certificate, validates package identity and monotonic versionCode, checks the newly produced signature and refuses to create an incompatible update file. GitHub Actions now has an **opt-in** original-certificate signing step using encrypted secrets, including a public certificate fingerprint gate before publishing a signed update. Neither keystore nor passwords were committed or exposed.
+
+**Verification and boundary.** A Bash syntax check passed for the helper; the real-key signing path cannot yet be exercised because the original private P12 is absent in this session. The private debug key from the previously supplied CI-debug APK is also unavailable and cannot be reconstructed from the public APK. If that build is currently installed, Android requires one **high-score-backed-up transition** to a permanent signing key. This is **not** routine update practice and should not be performed before verifying the backup and installing identity.
+
 ## 2026-10-26 — The browser game could play locally but had no desktop host to receive scores
 
 **User's experiment and discovery.** Babuni.dev started Button Game on a Nobara desktop with the previously recommended `python3 -m http.server 8000` command. They could play in the browser, but submitting a final score produced “Could not reach host — try again.” They asked whether that desktop session worked like the Android **Serve on Wi-Fi** host, how other people would join and why the score failed. They also requested a replacement download link to the existing 1.0.3-beta Android APK.

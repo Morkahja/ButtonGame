@@ -1,5 +1,7 @@
 # Button Game (Buttongame)
 
+**Signing policy update (26 October 2026):** After Babuni.dev requested APKs that *always update the existing installed game*, the repository now includes a [guarded same-certificate signing helper](scripts/sign-android-update.sh) and optional original-key GitHub Actions release signing. **Debug-signed CI APKs are not guaranteed updates.** A one-time high-score-backed-up migration may be unavoidable if the current installation uses an ephemeral debug key. See [INSTALL.md](INSTALL.md). No newly original-signed APK is claimed until the private key is actually available.
+
 **Author:** Babuni.dev
 
 A one-minute, arcade-style button-smashing game with roaming targets, physical-looking number combinations and deliberately theatrical score collection. The game is authored and creatively directed by **Babuni.dev**. This repository preserves the original Flash artifact, earlier HTML5 reconstruction, current browser game, and native Android Wi-Fi host.

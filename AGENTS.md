@@ -1,5 +1,12 @@
 # Button Game — AI and Contributor Rules
 
+## Mandatory APK update signing practice
+
+- **Never label a GitHub CI debug APK an ordinary update**: temporary debug certificates differ across runners. An original-key-signed APK is required to update any existing installation signed with that original certificate.
+- The package ID must remain `com.babunigaming.buttongame`; increment versionCode and match the **actual installed certificate**, not just the package name.
+- Use `scripts/sign-android-update.sh` or the opted-in encrypted-secret original-key Actions process. The private `Buttongame-signing-keystore.p12` and password must never be committed, pasted in logs, or exposed.
+- If a key is missing or does not match the current device, be explicit; **do not claim to have produced an update APK**. Preserve host scores and document the one-time migration boundary if the old debug private key is lost.
+
 **Update — 26 October 2026:** Babuni.dev subsequently authorized full Red Trap Button implementation at **10%** replacement probability, with immediate Game Over and conservation of already-earned pending points. The feature is **implemented in GitHub source**, and the native Android compilation and new trap regression passed in [Actions run 40365295833](https://github.com/babunidev/ButtonGame/actions/runs/40365295833). Any earlier language below saying this mode is not started or not authorized records the **historical status at that time** and is superseded. An Android APK signed with the original release certificate and physical Trap Mode verification remain **pending**. See [the current Red Trap Button specification](docs/TRAP_MODE.md).
 
 This is a Babuni.dev-directed artwork and a software project. Preserve the user's authorship, distinctive mechanics and decision history.

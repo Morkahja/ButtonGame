@@ -1,5 +1,14 @@
 # Button Game — Current Project To-Do
 
+## Prevent APK signing incompatibilities
+
+- [x] Diagnose why previously signed updates worked but newer CI-debug APKs do not: **different signing certificate**, not a changed package ID or missed version bump.
+- [x] Add `scripts/sign-android-update.sh` to sign with an existing P12, verify signer and package identity against the **installed** APK, and enforce a higher versionCode.
+- [x] Add optional **original-certificate signed APK artifact** to GitHub Actions, guarded by encrypted private-key secrets and the historical public certificate fingerprint. No secrets are checked into Git.
+- [ ] Locate the original private `Buttongame-signing-keystore.p12` on Babuni.dev's trusted computer and compare its certificate with the **actual installed** APK.
+- [ ] If the phone holds the **1.0.2 CI debug build**, preserve host scores and perform **one exceptional migration** to a permanent original-key-signed APK, because the private CI-debug key is not retained.
+- [ ] After migration, sign every new higher-version release with that **same permanent certificate**; no routine uninstalls.
+
 **Updated 26 October 2026 from Babuni.dev's own device-testing report and the current GitHub source.**
 
 This is a short **active work list**. Previously tested features must not be repeatedly returned as unfinished QA tasks. The original seven-category checklist is preserved [unchanged as historical evidence](docs/HISTORICAL_CHECKLIST_2026-10-25.md); the [complete Red Trap Button specification](docs/TRAP_MODE.md) is separate.

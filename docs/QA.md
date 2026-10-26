@@ -1,5 +1,11 @@
 # Button Game — Verification and Release Status
 
+## Android APK upgrade signing gate
+
+A Button Game APK is only a verified **in-place update** when it has the same `com.babunigaming.buttongame` package ID, **higher versionCode**, and **identical signing certificate** to the currently installed APK. A new helper `scripts/sign-android-update.sh` checks these properties, and the optional encrypted-secret CI signing step checks the historical original-release public SHA-256 fingerprint before publishing its special update artifact.
+
+**Testing limits:** The new Bash helper passed syntax validation. Neither original signing material nor the old CI-debug private key is available here, so an actual original-key-signed Android APK has **not** been produced. Never claim a regular CI-debug APK is a compatible update, and do not uninstall a working app without first preserving and verifying its host high scores.
+
 ## Signing comparison and developer-only score transfer
 
 Direct certificate-byte comparison of the **previous 1.0.2-beta debug APK** and newly compiled **1.0.3-beta debug APK** found **different SHA-256 signing certificate fingerprints**. An in-place debug APK update between these specific versions is therefore not possible. A newly compiled APK being correct does not justify uninstalling a working host and losing scores without a backup.

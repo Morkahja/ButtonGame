@@ -1,5 +1,13 @@
 # Button Game — Decisions and Open Questions
 
+## D-024 — Preserve one permanent Android signer for every release
+
+- **Babuni.dev requirement:** APKs must update the existing installed Button Game without repeated uninstalls. The creator confirmed this worked in earlier releases.
+- **Root cause:** New CI-debug outputs use temporary signing certificates, while earlier releases reused Babuni.dev's original private P12 certificate.
+- **Implementation:** A safe local original-key signing helper and an opt-in encrypted-secret CI signing step, both enforcing correct certificate identity and separating unsigned/debug builds from genuine update APKs.
+- **Constraint:** Do not invent a new key, post private signing bytes/password, or tell Babuni.dev that a different-certificate APK can upgrade an existing app. If the currently installed debug key is lost, preserve host scores and perform a *single* deliberate transition to the permanent signer.
+- **Verification:** Build tooling committed; real-key signing and physical installation pending. No new release-signed APK exists yet.
+
 ## D-023 — Desktop LAN hosting needs the same score API, not a new game client
 
 - **User observation (26 October 2026):** Babuni.dev ran the HTML5 game on `localhost:8000`, found it playable but could not save high scores, and asked how to let other devices join over Wi-Fi.
