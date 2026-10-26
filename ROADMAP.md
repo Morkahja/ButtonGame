@@ -63,7 +63,7 @@ See [docs/QA.md](docs/QA.md) for cases and current evidence.
 - [ ] Update status after each actual build, install and device check with commit/release references.
 - [ ] Prepare portfolio-safe imagery, original-to-current evolution, and representative video after validation.
 
-## Backlog — unapproved ideas (PROPOSED, NOT IMPLEMENTED)
+## Historical and exploratory backlog — NOT scheduled for current release
 
 - **Trap Mode / red-button mechanic:** historical six-part specification **now recovered** (pre-game toggle/red icon; random trap spawns; instant Game Over on trap tap; +3 passive points/333 ms; normal floating-number physics/fusion; leaderboard mode indicator). **Not implemented and not a current release task.** Original timing edge cases remain unspecified. See [historical checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md).
 - Bluetooth hosting.
