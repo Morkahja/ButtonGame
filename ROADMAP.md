@@ -65,7 +65,7 @@ See [docs/QA.md](docs/QA.md) for cases and current evidence.
 
 ## Backlog — unapproved ideas (PROPOSED, NOT IMPLEMENTED)
 
-- Red/trap button or trip mechanic: the original long-chat specification is not recovered.
+- **Trap Mode / red-button mechanic:** historical six-part specification **now recovered** (pre-game toggle/red icon; random trap spawns; instant Game Over on trap tap; +3 passive points/333 ms; normal floating-number physics/fusion; leaderboard mode indicator). **Not implemented and not a current release task.** Original timing edge cases remain unspecified. See [historical checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md).
 - Bluetooth hosting.
 - True peer-to-peer multiplayer.
 - Optional in-app reset of high scores.
@@ -77,6 +77,12 @@ The above are research/design topics, **not release blockers or authorization to
 - [ ] **Recover original archival evidence only if it becomes accessible:** the creator recalls a detailed red/trap/trip-button discussion and an earlier much larger to-do list, neither of which could be retrieved in the 2026-10-26 history audit. Seek the actual original conversation or creator-authored notes, then classify each recovered item individually as accepted, rejected, postponed, implemented, or merely proposed. **Do not implement red-button behavior, fabricate rules, or convert an inaccessible checklist into engineering tickets without that evidence.**
 
 Existing shipped-feature release work and the approved host-owned Wi-Fi model remain the practical roadmap. Any “future feature” mentioned only in a generated audit is not automatically creator-approved.
+
+## Historical planning evidence: original seven categories
+
+The creator recovered a checklist dated **25 October 2026** with seven original sections: (1) Button & Quick Strike, (2) Floating Numbers & Combinations, (3) Timer & Interface, (4) High Scores & Session Statistics, (5) Trap Mode, (6) Multiplayer & Networking, and (7) Release & Quality Assurance. The recovered task wording is archived in [docs/HISTORICAL_CHECKLIST_2026-10-25.md](docs/HISTORICAL_CHECKLIST_2026-10-25.md).
+
+This living roadmap must not be misrepresented as that original checklist. It separates historical items already implemented, the intentionally cancelled old-score compatibility requirement, exploratory ideas, and newer AI recommendations from current creator priorities.
 
 ## Already implemented: do not relist as missing features
 

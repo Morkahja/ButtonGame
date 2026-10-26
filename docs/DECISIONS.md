@@ -44,10 +44,11 @@
 - **Decision still to implement:** Reproducible copy/sync/check in release pipeline. Do not say this is already fixed.
 - **State:** Source recordings present; packaging open.
 
-## D-008 — Red/trap or trip button mechanic
-- **Evidence:** A reference in the creator's recovered to-do list and creator recollection of a long unavailable conversation.
-- **Unknown:** Original functionality, spawn conditions, penalties, goals, user acceptance and design reasoning.
-- **State:** **Proposed / undocumented / not approved**. Do not create a speculative implementation or attribute one to the creator.
+## D-008 — Recovered historical Trap Mode requirements
+- **Source:** The creator supplied an excerpt attributed to the **25 October 2026 original seven-category checklist**, now preserved at [HISTORICAL_CHECKLIST_2026-10-25.md](HISTORICAL_CHECKLIST_2026-10-25.md). The full archived transcript remains inaccessible.
+- **Recovered specification:** Pre-game Traps toggle/red icon; randomly spawning red trap buttons; instant Game Over when tapped; passive +3 points every 333 ms during a trap; those points use ordinary number physics and fusion; trap-mode marker on leaderboard entries.
+- **Unknown:** Exact spawn chance, lifetime, passive-score termination, interaction of immediate Game Over with pending score settlement, and earlier creative arguments.
+- **Status:** Historical planned feature, **not implemented; no new approval to build it during the immediate release**. The earlier statement that all rules were unknown is superseded by this recovered excerpt. Additional details must not be invented.
 
 ## D-009 — Other exploratory multiplayer options
 - **Ideas:** Bluetooth hosting, genuine peer-to-peer network model, optional host score reset.
@@ -90,11 +91,12 @@
 - **State:** Implemented in web/Android HTML/JS; device visual check open.
 - **Evidence:** [root DEVLOG](../DEVLOG.md), October 25 live score ambience entry.
 
-## D-016 — Historical red/trap/trip mechanics remain an evidence gap
-- **Known:** The creator recalls specific original discussion and a large to-do list in an archived thread. A later recovered checklist names a red/trap button.
-- **Not retrieved:** Exact rules, penalties, conditions, intended timing, design alternatives, approval, or placement in the original list. A separate project's movable red recording button is unrelated and must **not** be imported as evidence.
-- **Status:** Known **mention**, missing specification, **not an implementation task**. The creator's recollection should be preserved without retroactively inventing dialogue.
-- **Recovery condition:** Reassess only if actual archived text, an original design file, or direct creator reconstruction is supplied.
+## D-016 — Trap Mode information gap partially resolved by recovered checklist
+- **Earlier evidence gap:** The archived conversation and full original rationale could not be accessed. Initial documentation had only a vague "red/trap/trip button" mention.
+- **New evidence:** The creator has now supplied the seven-category checklist attributed to the earlier conversation, including **six concrete Trap Mode requirements**. See [historical checklist](HISTORICAL_CHECKLIST_2026-10-25.md) and **D-008**.
+- **Still unknown:** Additional details in the complete chat, precise probability/timing edge cases, explicit present-day implementation approval, and evolution of alternatives.
+- **Status:** Concept description **recovered in part**, code **not implemented**, active release scope **unchanged**. This correction should coexist with the historical account of why the earlier docs were incomplete.
+
 
 ## Recording a new decision
 

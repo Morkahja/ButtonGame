@@ -43,17 +43,26 @@ The current redesign deliberately changes the experience from simple instant poi
 
 The numbers are both mechanics and performers. One documented iteration imagined 21 bursting into 21 separate `1` units that duplicated into 42 singles; a later creator request replaced that with **exactly 21 physical-looking `1` units**, bouncing off walls and changing into `2`s before all converged to a larger `42`. The 37 event follows a different grammar—travel to a common upper-center stage, visibly reverse to 73, turn green, and enter the normal collector. These alternate approaches are part of the design history; only the later mechanics describe the present source.
 
-The remembered red/trap/trip-button discussion and original large to-do list cannot be reconstructed from this accessible record. No appearance, penalty, timing or interaction rule is to be inferred from the word “trap.” See [docs/DECISIONS.md](docs/DECISIONS.md) and [docs/DEVLOG.md](docs/DEVLOG.md) for provenance and status.
+The creator-provided [original seven-category checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md) **now recovers six concrete historical Trap Mode requirements**. The complete archived conversation, full rationale and edge cases still cannot be reconstructed. Do not confuse a recovered design checklist with a feature currently implemented or freshly approved.
 
 ## Historical roots
 
 `Game.swf` and `Game.html` preserve an earlier Flash-era game. `ChatGPT Remake/` is a separate HTML5 reconstruction of that legacy artifact, with its own behavior and retrospective notes. The current game diverges through button graphics, score physics, special combinations, audio, Android hosting and the host-owned multiplayer leaderboard. Keep these stages distinct when telling the portfolio story.
 
-## Future concept boundary: red button / trap
+## Recovered historical concept — Trap Mode
 
-A recovered to-do list mentions a **red/trap button game mode**; the user also remembers a **red button trip/trap mechanic** from a long archived conversation. No reliable primary specification was retrieved. Trigger, penalties, spawn logic, accessibility implications and connection to current scoring are **unknown**. Status: **idea / original discussion not recovered / not approved for implementation**. It must not be silently treated as an existing or scheduled feature.
+The creator recovered a **25 October 2026** seven-category development checklist containing the following **Trap Mode** specification:
 
-Other exploratory concepts mentioned: Bluetooth hosting and true peer-to-peer multiplayer. Neither replaces the approved Android Wi-Fi model.
+1. A **pre-game Traps toggle** shown with a **red-button icon**.
+2. **Random red trap-button spawning** when the mode is enabled.
+3. **Instant Game Over** when a player taps a red trap.
+4. A trap grants **3 passive points every 333 milliseconds** during a trap.
+5. Those points participate in **normal floating-number physics and score fusion**, rather than bypassing the collection mechanics.
+6. A **trap-mode indicator on leaderboard entries** distinguishes trap-enabled games.
+
+**Status: documented historical gameplay concept; not implemented and not approved for implementation as part of the immediate release.** Exact spawn probabilities, trap duration, handling of pending points at instant Game Over and original design rationale were not recovered. Do not fill those gaps by assumption. See [source checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md) and [decision record](docs/DECISIONS.md).
+
+Other exploratory concepts mentioned: Bluetooth hosting and true peer-to-peer multiplayer. Neither replaces the established Android Wi-Fi hosting model.
 
 ## Non-goals for the immediate release
 

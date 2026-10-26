@@ -59,6 +59,8 @@ Detailed credit conservation differs between transformations and ordinary merged
 
 **Audio as visual feedback.** The 42 and 73 reveals take a dedicated `4273.ogg` cue rather than doubling a generic bell. Ordinary milestone bells occur for **each** reached 7/14/21/37/42/73 value, not once per floater lineage. Quick Strike uses its two random custom impacts from the *activating* press onward, while ordinary presses keep their impact set. The supplied new recordings were comparatively louder and had playback gain reduced without modifying the recording bytes.
 
-## Red/trap button
+## Recovered Trap Mode interface (historical only)
 
-There is **no verified visual, behavioral or accessibility specification** for this remembered concept. Its color is only a label in a recovered idea, not implementation authority.
+The original checklist describes a **pre-game Traps toggle with red-button icon**, and **random red trap buttons** during enabled play. Tapping a trap ends the game immediately. While a trap is active, it produces **three passive points every 333 ms**, represented through the **same floating-number physics, merges and score collector** as ordinary points. Runs using the mode need a **trap indicator alongside leaderboard entries**.
+
+These are **historical design requirements, not current UI**. Precise button artwork, chance/duration of trap spawns, accessible distinction beyond color, pending-score behavior at instant Game Over and full animation treatment were not specified in the recovered excerpt. Do not infer or implement them without the creator's decision. See [source checklist](HISTORICAL_CHECKLIST_2026-10-25.md).

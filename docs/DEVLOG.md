@@ -2,6 +2,18 @@
 
 This is the structured continuation and reading guide to the original [root DEVLOG.md](../DEVLOG.md), which remains intact as a primary historical source. [CHANGELOG.md](../CHANGELOG.md) records implemented change chronology; this journal records *why*, revisions, creator direction, AI collaboration, and what remained unverified. Earlier events below are summaries grounded in repository documents rather than newly discovered transcripts.
 
+## 2026-10-26 — Recovered original checklist and red Trap Mode
+
+**Creator input.** The creator supplied a passage attributed to the older, inaccessible Button Game development conversation. It stated that an assistant-generated updated to-do list had added its own recommendations and presented them as original; the earlier list instead had **seven categories dated 25 October 2026**, including a full Trap Mode section. The creator provided this recovered excerpt for preservation in the new documentation structure, not as authorization to implement the feature.
+
+**Historical concept recovered.** Trap Mode included: a pre-game **Traps toggle with a red-button icon**; **random red trap-button spawning**; **instant Game Over on tapping a trap**; **3 passive points every 333 ms while a trap is active**; the ordinary **number physics and score-fusion pipeline for those passive points**; and a **trap-mode indicator on leaderboard records**. This corrects the earlier source-limited assumption that the trap had no recoverable rules. Precise spawn probability, trap lifetime, game-over settlement semantics, and the complete originating conversation remain unavailable.
+
+**Other historical distinctions.** The original seven categories covered buttons/Quick Strike, floating numbers/combinations, timer/HUD, four-stat scores, Trap Mode, networking, and release/QA. Later creator clarifications were host-only authoritative rankings, **no migration of disposable beta high scores**, and variable time bonuses of **2/3/5/4 seconds for 7/14/42/73**. The recovered response's older note that native Kotlin compilation still needed to happen is superseded by GitHub's subsequent successful native builds. All three source OGGs were later committed under `sfx/`, although reproducible packaging remains incomplete.
+
+**AI contribution and correction.** The assistant documented this recovered record in [HISTORICAL_CHECKLIST_2026-10-25.md](HISTORICAL_CHECKLIST_2026-10-25.md) and updated present-day documentation without erasing the earlier evidence-gap entries. This is a recovery from creator-provided text, **not a claim that the full archive was accessed**.
+
+**Decision and verification.** Trap Mode remains historically specified but **not implemented or newly approved**; no game code, server, audio, APK or build workflow was changed. Only documentation was inspected and revised.
+
 ## 2026-10-26 — Documentation foundation and recovery boundaries
 
 **Creator direction.** After recovering a comprehensive project to-do list and discovering that a long archived development chat would not open reliably, the creator asked for the missing GitHub documentation structure to be established. The creator wants a complete record suitable for future work and eventual babuni.dev portfolio publication. The red button/trap or trip discussion and its longer to-do history may be inside the inaccessible chat.
