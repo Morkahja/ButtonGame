@@ -16,6 +16,12 @@ android {
     }
 
     buildTypes {
+        // Side-by-side test builds do not overwrite the original release-signed
+        // app or delete its host-owned high-score database.
+        debug {
+            applicationIdSuffix = ".testing"
+            versionNameSuffix = "-testing"
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
