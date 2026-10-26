@@ -1,21 +1,21 @@
 # Button Game — Current Project To-Do
 
-**Updated 26 October 2026 from the creator's own device-testing report and the current GitHub source.**
+**Updated 26 October 2026 from Babuni.dev's own device-testing report and the current GitHub source.**
 
 This is a short **active work list**. Previously tested features must not be repeatedly returned as unfinished QA tasks. The original seven-category checklist is preserved [unchanged as historical evidence](docs/HISTORICAL_CHECKLIST_2026-10-25.md); the [complete Red Trap Button specification](docs/TRAP_MODE.md) is separate.
 
-## Completed — confirmed by the creator on actual devices
+## Completed — confirmed by Babuni.dev on actual devices
 
 - [x] **Button & Quick Strike:** turquoise target, rotation/spawn animations, pulse, impact feedback, shatter, 73 ms Quick Strike, spinning/green dot/double points, Quick Strike sounds.
 - [x] **Floating numbers & combinations:** emission, physics, full-label collisions, mergers, visible score collection, 21→42 and 37→73, golden highlights, milestone bells, special sound effects.
 - [x] **Timer & interface:** 7/14/42/73 bonuses (+2/+3/+5/+4 s), golden timer/score banks, HUD, Reaction/APM, Game Over, replay, phone presentation.
 - [x] **High scores:** real guest-to-host submission works; host Game Over ranking updates automatically every three seconds; the four final statistics are saved correctly and persist across hosting restarts.
 - [x] **Two-device Wi-Fi multiplayer:** guest browser joining, connected-player list, live player statistics and shared leaderboard work.
-- [x] **Physical-device QA of existing installed game:** gameplay, interface, sound volume and multiplayer tested and reported working by the creator.
+- [x] **Physical-device QA of existing installed game:** gameplay, interface, sound volume and multiplayer tested and reported working by Babuni.dev.
 - [x] **Source OGG recordings present:** all three custom OGGs were already in root `sfx/`.
 - [x] **Documentation baseline:** README, concept, decisions, design, architecture, developer guidance, development journal and recovered historical checklists.
 
-These results are **creator-reported device verification of the installed version**. They are not automatically proof that a newly rebuilt APK has been installed or signed. See [docs/QA.md](docs/QA.md).
+These results are **Babuni.dev-reported device verification of the installed version**. They are not automatically proof that a newly rebuilt APK has been installed or signed. See [docs/QA.md](docs/QA.md).
 
 ## Current release work
 
@@ -45,6 +45,6 @@ The nine-item design is preserved without changing gameplay. [Full checklist and
 
 ## Explicitly not active tasks
 
-Do **not** create a new score-submission retry system based on a one-off old bug. Do **not** turn hypothetical bind conflicts, startup failures, score-file corruption or anti-cheat hardening into mandatory milestones for this simple game. The creator reports no server startup or port conflict issues. Additional complexity requires a real demonstrated problem or a new creator request.
+Do **not** create a new score-submission retry system based on a one-off old bug. Do **not** turn hypothetical bind conflicts, startup failures, score-file corruption or anti-cheat hardening into mandatory milestones for this simple game. Babuni.dev reports no server startup or port conflict issues. Additional complexity requires a real demonstrated problem or a new Babuni.dev request.
 
 Exploratory alternative network approaches are historical ideas recorded in [CONCEPT.md](CONCEPT.md) and [docs/DECISIONS.md](docs/DECISIONS.md), **not roadmap milestones**.
