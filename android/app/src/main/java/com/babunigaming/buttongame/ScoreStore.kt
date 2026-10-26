@@ -13,7 +13,8 @@ data class ScoreEntry(
     val score: Int,
     val reactionMs: Int,
     val apm: Int,
-    val durationMs: Long
+    val durationMs: Long,
+    val trapsEnabled: Boolean
 )
 
 class ScoreStore(context: Context) {
@@ -38,7 +39,8 @@ class ScoreStore(context: Context) {
                             score = o.optInt("score", 0).coerceAtLeast(0),
                             reactionMs = o.optInt("reactionMs", 0).coerceAtLeast(0),
                             apm = o.optInt("apm", 0).coerceAtLeast(0),
-                            durationMs = o.optLong("durationMs", 0L).coerceAtLeast(0L)
+                            durationMs = o.optLong("durationMs", 0L).coerceAtLeast(0L),
+                            trapsEnabled = o.optBoolean("trapsEnabled", false)
                         )
                     )
                 }
@@ -48,10 +50,10 @@ class ScoreStore(context: Context) {
         }
     }
 
-    fun add(name: String, score: Int, reactionMs: Int, apm: Int, durationMs: Long): List<ScoreEntry> = synchronized(lock) {
+    fun add(name: String, score: Int, reactionMs: Int, apm: Int, durationMs: Long, trapsEnabled: Boolean): List<ScoreEntry> = synchronized(lock) {
         val cleaned = name.trim().take(MAX_NAME).ifEmpty { "Player" }
         val entry = ScoreEntry(cleaned, score.coerceAtLeast(0),
-            reactionMs.coerceAtLeast(0), apm.coerceAtLeast(0), durationMs.coerceAtLeast(0L))
+            reactionMs.coerceAtLeast(0), apm.coerceAtLeast(0), durationMs.coerceAtLeast(0L), trapsEnabled)
         val next = (list() + entry).sortedByDescending { it.score }.take(MAX_SCORES)
         val arr = JSONArray()
         next.forEach { e -> arr.put(asJson(e)) }
@@ -71,6 +73,7 @@ class ScoreStore(context: Context) {
         .put("reactionMs", entry.reactionMs)
         .put("apm", entry.apm)
         .put("durationMs", entry.durationMs)
+        .put("trapsEnabled", entry.trapsEnabled)
 
     companion object {
         const val MAX_NAME = 16
