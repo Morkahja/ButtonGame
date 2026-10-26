@@ -468,6 +468,8 @@
     for (let i = 0; i < 50; i++) {
       const nx = randomint(55, 395);
       const ny = randomint(90, 360);
+      // The initial start-screen checkbox must not cover the first normal target.
+      if (!started && Math.abs(nx - STAGE / 2) < 100 && ny > 110 && ny < 205) continue;
       if (!overlapsHud(nx, ny)) return { x: nx, y: ny };
     }
     return { x: STAGE / 2, y: STAGE / 2 };
@@ -735,6 +737,10 @@
     setFeindVisual(false);
     playSpawnIn();
     spawnTime = performance.now();
+    // Unlike a normal button, an untouched red trap must expire by itself.
+    // Its retirement uses the same fade-step, pop delay and shatter sequence.
+    fading = trapActive;
+    flupp = trapActive ? randomint(1, 22) : 0;
   }
 
   function beginPopPhase() {
@@ -2104,6 +2110,8 @@
       return;
     }
     if (!fading) return;
+    // Let an untouched trap finish its 320ms spawn-in before its lifetime ticks.
+    if (trapActive && performance.now() < spawnAnimUntil) return;
     // Hold the button intact for another 160ms, then break it faster.
     // Taps during this brief hold still count (including Quick Strike).
     if (pendingPopAt) {
