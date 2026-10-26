@@ -1,6 +1,6 @@
 # Button Game — Creative Concept
 
-**Direction:** Babuni.dev-led project, Babuni.dev.  
+**Author and creative direction:** Babuni.dev.  
 **State:** A reconstruction of the demonstrable concept, not a claim to recover every discussion from the inaccessible long development chat.  
 **Last reviewed:** 2026-10-26.
 
