@@ -1,6 +1,6 @@
 # Button Game — Creative Concept
 
-**Direction:** Creator-led project, Babuni.dev.  
+**Direction:** Babuni.dev-led project, Babuni.dev.  
 **State:** A reconstruction of the demonstrable concept, not a claim to recover every discussion from the inaccessible long development chat.  
 **Last reviewed:** 2026-10-26.
 
@@ -24,7 +24,7 @@ These are statements about the current source, not confirmation of physical-devi
 
 ## Shared social play
 
-The creator's **Serve on Wi-Fi** direction lets one Android phone act as host while other players join from devices on the same network using an address or QR code. The Android host controls the shared score ledger; players report final points, reaction time, actions per minute and session duration. This is **parallel local play and shared rankings**, not a synchronized physics simulation or peer-to-peer game.
+Babuni.dev's **Serve on Wi-Fi** direction lets one Android phone act as host while other players join from devices on the same network using an address or QR code. The Android host controls the shared score ledger; players report final points, reaction time, actions per minute and session duration. This is **parallel local play and shared rankings**, not a synchronized physics simulation or peer-to-peer game.
 
 ## Visual and interaction identity
 
@@ -41,9 +41,9 @@ The retained earlier browser reconstruction, `ChatGPT Remake/README.md`, documen
 
 The current redesign deliberately changes the experience from simple instant point/time rewards to visible, conserved point and time transfers. In the October 25 revisions, time granted merely for clicking or button fading was removed: selected numerical milestones now extend play, making combination play meaningful rather than endlessly sustaining a round with ordinary taps. Reaction measurement likewise became a measurement of first contact **after a new target finishes appearing**, not how long the first page was left open.
 
-The numbers are both mechanics and performers. One documented iteration imagined 21 bursting into 21 separate `1` units that duplicated into 42 singles; a later creator request replaced that with **exactly 21 physical-looking `1` units**, bouncing off walls and changing into `2`s before all converged to a larger `42`. The 37 event follows a different grammar—travel to a common upper-center stage, visibly reverse to 73, turn green, and enter the normal collector. These alternate approaches are part of the design history; only the later mechanics describe the present source.
+The numbers are both mechanics and performers. One documented iteration imagined 21 bursting into 21 separate `1` units that duplicated into 42 singles; a later Babuni.dev request replaced that with **exactly 21 physical-looking `1` units**, bouncing off walls and changing into `2`s before all converged to a larger `42`. The 37 event follows a different grammar—travel to a common upper-center stage, visibly reverse to 73, turn green, and enter the normal collector. These alternate approaches are part of the design history; only the later mechanics describe the present source.
 
-The earlier [seven-category checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md) recovered six Trap Mode tasks. The creator has now supplied the **complete nine-item feature checklist** in [docs/TRAP_MODE.md](docs/TRAP_MODE.md), including normal button lifecycle parity, untouched expiration and shatter, precisely where passive points emerge, and the red-icon location beside leaderboard names. The concept is documented; **the entire feature remains not started**.
+The earlier [seven-category checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md) recovered six Trap Mode tasks. Babuni.dev has now supplied the **complete nine-item feature checklist** in [docs/TRAP_MODE.md](docs/TRAP_MODE.md), including normal button lifecycle parity, untouched expiration and shatter, precisely where passive points emerge, and the red-icon location beside leaderboard names. The concept is documented; **the entire feature remains not started**.
 
 ## Historical roots
 
@@ -51,9 +51,9 @@ The earlier [seven-category checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md) 
 
 ## Red Trap Button — documented game-mode concept, not started
 
-**Creator's design intent:** “An optional game mode that rewards patience and punishes careless tapping.”
+**Babuni.dev's design intent:** “An optional game mode that rewards patience and punishes careless tapping.”
 
-The **authoritative nine-item feature specification** supplied by the creator is preserved at [docs/TRAP_MODE.md](docs/TRAP_MODE.md). It calls for:
+The **authoritative nine-item feature specification** supplied by Babuni.dev is preserved at [docs/TRAP_MODE.md](docs/TRAP_MODE.md). It calls for:
 
 - An optional pre-game **Traps checkbox** with red-button icon.
 - Random replacement of ordinary spawns with **red trap buttons** when enabled.
@@ -69,4 +69,4 @@ Other exploratory ideas—Bluetooth and true peer-to-peer hosting—do not super
 
 ## Non-goals for the immediate release
 
-Do not redesign the core button, invent new game modes, add a second TEST application or implement unapproved features while completing the existing Android update. High-score preservation for the beta test data is not required by the creator. Reliability, sound completeness, signing and actual two-device verification come first.
+Do not redesign the core button, invent new game modes, add a second TEST application or implement unapproved features while completing the existing Android update. High-score preservation for the beta test data is not required by Babuni.dev. Reliability, sound completeness, signing and actual two-device verification come first.
