@@ -2,6 +2,32 @@
 
 Developer / creative direction: **Babuni.dev**. Current normal package: `com.babunigaming.buttongame`.
 
+## Pull the newest code locally
+
+In the existing Button Game Git repository, after checking `git status -sb` for uncommitted changes:
+
+```bash
+git pull --ff-only origin main
+```
+
+This updates the local **source**, not the already installed Android app. The older personal stash remains separate; do not blindly apply it over newer overlapping files. A new Android app needs a new compiled APK and a matching signing certificate to upgrade in place.
+
+## Play on a desktop computer
+
+The game is already a browser game. Inside the updated Button Game folder, run:
+
+```bash
+python3 -m http.server 8000
+```
+
+Open **http://localhost:8000/** in a desktop browser. The game itself works; the simple static server does **not** provide `/api/scores` or `/api/presence` endpoints, so it cannot save shared scores or show live players. For those multiplayer features, connect your desktop browser to the **Serve on Wi-Fi** address displayed in the Android host app. On wide landscape screens, connected players appear to the **left**, the game is in the center, and host high scores appear to the **right**.
+
+For sharing publicly later, `index.html`, `game.js`, and `assets/` can be served by a web host. A public score service would be a separate project from the existing Android-only host leaderboard. Stop the local Python server with **Ctrl+C**.
+
+## Version and signing warning
+
+New interface/layout source is **1.0.3-beta (versionCode 4)**. CI-produced debug APKs may use a newly generated debug certificate **on each runner**, so one CI debug build may not be able to update another one without uninstalling. A release-signed app certainly cannot be replaced by a differently signed debug APK. To keep the installed host scores, locally sign the new unsigned release with the **same key as the currently installed version**. Never upload private signing material.
+
 ## Host a session
 
 1. Install a correctly **release-signed** APK of the normal Button Game package.
@@ -17,7 +43,7 @@ The current GitHub Actions workflow builds an installable **debug-signed** APK a
 
 The earlier unrequested **`TEST` package variant has been removed** (commits `31c2718` / `c46ee3f`); current debug and release variants have the same base app ID, but different signatures. Attempting to install a debug APK over a release-signed copy will fail certificate matching. Babuni.dev does **not** require preserving expendable beta test scores; uninstalling may discard them, but is not itself a substitute for verifying proper release signing.
 
-Private original signing material must stay out of GitHub and logs. Confirm the signed release's certificate matches previous installed releases; the source now reports `versionCode = 3` / `versionName = 1.0.2-beta` for this update.
+Private original signing material must stay out of GitHub and logs. Confirm the signed release's certificate matches previous installed releases; the source now reports `versionCode = 4` / `versionName = 1.0.3-beta` for this update.
 
 ## Build current native source
 

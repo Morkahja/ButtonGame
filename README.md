@@ -6,6 +6,8 @@ A one-minute, arcade-style button-smashing game with roaming targets, physical-l
 
 **Project status (26 October 2026): previously tested gameplay and real two-device Wi-Fi multiplayer work according to Babuni.dev.** The new optional **Red Trap Button** is now implemented in source after Babuni.dev's approval, with 10% subsequent red spawns and instant loss preserving earned pending points. The [new complete Android CI build and regression](https://github.com/babunidev/ButtonGame/actions/runs/40365295833) **passed** for version **1.0.2-beta**; original-certificate signing, in-place installation and physical Trap Mode testing are still pending.
 
+**1.0.3-beta source update (26 October 2026):** Following Babuni.dev's successful 1.0.2-beta phone test, the small Traps checkbox has moved beside the bottom Reaction/APM and Play Again controls. It remains checked/unchecked through Game Over and can be changed before replay, but not mid-round. Saved host high scores are visible **before starting**, and a wide desktop browser now places players on the left, game in the center, scores on the right. New Android CI/install confirmation is tracked in [ROADMAP.md](ROADMAP.md).
+
 ## Play and hosting
 
 - The game begins when the player first presses the moving turquoise button; it starts with 60 seconds.

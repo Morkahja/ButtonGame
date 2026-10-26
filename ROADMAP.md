@@ -4,6 +4,16 @@
 
 This is a short **active work list**. Previously tested features must not be repeatedly returned as unfinished QA tasks. The original seven-category checklist is preserved [unchanged as historical evidence](docs/HISTORICAL_CHECKLIST_2026-10-25.md); the [complete Red Trap Button specification](docs/TRAP_MODE.md) is separate.
 
+## Current interface update — 1.0.3-beta (26 October 2026)
+
+- [x] Babuni.dev **installed and tested 1.0.2-beta**: red taps end the game immediately; already-earned score finishes collecting; the red icon is saved; host high scores survive closing/reopening the app and stopping/restarting hosting. Passive +3 timing is observed; keep **10%** trap chance.
+- [x] Move the Traps label and checkbox to the **bottom-left beside Reaction/APM and Play Again**, keep the selected state through Game Over and allow mode changes before replay; lock it during active runs.
+- [x] Show saved host high scores before play starts; preserve full in-game high scores at mobile Game Over.
+- [x] Widescreen responsive layout: live players **left**, game **center**, host high scores **right**; phone layout stays stacked.
+- [x] Bump Android version to **1.0.3-beta / code 4**, and add source regression coverage.
+- [ ] Verify the final 1.0.3-beta CI artifacts and install the new Android build signed with the **currently installed app's signing certificate**.
+- [ ] Quick physical visual check of changed positions and score preview; prior gameplay/Trap Mode tests are already confirmed by Babuni.dev.
+
 ## Completed — confirmed by Babuni.dev on actual devices
 
 - [x] **Button & Quick Strike:** turquoise target, rotation/spawn animations, pulse, impact feedback, shatter, 73 ms Quick Strike, spinning/green dot/double points, Quick Strike sounds.

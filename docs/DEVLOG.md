@@ -1,5 +1,17 @@
 # Button Game — Curated Development Journal
 
+## 2026-10-26 — The first Trap Mode phone test inspires replay control and desktop composition
+
+Babuni.dev installed the first Trap Mode APK and **confirmed actual behavior on the phone**: the initial checkbox appeared; tapping the red target caused immediate Game Over while already-earned points completed their movement into the score balance; passive red-button +3 points appeared at approximately the intended frequency; the high-score row correctly displayed a small red button; and saved high scores persisted after the app was closed/reopened and Android hosting was stopped/restarted. The creator chose to **keep the 10% chance** while testing.
+
+The next discussion was not about increasing complexity. Babuni.dev noticed that the pre-game checkbox was in an inconvenient location and initially described moving it over Reaction/APM. They refined the idea aloud: place the small **Traps label and checkbox to the left of the bottom Reaction/APM and Play Again area**; after Game Over it must remain there, retaining the checked or unchecked mode so players can change the **next** run. The creator briefly considered a spawn-rate slider and dismissed it. AI interpreted this as a permanent footer selector **disabled during active play** and re-enabled after Game Over settlement, keeping the current choice between rounds.
+
+The author also requested saved high scores **below the game before the first round**, and noticed a desktop/landscape layout opportunity: **connected players on the left, the game in the center, high scores on the right**. AI implemented a breakpoint-based CSS grid at wide viewports and retained a single-column mobile layout; the mobile Game Over page still emphasizes its full ranking and hides the duplicate faded lower preview.
+
+The user also asked that every new build/release discussion include **how to pull the code locally** and reminded us of the eventual aim to let other people play on desktop. The existing HTML5 game is already playable from a simple local HTTP server; it can be publicly served as static files later, but its Android-host-owned shared scores do not magically exist without the compatible server. `INSTALL.md` now explains local desktop play, the Android host URL, source pull and signing distinctions.
+
+**Creative attribution and verification:** All interaction/layout requests and rejection of the slider are Babuni.dev's. AI carried out HTML/CSS/JS changes, kept Android assets synchronized, added tests, and bumped the app to **1.0.3-beta (code 4)**. Babuni.dev's real-device observations apply to **1.0.2-beta**; the new selector/sidebar layout still needs its own build and brief visual acceptance.
+
 This is the structured continuation and reading guide to the original [root DEVLOG.md](../DEVLOG.md), which remains intact as a primary historical source. [CHANGELOG.md](../CHANGELOG.md) records implemented change chronology; this journal records *why*, revisions, Babuni.dev direction, AI collaboration, and what remained unverified. Earlier events below are summaries grounded in repository documents rather than newly discovered transcripts.
 
 ## 2026-10-26 — Red Trap Button moves from approved plan to source implementation

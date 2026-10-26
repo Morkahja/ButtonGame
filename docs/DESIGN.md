@@ -1,5 +1,11 @@
 # Button Game — Visual and Interaction Design
 
+## Replay selector and wider-screen composition — 26 October 2026
+
+Following Babuni.dev's actual phone test, the former pre-game Traps checkbox moves to a compact **bottom-left** position next to the Reaction/APM plate and Game Over's Play Again control. Its value remains checked for Trap Mode runs, unchecked for normal runs, and can be switched for the next game. The source disables changes during a round and enables them again once the score settles; no percentage slider is included because the author dismissed it.
+
+When the Android host has saved scores, the lightweight leaderboard now appears **beneath the game before play**. It remains subdued on phones and is hidden on narrow Game Over screens while the full ranking is displayed. On wide landscape browsers a CSS grid places **connected players left**, **game center** and **high scores right**, while keeping the original phone stack. This changes layout, not scoring ownership or gameplay.
+
 **Update — 26 October 2026:** Babuni.dev subsequently authorized full Red Trap Button implementation at **10%** replacement probability, with immediate Game Over and conservation of already-earned pending points. The feature is **implemented in GitHub source**, and the native Android compilation and new trap regression passed in [Actions run 40365295833](https://github.com/babunidev/ButtonGame/actions/runs/40365295833). Any earlier language below saying this mode is not started or not authorized records the **historical status at that time** and is superseded. An Android APK signed with the original release certificate and physical Trap Mode verification remain **pending**. See [the current Red Trap Button specification](TRAP_MODE.md).
 
 Status: **as implemented in current HTML/CSS/JS**. Babuni.dev reports having tested gameplay, sound volume, UI layout and multiplayer on actual phones on 26 October 2026; installation of the next newly built/signed APK remains separate. This document describes existing presentation and intentional behavior; changes to the visual grammar require Babuni.dev review.

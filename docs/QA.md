@@ -1,5 +1,11 @@
 # Button Game — Verification and Release Status
 
+## Babuni.dev's installed Trap Mode acceptance and the next layout check
+
+**Reported device-tested on 2026-10-26 (installed 1.0.2-beta):** red taps immediately end play; pending points collect before submission; trap's +3 points pulse roughly every third of a second; mode icon appears on the leaderboard; hosting scores persist across closing/opening the app and stopping/restarting the Wi-Fi host. The 10% chance is approved for ongoing testing.
+
+**Changed in 1.0.3-beta source (awaiting new-device visual check):** checkbox beside Reaction/APM/Play Again, mode switch available at Game Over, saved leaderboard shown before starting, and desktop players/game/high-score columns. Do not conflate successful native CI with physical verification of these layout changes. To update in place without losing host scores, the new APK must match the installed app's signing certificate.
+
 **Update — 26 October 2026:** Babuni.dev subsequently authorized full Red Trap Button implementation at **10%** replacement probability, with immediate Game Over and conservation of already-earned pending points. The feature is **implemented in GitHub source**, and the native Android compilation and new trap regression passed in [Actions run 40365295833](https://github.com/babunidev/ButtonGame/actions/runs/40365295833). Any earlier language below saying this mode is not started or not authorized records the **historical status at that time** and is superseded. An Android APK signed with the original release certificate and physical Trap Mode verification remain **pending**. See [the current Red Trap Button specification](TRAP_MODE.md).
 
 **Updated 26 October 2026.** Distinguish **Babuni.dev-tested installed application** from **new source build**, CI verification and installation of a new signed APK.

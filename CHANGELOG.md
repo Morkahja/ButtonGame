@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-10-26 — Mode switching at Game Over and desktop sidebars (1.0.3-beta)
+
+- **Babuni.dev tested the installed prior APK:** Traps checkbox, red instant loss, pending score collection, passive +3 numbers, the red high-score icon, and host high-score persistence across app and server restarts worked. Kept the trap probability at 10%.
+- Relocated the small Traps label and checkbox to the **bottom-left of the game next to Reaction/APM and Play Again**. Remains visible at Game Over with its previous checked state; can be changed before starting a new round, but not during one. Babuni.dev discarded the idea of a trap-frequency slider.
+- Made host high scores appear **before the first tap** below the game where available. On wide desktops, arrange **players/game/scores** into left/center/right columns while retaining the stacked phone presentation.
+- Updated root and Android mirror assets; added test assertions; bumped version to `1.0.3-beta` (code `4`). No change to normal scoring, red probability or host persistence.
+- **Release status:** Full build, original-signature continuity and installed-device visual check remain separate from source status.
+
 ## 2026-10-26 — Red Trap Button implemented in source (1.0.2-beta)
 
 - On Babuni.dev's authorization, added the optional pre-game Traps toggle and a matching red four-hole button. The start-screen button stays normal; following spawns use a 10% independent red replacement probability.

@@ -1,5 +1,13 @@
 # Button Game — Decisions and Open Questions
 
+## D-022 — Persistent Trap selector for replay; three-column desktop presentation
+
+- **Direct 2026-10-26 Babuni.dev feedback:** 1.0.2-beta Trap Mode and host-score persistence tested successfully on a phone; retain the existing **10% chance**.
+- **Author decision:** Move a **small Traps label and checkbox to the left of Reaction/APM** beside the Play Again region. Preserve its checked/unchecked state across Game Over and allow editing for the **next** round. A briefly considered rate slider was **rejected**.
+- **Author decision:** Saved high scores should be visible **before** play starts, below the game on phones. On desktop, arrange players **left**, game **center**, high scores **right**.
+- **AI implementation:** Small permanent footer control, locked during active play; render host preview whenever scores are available, hide duplicate lower preview on narrow Game Over, and use wide-screen CSS grid.
+- **State:** Implemented in version 1.0.3-beta source; CI and on-device layout verification are separate. Static desktop serving does not provide the Android score API.
+
 **Update — 26 October 2026:** Babuni.dev subsequently authorized full Red Trap Button implementation at **10%** replacement probability, with immediate Game Over and conservation of already-earned pending points. The feature is **implemented in GitHub source**, and the native Android compilation and new trap regression passed in [Actions run 40365295833](https://github.com/babunidev/ButtonGame/actions/runs/40365295833). Any earlier language below saying this mode is not started or not authorized records the **historical status at that time** and is superseded. An Android APK signed with the original release certificate and physical Trap Mode verification remain **pending**. See [the current Red Trap Button specification](TRAP_MODE.md).
 
 **Notation:** Accepted = established Babuni.dev direction or documented decision. Implemented = present in source. Verified = actually checked at the stated level. Proposed = not authorized. Retrospective entries rely on [original DEVLOG](../DEVLOG.md), [CHANGELOG](../CHANGELOG.md), and Babuni.dev-provided 2026-10-26 to-do list, not an invented transcript.
