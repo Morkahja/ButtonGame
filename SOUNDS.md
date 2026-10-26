@@ -1,28 +1,30 @@
 # Button Game — Audio Cues and Asset Status
 
-**State as of 2026-10-26:** All three newer custom recordings are in GitHub under root `sfx/`, but are **not yet present in the packaged web/Android asset trees**. The current game code references them and falls back to older recordings when unavailable.
+**State as of 2026-10-26:** All ten original OGG sound files (including three custom recordings) are committed under root `sfx/`, mirrored in `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/`. GitHub CI now synchronizes and checks the exact bytes inside the debug and unsigned release APKs; successful execution of the latest workflow must be checked separately.
 
 | Audio | Trigger | Current source |
 | --- | --- | --- |
 | `impact1.ogg`–`impact4.ogg` | Ordinary button hits | `sfx/` and `assets/sfx/`; bundled Android copies exist |
 | `Bell1.ogg`–`Bell3.ogg` | Eligible combination milestones such as 7, 14, 21 and 37 | `sfx/` and `assets/sfx/`; bundled Android copies exist |
-| `4273.ogg` | Special center-stage 42/73 reveal | `sfx/4273.ogg` **only** |
-| `QuickStrikepoints.ogg`, `QuickStrikepoints1.ogg` | Randomly chosen successful Quick Strike tap cue | `sfx/` **only** |
+| `4273.ogg` | Special center-stage 42/73 reveal | Root `sfx/`, browser and Android mirrored paths |
+| `QuickStrikepoints.ogg`, `QuickStrikepoints1.ogg` | Randomly chosen successful Quick Strike tap cue | Root `sfx/`, browser and Android mirrored paths |
 
-The custom files are referenced by `game.js` at relative paths inside `assets/sfx/`. The earlier signed, manually packaged APKs historically included these recordings. A clean current GitHub checkout / CI build cannot reproduce them until source files are copied into `assets/sfx/` and the Android `www/assets/sfx/` mirror.
+The custom files are referenced by `game.js` at relative paths inside `assets/sfx/`. Earlier signed, manually packaged APKs included them; the current source now preserves that same content in reproducible web and Android build locations. New signed release delivery still requires the original certificate outside GitHub.
 
 ## Implementation notes
 
 - Playback uses the Web Audio API, preloaded buffers, impact pitch variation and softened attacks for frequent input.
-- The original special reveal and Quick Strike playback gains were adjusted during development to avoid drowning out ordinary cues; physical phone loudness is still not verified on the newest source build.
+- The original special reveal and Quick Strike playback gains were adjusted during development to avoid drowning out ordinary cues. The creator reports **actual phone volume, gameplay and UI have been tested and work** in the installed version; a new rebuilt/signed APK has not yet been installed for independent confirmation.
 - A qualifying combination milestone plays the appropriate standard cue; the two center-stage special reveals choose `4273.ogg` instead of duplicating a standard bell at that exact moment.
 - Fallback keeps the game playable if a custom recording fails to load. Fallback is **not** evidence of complete sound packaging.
 
 ## Required release checks
 
-1. Resolve canonical source and sync behavior for `sfx/` → `assets/sfx/` → Android packaged assets.
-2. Have GitHub Actions check all custom OGG paths **inside** the assembled APK and trigger on `sfx/**` changes.
-3. Verify cue routing, no missing-file errors and volume balance on an Android phone.
-4. Do not remove or transcode the creator-supplied originals without a documented reason and approval.
+1. **Done in source:** Canonical `sfx/` recordings mirror into both browser and Android asset folders.
+2. **Done in CI configuration:** Synchronization on each build, `sfx/**` change triggers and byte-for-byte checks inside both APKs.
+3. **Creator-reported done:** Sound output, volume balance, interface and gameplay tested on the phone.
+4. **Still pending:** Confirm the new CI build result and original-certificate sign/install the new release update.
+
+Do not remove or transcode the creator-supplied originals without approval.
 
 See [ROADMAP.md](ROADMAP.md) and [docs/QA.md](docs/QA.md).

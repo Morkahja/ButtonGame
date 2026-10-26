@@ -2,7 +2,7 @@
 
 A one-minute, arcade-style button-smashing game with roaming targets, physical-looking number combinations and deliberately theatrical score collection. The game is a creative project directed by its creator, **Babuni.dev**. This repository preserves the original Flash artifact, earlier HTML5 reconstruction, current browser game, and native Android Wi-Fi host.
 
-**Project status (26 October 2026): playable beta; release update and physical multiplayer verification pending.** Code and CI success are not a claim that the newest version has been signed, delivered, or verified on two phones.
+**Project status (26 October 2026): gameplay and real two-device Wi-Fi multiplayer tested and working according to the creator.** Reproducible sound packaging is fixed in GitHub source; CI verification and the next original-certificate signed APK release remain separate steps.
 
 ## Play and hosting
 
@@ -20,8 +20,8 @@ The web game source is `index.html` and `game.js`, with assets under `assets/`. 
 | --- | --- |
 | `game.js`, `index.html`, `assets/` | Current HTML5 gameplay and presentation |
 | `android/` | Native Android host, API, WebView and build |
-| `sfx/` | Source library including all three custom recordings |
-| `scripts/sync-www.sh` | Existing web-to-Android copy helper; currently does **not** include the three `sfx/`-only recordings |
+| `sfx/` | Canonical source for all ten OGG recordings, mirrored into browser/Android assets |
+| `scripts/sync-www.sh` | Copies the web source and original OGGs into browser/Android assets |
 | `Game.swf`, `Game.html` | Preserved original Flash-era material |
 | `ChatGPT Remake/` | Earlier reconstruction; **not** the current game |
 | `tests/` | Committed regression tests |
@@ -38,7 +38,7 @@ The web game source is `index.html` and `game.js`, with assets under `assets/`. 
 - [docs/DECISIONS.md](docs/DECISIONS.md) — recorded creator decisions, rejected approaches and open choices
 - [docs/DESIGN.md](docs/DESIGN.md) — visual and interaction specifications
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) — runtime and data flow
-- [docs/QA.md](docs/QA.md) — verification ledger and reproducible manual checks
+- [docs/QA.md](docs/QA.md) — creator-confirmed device testing and release check ledger
 - [docs/CONTENT.md](docs/CONTENT.md) — future portfolio presentation and evidence inventory
 - [docs/AI_COLLABORATION.md](docs/AI_COLLABORATION.md) — authorship and AI collaboration conventions
 - [INSTALL.md](INSTALL.md) — APK and Wi-Fi use
@@ -48,7 +48,7 @@ The web game source is `index.html` and `game.js`, with assets under `assets/`. 
 
 CI currently runs `node --check game.js`, `node tests/live-leaderboard-refresh.cjs` and Gradle `assembleDebug assembleRelease`. The workflow has compiled the native app, but it is **not** a complete gameplay or hardware test.
 
-To synchronize current web files manually: `./scripts/sync-www.sh`; then build under `android/` with Gradle. **Known blocker:** that helper copies sounds from `assets/sfx/`, while the three newer OGGs currently exist only under `sfx/`. A clean GitHub build therefore lacks those three cues until packaging is fixed. See [ROADMAP.md](ROADMAP.md).
+To synchronize current web files manually: `bash scripts/sync-www.sh`; then build under `android/` with Gradle. All ten OGGs are now committed and synchronized from canonical `sfx/`, and CI compares the exact recordings inside both compiled APK variants. See [ROADMAP.md](ROADMAP.md) for remaining **release signing and delivery**, not redundant feature rework.
 
 The active Android application ID is `com.babunigaming.buttongame`. The separate TEST application variant introduced in an earlier experiment was subsequently removed. Release upgrades require the original signing certificate, held outside GitHub; unsigned or debug-signed CI artifacts cannot upgrade an existing release-signed installation.
 

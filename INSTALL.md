@@ -9,7 +9,7 @@ Developer / creative direction: **Babuni.dev**. Current normal package: `com.bab
 3. Guests join the displayed `http://<host-ip>:8766/` URL or scan the QR code while on the same reachable network.
 4. Play from host and guest. The Android server owns the high-score database; guests submit final scores to it.
 
-Some guest/café Wi-Fi networks isolate clients; a personal hotspot may help. Client-to-host access and backgrounding must be verified on the actual devices.
+The creator has tested host-and-guest Wi-Fi play, live player statistics, high-score submission and automatic Game Over refresh on two actual devices and reports them working.
 
 ## Release APK versus CI artifacts
 
@@ -17,7 +17,7 @@ The current GitHub Actions workflow builds an installable **debug-signed** APK a
 
 The earlier unrequested **`TEST` package variant has been removed** (commits `31c2718` / `c46ee3f`); current debug and release variants have the same base app ID, but different signatures. Attempting to install a debug APK over a release-signed copy will fail certificate matching. The creator does **not** require preserving expendable beta test scores; uninstalling may discard them, but is not itself a substitute for verifying proper release signing.
 
-Private original signing material must stay out of GitHub and logs. Confirm the signed release's certificate matches previous installed releases; increment `versionCode` for the release process (current source reports code 1 / name `1.0.0-beta`).
+Private original signing material must stay out of GitHub and logs. Confirm the signed release's certificate matches previous installed releases; the source now reports `versionCode = 2` / `versionName = 1.0.1-beta` for this update.
 
 ## Build current native source
 
@@ -31,9 +31,9 @@ cd android
 ./gradlew assembleDebug assembleRelease
 ```
 
-**Known incomplete build step (26 October 2026):** The source recordings `sfx/4273.ogg`, `sfx/QuickStrikepoints.ogg` and `sfx/QuickStrikepoints1.ogg` are committed, but missing under `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/`. The current script only copies from `assets/sfx/`; the CI workflow does not run it before Gradle and does not watch `sfx/**`. Until corrected, a clean CI build has fallback sounds but is **not custom-audio complete**. See [ROADMAP.md](ROADMAP.md).
+**Audio packaging fixed in source (26 October 2026):** All ten original OGG recordings, including `4273.ogg`, `QuickStrikepoints.ogg` and `QuickStrikepoints1.ogg`, are now present under `sfx/`, `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/`. `scripts/sync-www.sh` treats `sfx/` as the canonical originals and synchronizes both targets. GitHub Actions runs the script and checks actual audio bytes inside both APKs. **Confirm the new build run passes before relying on its artifacts.**
 
-GitHub currently has no published release entry for the newest corrected APK. CI's successful Kotlin/JavaScript compile does not prove signed-release installation or two-phone networking.
+No newly signed APK for this source revision has yet been established. GitHub CI compiles debug and unsigned release packages; only the creator's original signing certificate (kept outside GitHub) can produce an installable update of the existing release-signed app. The existing installed app's two-phone behavior is confirmed by the creator, independently of the still-pending new-build signing.
 
 ## High-score ownership and format
 
@@ -43,4 +43,4 @@ To reset all host app data, Android Settings → Apps → Button Game → Storag
 
 ## Verification before distribution
 
-Inspect APK entry list for both `assets/www/game.js` and `assets/www/index.html` **and all ten intended audio OGG files**; confirm native classes, hash and signature. Install on a real device and run [docs/QA.md](docs/QA.md), especially guest score submission and automatic host Game Over refresh within about three seconds. A release artifact and successful device check must be recorded in [CHANGELOG.md](CHANGELOG.md) and [docs/DEVLOG.md](docs/DEVLOG.md).
+Inspect APK entry list for both `assets/www/game.js` and `assets/www/index.html` **and all ten intended audio OGG files**; confirm native classes, hash and signature. The existing installed app's phone checks have already been completed by the creator. For the **newly signed version**, a brief installation/launch/audio/Wi-Fi smoke test is enough. Refer to [docs/QA.md](docs/QA.md). A release artifact and successful device check must be recorded in [CHANGELOG.md](CHANGELOG.md) and [docs/DEVLOG.md](docs/DEVLOG.md).

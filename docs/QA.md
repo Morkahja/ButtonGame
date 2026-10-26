@@ -1,66 +1,44 @@
-# Button Game — Verification Ledger
+# Button Game — Verification and Release Status
 
-**Baseline:** GitHub `main` at `d5ce766`, 2026-10-26. Tests not run during this documentation task are **not marked passed**. This is a working acceptance plan, not a certificate.
+**Updated 26 October 2026.** Distinguish **creator-tested installed application** from **new source build**, CI verification and installation of a new signed APK.
 
-## Evidence actually checked
+## Creator-confirmed physical tests
 
-| Area | Evidence | Status |
-| --- | --- | --- |
-| Native Kotlin debug + unsigned release compile | [GitHub Actions run 40247849170](https://github.com/babunidev/ButtonGame/actions/runs/40247849170) for `c46ee3f` | CI passed |
-| Node JS parsing + Game Over refresh condition | Same CI workflow, `tests/live-leaderboard-refresh.cjs` | CI passed |
-| Root vs Android web source files | GitHub head source comparison | Byte-equal at prior audit; recheck before release |
-| Source custom OGG files | `sfx/` listing at `d5ce766` | Present in source library |
-| Packaged custom OGG files | `assets/sfx/` and Android `www/assets/sfx/` tree inspection | **Missing**; packaging unresolved |
-| Newest signed installable update with refresh | No matching completed release artifact established | **Open** |
-| Real guest/host network behavior | No two-device verification evidence | **Open** |
+The creator reported directly on 26 October 2026 that the following were **tested and work** on actual devices:
 
-Note: the new `d5ce766` sound commit alone did not trigger Android CI because the workflow path filter excludes `sfx/**`.
+| Area | Reported result |
+| --- | --- |
+| Target graphics, spawn, Quick Strike, shatter and both strike sounds | Tested; works |
+| Floating-number collisions/fusion/score collector and special 21→42 / 37→73 | Tested; works |
+| Timer bonuses, timer balance, HUD, Game Over, layout and replay | Tested; works |
+| Guest → Android-host score POST and shared ranking | Tested; works |
+| Already-open Game Over leaderboard auto-refresh | Tested; refreshes every 3 seconds |
+| Four final statistics persisted with scores | Creator reports saved correctly |
+| Hosting restart persistence | Tested; survives restart |
+| Two-device Wi-Fi play, live player list and statistics | Tested; works |
+| Sound volume, gameplay and interface on actual phones | Tested; works |
+| Server startup and port collisions | No incidents reported in actual use |
 
-## Manual host-and-guest acceptance
+These are **user observations**, not independently instrumented logs. They remove repeated manual testing from the active to-do list for the **already-installed working version**.
 
-| ID | Procedure | Pass criterion | Status |
-| --- | --- | --- | --- |
-| LAN-01 | Host phone: Serve on Wi-Fi; guest: open QR or URL | Page loads without host service error | Not run |
-| LAN-02 | Guest completes round; submits score | Clear success; one host ledger entry | Not run |
-| LAN-03 | Leave host on Game Over before guest submits | New guest entry appears in about 3 seconds without restarting | Not run |
-| LAN-04 | Compare both devices | Same ranking and four stats (points, reaction, APM, elapsed time) | Not run |
-| LAN-05 | Restart host app and start hosting again | Previous host results remain present | Not run |
-| LAN-06 | Drop Wi-Fi mid-submission and recover | Error and retry; no fabricated success or unintended duplicate | Not run |
-| LAN-07 | Background/reopen Android activity | Real hosting state represented; no false "off" state | Not run |
-| LAN-08 | Try starting service with port occupied | Controlled failure; no crash | Not run |
+## Code / CI evidence
 
-## Gameplay acceptance
+- Previously compiled Android debug and unsigned release APKs: [GitHub Actions 40247849170](https://github.com/babunidev/ButtonGame/actions/runs/40247849170), **passed**.
+- The guest Game Over three-second refresh regression is committed in `tests/live-leaderboard-refresh.cjs`.
+- On 26 October 2026, source packaging and CI checks were updated: all original OGGs are mirrored into both browser and Android web assets; CI will compare source/mirror bytes and check the **10 actual OGG payloads in both assembled APKs**.
+- The new release candidate is `versionCode = 2`, `versionName = 1.0.1-beta`, under the unchanged `com.babunigaming.buttongame` application ID.
+- **Latest build verification:** [GitHub Actions 40325603457](https://github.com/babunidev/ButtonGame/actions/runs/40325603457) started for the packaging commit; confirmation is pending until the actual outcome is checked.
 
-| ID | Behavior | Status |
-| --- | --- | --- |
-| GAME-01 | First press starts 60 s; timed spawning and randomized tilt | Physical QA open |
-| GAME-02 | First hit in 73 ms Quick Strike window and continuing 2× taps | Physical QA open |
-| GAME-03 | Shatter delay, recognizable fragments and scoring throughout | Physical QA open |
-| GAME-04 | Floating values collide, merge gradually, and settle without duplicate credit | Broader automated coverage open |
-| GAME-05 | 21→42 / 37→73 trigger, sound and exact value payout | Physical QA open |
-| GAME-06 | +2 s (7), +3 s (14), +5 s (42), +4 s (73); no direct time bonus for 21/37 | Broader automated coverage open |
-| GAME-07 | End-of-round waits for pending score and time settlement | Broader automated coverage open |
-| GAME-08 | Play Again resets all state and no stale submission | Physical QA open |
-| UI-01 | Four HUD stats readable; 50% fading leaderboard below playfield | Layout QA open |
-| UI-02 | Game Over scrollbar hidden while touch scrolling works | Layout QA open |
-| UI-03 | Small/rotated screens, overlay alignment and app backgrounding | Layout QA open |
-| AUDIO-01 | Special 42/73 and Quick Strike recordings audible and balanced | Packaging + physical QA open |
+## Only remaining release checks
 
-## Future automated test work
+1. Confirm the source-synchronized latest Gradle debug/unsigned-release build and tests pass.
+2. Original-certificate sign the new **release** artifact outside GitHub; never expose signing material.
+3. Verify exact APK package identity, signer, version, file integrity, and ordinary upgrade installation; quickly open the new build and confirm audio/gameplay/Wi-Fi still work.
 
-- Run a native host API integration test for POST/GET JSON, ordering, field ranges, and cross-client consistency.
-- Test persistent file interruption, corruption and recovery (after atomic storage is implemented).
-- Test concurrent guest submissions, collisions of identity, malformed requests and basic denial-of-service conditions.
-- Expand deterministic browser tests beyond polling conditions: points/time conservation, collisions, transforms, replay.
-- Make CI verify every required sound file exists inside assembled APK, not merely its web entry points.
-- Add a repeatable on-device smoke test before declaring a signed release delivered.
+A debug-signed APK or unsigned CI artifact is not an update for the installed release-signed app. A new signed release has **not** been produced by this source/CI change.
 
-## Release acceptance
+## No unnecessary QA scope expansion
 
-1. Confirm exact source commit, complete audio bundle, package ID `com.babunigaming.buttongame` and incremented version.
-2. Build latest native release, verify APK assets/classes and sign with same original certificate; keep keys private.
-3. Verify signature, hash, install/upgrade compatibility and launch on device.
-4. Execute LAN-01 through LAN-06 at minimum and audio/gameplay smoke checks.
-5. Publish versioned signed APK with immutable commit/release link and attach results to changelog and devlog.
+No additional score retry feature, contrived server conflict reproduction, advanced anti-cheat, or new multiplayer architecture is required for this user-tested casual game unless a concrete issue arises and the creator asks to address it.
 
-Unobserved test results must remain "Not run"; do not infer PASS from an earlier APK, mock or workflow.
+Trap Mode is **entirely not started** and is documented separately at [TRAP_MODE.md](TRAP_MODE.md).

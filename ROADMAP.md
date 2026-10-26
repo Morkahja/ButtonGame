@@ -1,90 +1,50 @@
-# Button Game — Roadmap and Active Work
+# Button Game — Current Project To-Do
 
-**Baseline:** 2026-10-26; checked against `main` at `d5ce766` and the creator-provided "Complete To-Do List". A checked-in implementation is not a verified device behavior, and a successful unsigned build is not a delivered signed release.
+**Updated 26 October 2026 from the creator's own device-testing report and the current GitHub source.**
 
-## Status key
+This is a short **active work list**. Previously tested features must not be repeatedly returned as unfinished QA tasks. The original seven-category checklist is preserved [unchanged as historical evidence](docs/HISTORICAL_CHECKLIST_2026-10-25.md); the [complete Red Trap Button specification](docs/TRAP_MODE.md) is separate.
 
-- **Implemented (source):** code exists; may still need physical testing.
-- **Verified (CI):** named automated check has passed.
-- **Open:** actionable work remains.
-- **Proposed:** idea only; no implementation authorization.
+## Completed — confirmed by the creator on actual devices
 
-## Milestone 0 — Existing Android update (highest priority; OPEN)
+- [x] **Button & Quick Strike:** turquoise target, rotation/spawn animations, pulse, impact feedback, shatter, 73 ms Quick Strike, spinning/green dot/double points, Quick Strike sounds.
+- [x] **Floating numbers & combinations:** emission, physics, full-label collisions, mergers, visible score collection, 21→42 and 37→73, golden highlights, milestone bells, special sound effects.
+- [x] **Timer & interface:** 7/14/42/73 bonuses (+2/+3/+5/+4 s), golden timer/score banks, HUD, Reaction/APM, Game Over, replay, phone presentation.
+- [x] **High scores:** real guest-to-host submission works; host Game Over ranking updates automatically every three seconds; the four final statistics are saved correctly and persist across hosting restarts.
+- [x] **Two-device Wi-Fi multiplayer:** guest browser joining, connected-player list, live player statistics and shared leaderboard work.
+- [x] **Physical-device QA of existing installed game:** gameplay, interface, sound volume and multiplayer tested and reported working by the creator.
+- [x] **Source OGG recordings present:** all three custom OGGs were already in root `sfx/`.
+- [x] **Documentation baseline:** README, concept, decisions, design, architecture, developer guidance, development journal and recovered historical checklists.
 
-The objective is **one complete, correctly signed update of the normal Button Game app**, containing the latest guest Game Over refresh fix and every intended sound. Do not create a parallel TEST package, preserve expendable beta scores, or add new modes.
+These results are **creator-reported device verification of the installed version**. They are not automatically proof that a newly rebuilt APK has been installed or signed. See [docs/QA.md](docs/QA.md).
 
-- [ ] **Package three recordings:** `sfx/4273.ogg`, `sfx/QuickStrikepoints.ogg` and `sfx/QuickStrikepoints1.ogg` currently exist in GitHub, but not under `assets/sfx/` or the Android `www/assets/sfx/` bundle.
-- [ ] Update `scripts/sync-www.sh` so the canonical sound source is copied correctly; synchronize HTML, JavaScript and all audio into Android before compiling.
-- [ ] Update `.github/workflows/android-build.yml` to synchronize, verify exact required asset entries, and trigger when `sfx/**` changes.
-- [ ] Build the latest native unsigned release using the established Gradle pipeline.
-- [ ] Sign using the **original** release certificate outside committed source; verify APK package ID, signature/certificate continuity and integrity.
-- [ ] Establish incrementing `versionCode` and release naming; current `versionCode = 1` / `versionName = 1.0.0-beta`.
-- [ ] Deliver an installable, verified signed `.apk` for the **existing** package; preferably publish to a persistent GitHub release after verifying the artifact.
+## Current release work
 
-**Existing baseline:** Android build workflow and Game Over polling code are implemented. CI run [40247849170](https://github.com/babunidev/ButtonGame/actions/runs/40247849170) passed on the commit that removed the TEST variant. The subsequent `sfx/` source commit `d5ce766` did not trigger the workflow (no `sfx/**` path trigger). Earlier locally signed packages are historical artifacts, not evidence that the newest update has been signed and delivered.
+- [x] Copy all three custom OGGs to both `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/`. Preserve bytes from canonical `sfx/`.
+- [x] Update `scripts/sync-www.sh` to include original recordings; update Android CI to sync web assets and check exact sounds in debug/unsigned-release APKs.
+- [x] Increment Android version to `versionCode = 2` and `versionName = 1.0.1-beta` for the new native build.
+- [ ] **Confirm the new GitHub Actions native debug/unsigned-release build passes**, including all ten sounds and existing leaderboard regression. Build: [40325603457](https://github.com/babunidev/ButtonGame/actions/runs/40325603457).
+- [ ] **Sign the new release using the original certificate** (held outside this repository) and verify update installation compatibility.
+- [ ] **Deliver/install the signed normal-package APK**; a brief smoke test of that *new build* is sufficient. Do not introduce a separate TEST app.
 
-## Milestone 1 — Two-device multiplayer acceptance (OPEN)
+## Red Trap Button — entirely not started
 
-- [ ] Host on Android, join from a second device on the same Wi-Fi.
-- [ ] Submit guest score; verify clear acknowledgment and no separate guest-owned score database.
-- [ ] Leave host on its Game Over screen; verify guest entry appears automatically within roughly **3 seconds** of a successful host submission (allow network scheduling margin).
-- [ ] Compare guest/host rankings and all four final statistics: Points, Reaction (ms), APM and Session Time.
-- [ ] Restart host and a hosting session; verify persisted records return.
-- [ ] Simulate network loss; verify failure message and retry without false success.
-- [ ] If a score remains absent after a fresh host leaderboard load, inspect POST and native storage rather than assuming another UI refresh defect.
-- [ ] Confirm Quick Strike and 42/73 special audio output and volume on the actual device.
+The nine-item design is preserved without changing gameplay. [Full checklist and rules](docs/TRAP_MODE.md).
 
-## Milestone 2 — Host hardening (OPEN; prioritize reproduced failures)
+- [ ] Pre-game Traps checkbox/red button icon.
+- [ ] Random red replacement spawns using normal position, lifespan, rotation and shatter.
+- [ ] Immediate Game Over if clicked; untouched traps shatter and allow next spawn.
+- [ ] Passive +3 points every ⅓ second (9/s) from center through ordinary number physics and fusion.
+- [ ] Save Traps-enabled state on host high scores and display the red icon beside qualifying names.
 
-- [ ] Handle HTTP bind/port 8766 failures without crashing `HostService` or reporting false success.
-- [ ] Reconcile UI hosting state with the actual service after reopening/recreating `MainActivity`.
-- [ ] Gate/retry WebView game loading until the server responds.
-- [ ] Make `ScoreStore` writes atomic; expose a recoverable error on corrupt data.
-- [ ] Validate score/post fields, ranges, name length and request sizes; consider sensible request throttling.
-- [ ] Decide which anti-forgery measures suit friendly LAN play. A client-provided score is **not** intrinsically verifiable.
-- [ ] Disable WebView debugging in release builds.
+**Not part of the current APK update.** The nine exact original tasks remain unchecked in `docs/TRAP_MODE.md`.
 
-## Milestone 3 — Gameplay and quality verification (OPEN)
+## Maintenance and portfolio documentation
 
-- [ ] Test spawn distribution, tilts, tap response, 73 ms Quick Strike, 2× score and early presses.
-- [ ] Test delayed crack/shatter and clicks through destruction.
-- [ ] Test floater collision, merges, pending-value conservation and end-of-round settlement.
-- [ ] Test 21 → 42 and 37 → 73 transforms and exact associated score/time bonuses (7/14/42/73).
-- [ ] Test replay/reset state and no duplicate score posting.
-- [ ] Test portrait/landscape layout, HUD overlap, leaderboard scroll, 50% fade/gradient and background/foreground recovery.
-- [ ] Expand CI beyond the one committed leaderboard polling regression; add API, persistence and multi-client integration testing.
+- [ ] Keep `CHANGELOG.md`, `docs/DEVLOG.md` and this roadmap aligned with **actual** released changes, not hypothetical fixes.
+- [ ] Collect publication-safe gameplay screenshots/video and the story of development for babuni.dev when desired.
 
-See [docs/QA.md](docs/QA.md) for cases and current evidence.
+## Explicitly not active tasks
 
-## Milestone 4 — Documentation and presentation
+Do **not** create a new score-submission retry system based on a one-off old bug. Do **not** turn hypothetical bind conflicts, startup failures, score-file corruption or anti-cheat hardening into mandatory milestones for this simple game. The creator reports no server startup or port conflict issues. Additional complexity requires a real demonstrated problem or a new creator request.
 
-- [x] Create a documentation baseline: root README, concept, roadmap, development rules, structured project history, design, architecture, decisions, content and collaboration references. (Documentation commit, 2026-10-26.)
-- [x] Keep existing `DEVLOG.md` and `CHANGELOG.md` as primary historical records rather than replacing them.
-- [ ] Update status after each actual build, install and device check with commit/release references.
-- [ ] Prepare portfolio-safe imagery, original-to-current evolution, and representative video after validation.
-
-## Historical and exploratory backlog — NOT scheduled for current release
-
-- **Red Trap Button / Trap Mode:** **entire feature NOT STARTED**. The creator recovered a complete [nine-item checklist](docs/TRAP_MODE.md): Traps checkbox/red icon; random replacements; normal spawn position/lifespan/rotation/destruction; immediate Game Over if tapped; untouched expiry/shatter/next spawn; +3 center-emitted passive points every ⅓ second (9/s) through ordinary physics, expiry and fusion; persistent mode flag on host high scores; small red button beside relevant leaderboard names. This is a documented future game mode, **not the immediate APK release task**.
-- Bluetooth hosting.
-- True peer-to-peer multiplayer.
-- Optional in-app reset of high scores.
-
-The above are research/design topics, **not release blockers or authorization to implement**.
-
-## Historical research dependency — not a feature-development task
-
-- [x] **Preserve the recovered historical seven-category checklist** with the earlier six documented Trap Mode requirements in [docs/HISTORICAL_CHECKLIST_2026-10-25.md](docs/HISTORICAL_CHECKLIST_2026-10-25.md). The source is creator-pasted historical text, **not** a retrieved full transcript.
-- [ ] **If accessible, obtain the complete original archived conversation or original creator-authored notes** to resolve remaining trap spawn probability, race conditions and Game Over score-settlement details, historical debates and omissions from the condensed checklist. Do not invent those missing rules or convert archived ideas into new implementation tasks without the creator's current direction.
-
-Existing shipped-feature release work and the approved host-owned Wi-Fi model remain the practical roadmap. Any “future feature” mentioned only in a generated audit is not automatically creator-approved.
-
-## Historical planning evidence: original seven categories
-
-The creator recovered a checklist dated **25 October 2026** with seven original sections: (1) Button & Quick Strike, (2) Floating Numbers & Combinations, (3) Timer & Interface, (4) High Scores & Session Statistics, (5) Trap Mode, (6) Multiplayer & Networking, and (7) Release & Quality Assurance. The recovered task wording is archived in [docs/HISTORICAL_CHECKLIST_2026-10-25.md](docs/HISTORICAL_CHECKLIST_2026-10-25.md).
-
-This living roadmap must not be misrepresented as that original checklist. It separates historical items already implemented, the intentionally cancelled old-score compatibility requirement, exploratory ideas, and newer AI recommendations from current creator priorities.
-
-## Already implemented: do not relist as missing features
-
-Current HTML5 game; Android NanoHTTPD hosting and QR join; native v2 host-owned score fields; POST/GET leaderboard API; three-second Game Over polling code and CI regression; in-play leaderboard preview; Quick Strike, shatter, floaters and combinations; replay; sound cue routing; native Android compilation. Separately track **integration, packaging, signing and verification** still required for these.
+Exploratory alternative network approaches are historical ideas recorded in [CONCEPT.md](CONCEPT.md) and [docs/DECISIONS.md](docs/DECISIONS.md), **not roadmap milestones**.
