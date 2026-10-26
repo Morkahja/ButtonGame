@@ -83,3 +83,5 @@ The three OGGs have since been committed to root `sfx/`; packaged web/Android as
 **Related current documents:** [Concept](../CONCEPT.md), [Roadmap](../ROADMAP.md), [Design](DESIGN.md), [Decisions](DECISIONS.md), [Development journal](DEVLOG.md).
 
 **Historical integrity:** This copy contains the seven recovered categories with their task wording preserved. Commentary and later corrections are explicitly separated.
+
+**Later recovered detail (26 October 2026):** The creator provided a separate **nine-item Red Trap Button feature checklist** in [TRAP_MODE.md](TRAP_MODE.md). It supplements the original six-item historical summary with ordinary spawn/lifespan/rotation/shatter parity, untouched trap expiry and the next spawn, center-origin passive points and a small red icon beside qualifying leaderboard names. The entire feature is **not started**. This later detail is not silently inserted into the original seven-category checklist.
