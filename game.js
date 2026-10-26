@@ -13,6 +13,10 @@
   const FPS = 15;
   const FRAME_MS = 1000 / FPS;
   const BASE_DURATION_MS = 60000;
+  const TRAP_CHANCE = 0.10;
+  const TRAP_POINT_INTERVAL_MS = 1000 / 3;
+  const RED_BUTTON_IMAGE = "assets/button-red.svg";
+  const NORMAL_BUTTON_IMAGE = "assets/button.svg";
   const FADE_START_ALPHA = 100;
   const FADE_END_ALPHA = 5;
   const SPAWN_ANIM_MS = 320;
@@ -92,6 +96,8 @@
   ];
 
   const feind = document.getElementById("feind");
+  const trapOptionEl = document.getElementById("trap-option");
+  const trapToggleEl = document.getElementById("traps-toggle");
   const pointSourceEl = document.getElementById("point-source");
   const punkteEl = document.getElementById("punkte");
   const scoreBufferEl = document.getElementById("score-buffer");
@@ -408,10 +414,10 @@
       id: sessionId,
       name: getLiveName(),
       score: score,
-      timeLeft: Math.max(0, remainingSeconds()),
+      timeLeft: trapEnding ? 0 : Math.max(0, remainingSeconds()),
       reactionMs: currentReactionValue(),
       apm: currentApmValue(),
-      playing: started && !gameOver,
+      playing: started && !gameOver && !trapEnding,
     };
     fetch("/api/presence", {
       method: "POST",
@@ -474,6 +480,11 @@
   let startTime = 0;
   let gameOver = false;
   let roundExpired = false;
+  let trapsEnabled = false;
+  let trapActive = false;
+  let trapEnding = false; // Game Over shown immediately, earned points still settle.
+  let trapLossAt = 0;
+  let nextTrapEmissionAt = 0;
   let x = STAGE / 2;
   let y = STAGE / 2;
   let rotation = 0;
@@ -563,7 +574,7 @@
     SHATTER_CELLS.forEach(function (poly, i) {
       const image = document.createElement("img");
       image.className = "button-piece";
-      image.src = "assets/button.svg";
+      image.src = trapActive ? RED_BUTTON_IMAGE : NORMAL_BUTTON_IMAGE;
       image.alt = "";
       image.draggable = false;
       image.style.clipPath = polygonCss(poly);
@@ -616,6 +627,34 @@
       shard.el.style.transform = "translate(" + (shard.tx * dist).toFixed(2) + "px, " +
         (shard.ty * dist).toFixed(2) + "px) rotate(" + (shard.spin * turn).toFixed(2) + "deg)";
     }
+  }
+
+  function shouldSpawnTrap(enabled, randomValue) {
+    return !!enabled && randomValue < TRAP_CHANCE;
+  }
+
+  function setTrapActive(enabled) {
+    trapActive = !!enabled;
+    feind.classList.toggle("is-trap", trapActive);
+    feind.setAttribute("aria-label", trapActive ? "Red trap button — do not press" : "Button");
+    const asset = trapActive ? RED_BUTTON_IMAGE : NORMAL_BUTTON_IMAGE;
+    feind.querySelector(".feind0").src = asset;
+    feind.querySelector(".feind1").src = asset;
+    nextTrapEmissionAt = trapActive ? performance.now() + TRAP_POINT_INTERVAL_MS : 0;
+  }
+
+  function emitTrapPoints(now) {
+    // Passive points share the normal visible floater and score-bank lifecycle.
+    if (!started || gameOver || roundExpired || trapEnding || !trapActive) return;
+    let emitted = 0;
+    while (nextTrapEmissionAt && now >= nextTrapEmissionAt && emitted < 6) {
+      spawnFloater(3);
+      nextTrapEmissionAt += TRAP_POINT_INTERVAL_MS;
+      emitted++;
+    }
+    // The game must not rapidly backfill a long phone-suspension interval.
+    if (nextTrapEmissionAt && now >= nextTrapEmissionAt)
+      nextTrapEmissionAt = now + TRAP_POINT_INTERVAL_MS;
   }
 
   function setQuickStrikeActive(enabled) {
@@ -677,6 +716,7 @@
   function respawnTarget() {
     // Return the center source to cyan when a new button spawns.
     setQuickStrikeActive(false);
+    setTrapActive(shouldSpawnTrap(started && trapsEnabled, Math.random()));
     popping = false;
     popStartedAt = 0;
     popUntil = 0;
@@ -769,6 +809,8 @@
   function startGame(now) {
     started = true;
     startTime = now;
+    trapsEnabled = !!trapToggleEl.checked;
+    trapOptionEl.hidden = true;
     deadline = now + BASE_DURATION_MS;
     anleitungEl.textContent = "";
     syncScorePreview();
@@ -1670,6 +1712,7 @@
           reactionMs: Number.isFinite(e.reactionMs) ? safeScoreNumber(e.reactionMs) : null,
           apm: Number.isFinite(e.apm) ? safeScoreNumber(e.apm) : null,
           durationMs: Number.isFinite(e.durationMs) ? safeScoreNumber(e.durationMs) : null,
+          trapsEnabled: e.trapsEnabled === true,
         };
       })
       .sort(function (a, b) {
@@ -1680,7 +1723,16 @@
 
   function syncScorePreview() {
     // The host API is the only source. No private guest scoreboard.
-    previewEl.classList.toggle("is-hidden", !started || gameOver || !lastHostScores.length);
+    previewEl.classList.toggle("is-hidden", !started || gameOver || trapEnding || !lastHostScores.length);
+  }
+
+  function appendTrapBadge(parent) {
+    const icon = document.createElement("img");
+    icon.className = "trap-score-icon";
+    icon.src = RED_BUTTON_IMAGE;
+    icon.alt = "Traps mode";
+    icon.title = "Score earned with Traps enabled";
+    parent.appendChild(icon);
   }
 
   function renderScorePreview(scores) {
@@ -1692,6 +1744,7 @@
       const name = document.createElement("span");
       name.className = "preview-name";
       name.textContent = (i + 1) + ". " + record.name;
+      if (record.trapsEnabled) appendTrapBadge(name);
       const points = document.createElement("span");
       points.className = "preview-points";
       points.textContent = record.score + " pts";
@@ -1718,7 +1771,9 @@
       const e = scores[i];
       const heading = document.createElement("div");
       heading.className = "score-entry-heading";
-      heading.textContent = e.name + " — " + e.score + " pts";
+      heading.textContent = e.name;
+      if (e.trapsEnabled) appendTrapBadge(heading);
+      heading.appendChild(document.createTextNode(" — " + e.score + " pts"));
       const detail = document.createElement("div");
       detail.className = "score-entry-details";
       detail.textContent = "Reaction " + (e.reactionMs ? e.reactionMs + " ms" : "—") +
@@ -1755,6 +1810,7 @@
       reactionMs: finalStats ? finalStats.reactionMs : 0,
       apm: finalStats ? finalStats.apm : 0,
       durationMs: finalStats ? finalStats.durationMs : 0,
+      trapsEnabled: trapsEnabled,
     };
     scoreStatus.textContent = "Saving…";
     submitScoreBtn.disabled = true;
@@ -1789,9 +1845,30 @@
       });
   }
 
+  function triggerTrapLoss(now) {
+    // End play and show Game Over at once. Defer score submission only.
+    trapEnding = true;
+    trapLossAt = now;
+    roundExpired = true;
+    nextTrapEmissionAt = 0;
+    setQuickStrikeActive(false);
+    fading = false;
+    pendingPopAt = 0;
+    clearPopShards();
+    feind.classList.add("is-gone");
+    endEl.textContent = "Game Over";
+    endWrap.classList.add("visible");
+    scoreForm.hidden = true;
+    playAgainBtn.hidden = true;
+    timeEl.textContent = "0";
+    syncScorePreview();
+    pushPresence();
+  }
+
   function endGame() {
-    // Snapshot at Game Over, after all bonus and score settlement.
-    const durationMs = started ? Math.max(0, Math.round(performance.now() - startTime)) : 0;
+    // Freeze trap-run duration at the fatal tap, not at final score transfer.
+    const finishAt = trapLossAt || performance.now();
+    const durationMs = started ? Math.max(0, Math.round(finishAt - startTime)) : 0;
     finalStats = {
       reactionMs: reactionSamples ? Math.round(reactionSumMs / reactionSamples) : 0,
       apm: durationMs > 0 ? Math.round(hitCount * 60000 / durationMs) : 0,
@@ -1816,6 +1893,11 @@
 
   function resetGame() {
     setQuickStrikeActive(false);
+    setTrapActive(false);
+    trapEnding = false;
+    trapLossAt = 0;
+    trapsEnabled = false;
+    trapOptionEl.hidden = false;
     score = 0;
     finalStats = null;
     started = false;
@@ -1873,6 +1955,8 @@
 
   (function init() {
     setQuickStrikeActive(false);
+    setTrapActive(false);
+    trapOptionEl.hidden = false;
     try {
       const saved = localStorage.getItem(LOCAL_NAME_KEY);
       if (saved && playerNameInput) playerNameInput.value = saved;
@@ -1905,7 +1989,12 @@
   })();
 
   function onClick() {
-    if (gameOver || roundExpired) return;
+    if (gameOver || roundExpired || trapEnding) return;
+    // Even during breakup, red is fatal, not an ordinary scoreable hit.
+    if (trapActive) {
+      triggerTrapLoss(performance.now());
+      return;
+    }
 
     ensureAudio();
     const now = performance.now();
@@ -2005,6 +2094,7 @@
   fitToPhone();
 
   function feindEnterFrame() {
+    if (trapEnding) return;
     if (popping) {
       if (performance.now() >= popUntil) {
         respawnTarget();
@@ -2031,6 +2121,11 @@
 
   function rootEnterFrame() {
     if (gameOver) return;
+    if (trapEnding) {
+      timeEl.textContent = "0";
+      if (!hasPendingScore()) endGame();
+      return;
+    }
 
     updateApm();
 
@@ -2056,6 +2151,7 @@
 
     updateFx(ts);
     tweenReactDisplay(dt);
+    emitTrapPoints(ts);
     updateFloaters(dt);
     update37Reversals(ts);
     update21To42(ts);
