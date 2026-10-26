@@ -1,5 +1,7 @@
 # Button Game — Verification and Release Status
 
+**Update — 26 October 2026:** Babuni.dev subsequently authorized full Red Trap Button implementation at **10%** replacement probability, with immediate Game Over and conservation of already-earned pending points. The feature is **implemented in GitHub source**, and the native Android compilation and new trap regression passed in [Actions run 40365295833](https://github.com/babunidev/ButtonGame/actions/runs/40365295833). Any earlier language below saying this mode is not started or not authorized records the **historical status at that time** and is superseded. An Android APK signed with the original release certificate and physical Trap Mode verification remain **pending**. See [the current Red Trap Button specification](TRAP_MODE.md).
+
 **Updated 26 October 2026.** Distinguish **Babuni.dev-tested installed application** from **new source build**, CI verification and installation of a new signed APK.
 
 ## Babuni.dev-confirmed physical tests
@@ -41,4 +43,4 @@ A debug-signed APK or unsigned CI artifact is not an update for the installed re
 
 No additional score retry feature, contrived server conflict reproduction, advanced anti-cheat, or new multiplayer architecture is required for this user-tested casual game unless a concrete issue arises and Babuni.dev asks to address it.
 
-Trap Mode is **entirely not started** and is documented separately at [TRAP_MODE.md](TRAP_MODE.md).
+Trap Mode is **implemented in source and CI-compiled**, but physical device verification and an original-certificate-signed installable update remain open.

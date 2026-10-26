@@ -1,5 +1,7 @@
 # Button Game — Technical Architecture
 
+**Update — 26 October 2026:** Babuni.dev subsequently authorized full Red Trap Button implementation at **10%** replacement probability, with immediate Game Over and conservation of already-earned pending points. The feature is **implemented in GitHub source**, and the native Android compilation and new trap regression passed in [Actions run 40365295833](https://github.com/babunidev/ButtonGame/actions/runs/40365295833). Any earlier language below saying this mode is not started or not authorized records the **historical status at that time** and is superseded. An Android APK signed with the original release certificate and physical Trap Mode verification remain **pending**. See [the current Red Trap Button specification](TRAP_MODE.md).
+
 **Inspected baseline:** GitHub `main` at `d5ce766`, 2026-10-26. Architectural descriptions below concern code paths; production behavior is not proven solely by reading source.
 
 ## Runtime components
@@ -75,13 +77,13 @@ The 60-second `deadline` starts on the first tap. State updates include target/f
 
 **Identity and signing are interface contracts.** A proposed side-by-side `applicationIdSuffix = ".testing"` debug app was not requested and was reverted. Babuni.dev explicitly wants normal-package upgrades using the original release certificate and does not require beta test score preservation. A debug APK or unsigned release artifact does not satisfy that contract. Repository `sfx/` contains the custom files, but synchronized web/Android copies are not yet reproducible from the CI path.
 
-## Red Trap Button dependencies — specified, not implemented
+## Red Trap Button integration — source implemented
 
 Babuni.dev's [complete nine-item spec](TRAP_MODE.md) describes an optional pre-game Traps checkbox, random red replacement spawns with **ordinary position, lifespan, rotation and shatter lifecycle**, **instant Game Over when pressed**, and unattended **expiration/shatter/next spawn**. While a red target exists, it emits **3 passive points every one-third second (9 points per second)** from the playfield **center**. These points must use the **existing floating-number collision, merge, expiry and score-fusion accounting**, not a direct `score += 3` shortcut.
 
 High-score persistence must eventually record whether Traps was enabled for each run, and display a **small red button beside matching names**. This implies a future client/server mode metadata contract, but **no field name, storage migration behavior, or API change has been approved or implemented**. A future implementation must define how immediate Game Over interacts with pending score settlement and network submission before altering current behavior.
 
-**Entire Trap Mode feature is not started.** This is a documentation-only technical dependency analysis, not executable architecture or an instruction to alter the current host.
+**The entire Trap Mode is now implemented in source.** This is a documentation-only technical dependency analysis, not executable architecture or an instruction to alter the current host.
 
 ## Known failure/abuse surfaces
 

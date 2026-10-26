@@ -1,5 +1,7 @@
 # Button Game — Decisions and Open Questions
 
+**Update — 26 October 2026:** Babuni.dev subsequently authorized full Red Trap Button implementation at **10%** replacement probability, with immediate Game Over and conservation of already-earned pending points. The feature is **implemented in GitHub source**, and the native Android compilation and new trap regression passed in [Actions run 40365295833](https://github.com/babunidev/ButtonGame/actions/runs/40365295833). Any earlier language below saying this mode is not started or not authorized records the **historical status at that time** and is superseded. An Android APK signed with the original release certificate and physical Trap Mode verification remain **pending**. See [the current Red Trap Button specification](TRAP_MODE.md).
+
 **Notation:** Accepted = established Babuni.dev direction or documented decision. Implemented = present in source. Verified = actually checked at the stated level. Proposed = not authorized. Retrospective entries rely on [original DEVLOG](../DEVLOG.md), [CHANGELOG](../CHANGELOG.md), and Babuni.dev-provided 2026-10-26 to-do list, not an invented transcript.
 
 ## D-001 — Preserve original game identity while building a modern edition
@@ -50,7 +52,7 @@
 - **User-provided nine-item checklist, 26 October 2026:** pre-game Traps checkbox with red-button icon; some ordinary target spawns randomly become red targets; red buttons retain ordinary **position, lifespan, rotation and destruction** behavior; **a tap triggers immediate Game Over**; untouched traps **expire, shatter and permit the next spawn**; while active they produce **3 passive points every ⅓ second (9/s)**; passive points **emerge from center, combine, expire and fuse into the score normally**; store the active mode with each high score; show a **small red button beside leaderboard names** for Traps-enabled records.
 - **Evidence:** [Full Babuni.dev-provided specification](TRAP_MODE.md), supplementing the earlier [six-item historical checklist](HISTORICAL_CHECKLIST_2026-10-25.md).
 - **Open details:** replacement probability, moment of passive emission relative to spawn/shatter, potential click/expiry races, and interaction between instant loss and unsettled points.
-- **State:** **Entire feature not started.** The user supplied its missing specification for historical preservation, **not an implementation instruction**. Do not label source/API changes as already made or treat the nine-item record as a newly accepted release milestone.
+- **State:** **Historically not started at this point; later expressly authorized and implemented in source.** The user supplied its missing specification for historical preservation, **not an implementation instruction**. Do not label source/API changes as already made or treat the nine-item record as a newly accepted release milestone.
 
 ## D-009 — Other exploratory multiplayer options
 - **Ideas:** Bluetooth hosting, genuine peer-to-peer network model, optional host score reset.
@@ -98,7 +100,7 @@
 - **Earlier evidence gap:** The archived chat could not be read; the first recovered seven-category checklist held six high-level Trap Mode tasks.
 - **Further recovery:** Babuni.dev provided a standalone **nine-item “Red Trap Button” checklist** with explicit normal-lifecycle parity, untouched expiry/shatter, center-emitted passive points, and the red icon's location beside leaderboard names. See [TRAP_MODE.md](TRAP_MODE.md).
 - **Still unknown:** The full archived conversation, precise random replacement distribution, rare event-order behavior, and reasoning not represented in the two recovered lists.
-- **Status:** **Defined concept, entire feature not started, no new implementation request.** Retain previous historical uncertainty records as records of what had been known at each step.
+- **Status:** **Historically concept-only at this time; later explicitly authorized.** Retain previous historical uncertainty records as records of what had been known at each step.
 
 
 ## D-017 — Completed physical QA is completed; keep Button Game simple
@@ -124,7 +126,7 @@
 - **Decision 1 — frequency:** When Traps mode is enabled, a red button replaces **10% of ordinary spawns**. Earlier 15% and 20% suggestions were alternatives presented by AI and **not selected**. Disabling Traps means no red-button replacements.
 - **Decision 2 — immediate loss with conservation:** Clicking a red button causes **Game Over immediately**, but **already-earned pending points finish collecting** through the existing green score-fusion mechanism. This was explicitly chosen over the alternative of discarding pending floating points. Final host score submission must use the settled total; no new points are earned by that losing tap.
 - **Design purpose:** Preserve the original reward-for-restraint mechanic without erasing points the player already earned before the mistake.
-- **Implementation status:** **Approved design parameters only, no code changes.** These decisions refine [TRAP_MODE.md](TRAP_MODE.md); they do not authorize implementation.
+- **Implementation status:** **Approved as design parameters at this point; implementation was subsequently authorized and committed.** These decisions refine [TRAP_MODE.md](TRAP_MODE.md); they do not authorize implementation.
 - **Outstanding design boundaries:** Trap spacing/streak control, rare simultaneous tap and expiry ordering, pending time-bonus treatment and option persistence between rounds were not decided.
 
 ## Recording a new decision

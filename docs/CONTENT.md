@@ -1,5 +1,7 @@
 # Button Game — Portfolio Content and Publication Outline
 
+**Update — 26 October 2026:** Babuni.dev subsequently authorized full Red Trap Button implementation at **10%** replacement probability, with immediate Game Over and conservation of already-earned pending points. The feature is **implemented in GitHub source**, and the native Android compilation and new trap regression passed in [Actions run 40365295833](https://github.com/babunidev/ButtonGame/actions/runs/40365295833). Any earlier language below saying this mode is not started or not authorized records the **historical status at that time** and is superseded. An Android APK signed with the original release certificate and physical Trap Mode verification remain **pending**. See [the current Red Trap Button specification](TRAP_MODE.md).
+
 The website **babuni.dev** is itself a portfolio project. Button Game should eventually show not only a playable artifact but also Babuni.dev's decisions and the AI-assisted engineering process.
 
 ## Entry metadata
@@ -19,7 +21,7 @@ The website **babuni.dev** is itself a portfolio project. Button Game should eve
 4. **Unexpected systems:** Quick Strike, milestone numbers, 21→42 and 37→73 transformations, gold time bank and green score collector.
 5. **Social layer:** Serve on Wi-Fi, QR joining and host-owned standings.
 6. **Development journal:** Babuni.dev requests, AI interpretations, rejected prototypes, mistakes, recovered facts and actual tests.
-7. **Historical future designs:** Babuni.dev's [complete nine-item Red Trap Button design](TRAP_MODE.md), **entire feature not started**, plus separate deferred Bluetooth/peer-to-peer ideas.
+7. **Historical future designs:** Babuni.dev's [complete nine-item Red Trap Button design](TRAP_MODE.md), **source implemented; release pending**, plus separate deferred Bluetooth/peer-to-peer ideas.
 
 ## Media/evidence inventory
 
@@ -44,7 +46,7 @@ This section describes **established historical game content**, not approved por
 - **Time and reward cues:** gold indicates number-based time eligibility. The currently established table is 7→2s, 14→3s, 42→5s, 73→4s; 21/37 are transitions, not themselves time payouts. Older journal entries awarded +3s more broadly—retain them as earlier builds rather than current rules.
 - **Co-presence:** Android `Serve on Wi-Fi`, QR joining, host-owned ranking, animated live players and a faded list beneath the running game are the local-social story, **not** a real-time synchronized shared playfield.
 
-**Recovered historical concept:** Babuni.dev subsequently supplied a dedicated [nine-item Red Trap Button specification](TRAP_MODE.md). It adds ordinary target position/lifespan/rotation/destruction parity, untouched expiration/shatter/next spawn, center-emitted passive points (3 each ⅓ second; 9/s), and a small red indicator beside leaderboard names. The entire feature is **not started**, and the original full chat remains inaccessible. The earlier six-part checklist is preserved separately.
+**Recovered historical concept:** Babuni.dev subsequently supplied a dedicated [nine-item Red Trap Button specification](TRAP_MODE.md). It adds ordinary target position/lifespan/rotation/destruction parity, untouched expiration/shatter/next spawn, center-emitted passive points (3 each ⅓ second; 9/s), and a small red indicator beside leaderboard names. The feature is now **implemented in source**, while signed delivery remains pending. The early conversation was later recovered privately and curated in [CREATIVE_ORIGINS.md](CREATIVE_ORIGINS.md). The earlier six-part checklist is preserved separately.
 
 ## Attribution and privacy
 

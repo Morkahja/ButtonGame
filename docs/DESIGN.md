@@ -1,5 +1,7 @@
 # Button Game — Visual and Interaction Design
 
+**Update — 26 October 2026:** Babuni.dev subsequently authorized full Red Trap Button implementation at **10%** replacement probability, with immediate Game Over and conservation of already-earned pending points. The feature is **implemented in GitHub source**, and the native Android compilation and new trap regression passed in [Actions run 40365295833](https://github.com/babunidev/ButtonGame/actions/runs/40365295833). Any earlier language below saying this mode is not started or not authorized records the **historical status at that time** and is superseded. An Android APK signed with the original release certificate and physical Trap Mode verification remain **pending**. See [the current Red Trap Button specification](TRAP_MODE.md).
+
 Status: **as implemented in current HTML/CSS/JS**. Babuni.dev reports having tested gameplay, sound volume, UI layout and multiplayer on actual phones on 26 October 2026; installation of the next newly built/signed APK remains separate. This document describes existing presentation and intentional behavior; changes to the visual grammar require Babuni.dev review.
 
 ## Stage, button and gesture
@@ -59,10 +61,10 @@ Detailed credit conservation differs between transformations and ordinary merged
 
 **Audio as visual feedback.** The 42 and 73 reveals take a dedicated `4273.ogg` cue rather than doubling a generic bell. Ordinary milestone bells occur for **each** reached 7/14/21/37/42/73 value, not once per floater lineage. Quick Strike uses its two random custom impacts from the *activating* press onward, while ordinary presses keep their impact set. The supplied new recordings were comparatively louder and had playback gain reduced without modifying the recording bytes.
 
-## Red Trap Button interface — defined, not started
+## Red Trap Button interface — source implemented, phone test pending
 
 **Intended experience:** an optional mode rewarding patience and punishing careless tapping. Before a round, a **Traps checkbox with red-button icon** enables red traps. During the round some normal button spawns are **randomly replaced with red buttons**. A trap uses the ordinary button's **position, lifespan, rotation and destruction** behavior. Tapping it ends the game **immediately**; leaving it alone means it **expires, shatters and allows the next spawn**.
 
 While a trap is active, it generates **3 passive points every ⅓ second (9 points/sec)**. Those points appear **from the center**, pass through the **same number physics, merges, expiry and score fusion** as ordinary point effects. Scores earned with this mode active display a **small red button next to the player's name** in the leaderboard, and the mode-enabled flag is recorded with the host score.
 
-These requirements come from Babuni.dev's [nine-item specification](TRAP_MODE.md). They are **not implemented**. Spawn probability, specific red color/art geometry, race conditions at instant loss, pending-point settlement and screen-reader accommodation are not yet defined; do not invent them or mistake these notes for current UI.
+These requirements come from Babuni.dev's [nine-item specification](TRAP_MODE.md). They are **now implemented in source**, after Babuni.dev's approval. Spawn probability, specific red color/art geometry, race conditions at instant loss, pending-point settlement and screen-reader accommodation are not yet defined; do not invent them or mistake these notes for current UI.
