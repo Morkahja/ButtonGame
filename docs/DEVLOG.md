@@ -2,6 +2,14 @@
 
 This is the structured continuation and reading guide to the original [root DEVLOG.md](../DEVLOG.md), which remains intact as a primary historical source. [CHANGELOG.md](../CHANGELOG.md) records implemented change chronology; this journal records *why*, revisions, Babuni.dev direction, AI collaboration, and what remained unverified. Earlier events below are summaries grounded in repository documents rather than newly discovered transcripts.
 
+## 2026-10-26 — Trap Mode design parameters settled; implementation remains deferred
+
+**Creator's direction.** After reviewing a small staged implementation plan for the original Red Trap Button concept, Babuni.dev selected **a 10% chance of replacing a normal spawn with a trap**, rather than AI-suggested 15% or 20% alternatives. Babuni.dev also made a deliberate choice about a trap-hit ending: **Game Over should happen immediately**, but points **already earned and still pending in the visible number/score collector should finish collecting** rather than being discarded.
+
+**AI contribution and revised plan.** The plan in [TRAP_MODE.md](TRAP_MODE.md) now separates mode-toggle/UI work, target selection and lifecycle, passive 3-points-per-third-second emission, instant loss with existing-point settlement, host-owned leaderboard metadata and targeted regression/device checks. Preserving the existing score-fusion accounting is an **implementation recommendation**, not a newly created game mechanic. Other unresolved edge cases are explicitly left undecided.
+
+**Approval boundary and verification.** Babuni.dev said **“don't implement yet.”** This session therefore updates design documents only. Nothing has been built, run, released, or tested as Trap Mode; all nine feature tasks remain unchecked. Existing normal gameplay and previously reported device QA are unchanged.
+
 ## 2026-10-26 — Original brainstorming transcript recovered and read privately
 
 **The missing source arrives.** Babuni.dev supplied a markdown export of the old Button Game development conversation after the archived ChatGPT thread proved difficult to open. Unlike previous secondhand checklist excerpts, this source contains the **actual opening dialogue**: Babuni.dev introduces an older game already remade locally and proposes using the chat to collect ideas. The first creative requirements were given as spoken-style, tentative notes: flash every press, simultaneous Quick Strike flash/spin, double points for that button, a visible extra-time indicator, a scattered/duplicated 21→42, and golden eligible numbers. Only *after* those ideas did Babuni.dev ask AI to create a simple to-do list. The AI acted first as an **organizer and interpreter**, not as the inventor of the project.

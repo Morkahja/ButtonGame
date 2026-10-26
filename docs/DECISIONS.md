@@ -119,6 +119,14 @@
 - **Status:** The first green-time proposal was **superseded**, not forgotten, and must not be reinstated as an active to-do. The final golden layout is implemented and creator-tested.
 - **Source:** [Creative origins](CREATIVE_ORIGINS.md), [visual design](DESIGN.md).
 
+## D-020 — Set Red Trap Button frequency and settle earned score after instant loss
+- **Date and provenance:** 2026-10-26, direct Babuni.dev choice following a proposed red-button implementation plan.
+- **Decision 1 — frequency:** When Traps mode is enabled, a red button replaces **10% of ordinary spawns**. Earlier 15% and 20% suggestions were alternatives presented by AI and **not selected**. Disabling Traps means no red-button replacements.
+- **Decision 2 — immediate loss with conservation:** Clicking a red button causes **Game Over immediately**, but **already-earned pending points finish collecting** through the existing green score-fusion mechanism. This was explicitly chosen over the alternative of discarding pending floating points. Final host score submission must use the settled total; no new points are earned by that losing tap.
+- **Design purpose:** Preserve the original reward-for-restraint mechanic without erasing points the player already earned before the mistake.
+- **Implementation status:** **Approved design parameters only, no code changes.** These decisions refine [TRAP_MODE.md](TRAP_MODE.md); they do not authorize implementation.
+- **Outstanding design boundaries:** Trap spacing/streak control, rare simultaneous tap and expiry ordering, pending time-bonus treatment and option persistence between rounds were not decided.
+
 ## Recording a new decision
 
 Use: **ID — date — Babuni.dev request and reasons — AI suggestions and alternatives — accepted/rejected/deferred (with explicit evidence) — implementation file/commit — verification and uncertainty**. If no user approval occurred, record `pending`, not `accepted`.

@@ -26,7 +26,7 @@ These results are **Babuni.dev-reported device verification of the installed ver
 - [ ] **Sign the new release using the original certificate** (held outside this repository) and verify update installation compatibility.
 - [ ] **Deliver/install the signed normal-package APK**; a brief smoke test of that *new build* is sufficient. Do not introduce a separate TEST app.
 
-## Red Trap Button — entirely not started
+## Red Trap Button — specified and planned, entirely not started
 
 The nine-item design is preserved without changing gameplay. [Full checklist and rules](docs/TRAP_MODE.md).
 
@@ -36,7 +36,7 @@ The nine-item design is preserved without changing gameplay. [Full checklist and
 - [ ] Passive +3 points every ⅓ second (9/s) from center through ordinary number physics and fusion.
 - [ ] Save Traps-enabled state on host high scores and display the red icon beside qualifying names.
 
-**Not part of the current APK update.** The nine exact original tasks remain unchecked in `docs/TRAP_MODE.md`.
+**Design decisions confirmed 26 October 2026:** When enabled, **10% of spawns** are red replacements. Tapping a red button causes **immediate Game Over**, while **already-earned pending points continue their existing score-fusion collection before the final leaderboard result is recorded**. See the [staged implementation plan](docs/TRAP_MODE.md). **Do not implement yet:** Babuni.dev explicitly requested planning only. The nine original tasks remain unchecked.
 
 ## Maintenance and portfolio documentation
 
