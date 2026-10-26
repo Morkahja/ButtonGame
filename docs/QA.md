@@ -27,11 +27,11 @@ These are **user observations**, not independently instrumented logs. They remov
 - The guest Game Over three-second refresh regression is committed in `tests/live-leaderboard-refresh.cjs`.
 - On 26 October 2026, source packaging and CI checks were updated: all original OGGs are mirrored into both browser and Android web assets; CI will compare source/mirror bytes and check the **10 actual OGG payloads in both assembled APKs**.
 - The new release candidate is `versionCode = 2`, `versionName = 1.0.1-beta`, under the unchanged `com.babunigaming.buttongame` application ID.
-- **Latest build verification:** [GitHub Actions 40325603457](https://github.com/babunidev/ButtonGame/actions/runs/40325603457) started for the packaging commit; confirmation is pending until the actual outcome is checked.
+- **Latest build verification: PASSED.** [GitHub Actions 40325603457](https://github.com/babunidev/ButtonGame/actions/runs/40325603457) completed successfully for source commit [`2fa4539`](https://github.com/babunidev/ButtonGame/commit/2fa45393a9746366f80927382a628c2745b525c3). All steps passed: original-OGG synchronization, root/Android source parity, JavaScript/leaderboard regression, Gradle debug+release compile, APK contents and exact OGG byte checks, both artifact uploads. Artifacts: `ButtonGame-Native-Android-Debug` and `ButtonGame-Native-Android-Release-Unsigned`.
 
 ## Only remaining release checks
 
-1. Confirm the source-synchronized latest Gradle debug/unsigned-release build and tests pass.
+1. **Done:** source-synchronized latest Gradle debug/unsigned-release build, Node regression and all ten exact packaged OGGs passed in run 40325603457.
 2. Original-certificate sign the new **release** artifact outside GitHub; never expose signing material.
 3. Verify exact APK package identity, signer, version, file integrity, and ordinary upgrade installation; quickly open the new build and confirm audio/gameplay/Wi-Fi still work.
 

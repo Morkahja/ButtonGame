@@ -22,7 +22,7 @@ These results are **creator-reported device verification of the installed versio
 - [x] Copy all three custom OGGs to both `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/`. Preserve bytes from canonical `sfx/`.
 - [x] Update `scripts/sync-www.sh` to include original recordings; update Android CI to sync web assets and check exact sounds in debug/unsigned-release APKs.
 - [x] Increment Android version to `versionCode = 2` and `versionName = 1.0.1-beta` for the new native build.
-- [ ] **Confirm the new GitHub Actions native debug/unsigned-release build passes**, including all ten sounds and existing leaderboard regression. Build: [40325603457](https://github.com/babunidev/ButtonGame/actions/runs/40325603457).
+- [x] **Native Android debug and unsigned release build passed** with all ten sounds verified inside both APKs, existing leaderboard regression and web asset synchronization: [GitHub Actions 40325603457](https://github.com/babunidev/ButtonGame/actions/runs/40325603457).
 - [ ] **Sign the new release using the original certificate** (held outside this repository) and verify update installation compatibility.
 - [ ] **Deliver/install the signed normal-package APK**; a brief smoke test of that *new build* is sufficient. Do not introduce a separate TEST app.
 

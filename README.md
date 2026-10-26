@@ -2,7 +2,7 @@
 
 A one-minute, arcade-style button-smashing game with roaming targets, physical-looking number combinations and deliberately theatrical score collection. The game is a creative project directed by its creator, **Babuni.dev**. This repository preserves the original Flash artifact, earlier HTML5 reconstruction, current browser game, and native Android Wi-Fi host.
 
-**Project status (26 October 2026): gameplay and real two-device Wi-Fi multiplayer tested and working according to the creator.** Reproducible sound packaging is fixed in GitHub source; CI verification and the next original-certificate signed APK release remain separate steps.
+**Project status (26 October 2026): gameplay and real two-device Wi-Fi multiplayer tested and working according to the creator.** Reproducible sound packaging and the [latest full native Android CI build](https://github.com/babunidev/ButtonGame/actions/runs/40325603457) **passed**; only the new original-certificate signed APK/installation remains unverified.
 
 ## Play and hosting
 

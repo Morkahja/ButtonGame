@@ -31,7 +31,7 @@ cd android
 ./gradlew assembleDebug assembleRelease
 ```
 
-**Audio packaging fixed in source (26 October 2026):** All ten original OGG recordings, including `4273.ogg`, `QuickStrikepoints.ogg` and `QuickStrikepoints1.ogg`, are now present under `sfx/`, `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/`. `scripts/sync-www.sh` treats `sfx/` as the canonical originals and synchronizes both targets. GitHub Actions runs the script and checks actual audio bytes inside both APKs. **Confirm the new build run passes before relying on its artifacts.**
+**Audio packaging fixed in source (26 October 2026):** All ten original OGG recordings, including `4273.ogg`, `QuickStrikepoints.ogg` and `QuickStrikepoints1.ogg`, are now present under `sfx/`, `assets/sfx/` and `android/app/src/main/assets/www/assets/sfx/`. `scripts/sync-www.sh` treats `sfx/` as the canonical originals and synchronizes both targets. GitHub Actions runs the script and checks actual audio bytes inside both APKs. **The complete new GitHub Actions build passed** in [run 40325603457](https://github.com/babunidev/ButtonGame/actions/runs/40325603457); both the debug APK and the unsigned release APK were uploaded as workflow artifacts.
 
 No newly signed APK for this source revision has yet been established. GitHub CI compiles debug and unsigned release packages; only the creator's original signing certificate (kept outside GitHub) can produce an installable update of the existing release-signed app. The existing installed app's two-phone behavior is confirmed by the creator, independently of the still-pending new-build signing.
 
