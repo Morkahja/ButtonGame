@@ -1,6 +1,6 @@
 # Button Game — Recovered Seven-Category Development Checklist (25 October 2026)
 
-**Provenance:** The creator pasted a response from the older Button Game conversation on 26 October 2026. That response states it went back to an earlier original checklist and preserved its seven categories, while updating progress. The full archived conversation was not independently accessible here. Preserve its task wording as recovered historical evidence; do not conflate these historical items with the currently approved release scope or with assistant-added recommendations.
+**Provenance:** Babuni.dev pasted a response from the older Button Game conversation on 26 October 2026. That response states it went back to an earlier original checklist and preserved its seven categories, while updating progress. The full archived conversation was not independently accessible here. Preserve its task wording as recovered historical evidence; do not conflate these historical items with the currently approved release scope or with assistant-added recommendations.
 
 ## 1. Button & Quick Strike
 
@@ -84,4 +84,4 @@ The three OGGs have since been committed to root `sfx/`; packaged web/Android as
 
 **Historical integrity:** This copy contains the seven recovered categories with their task wording preserved. Commentary and later corrections are explicitly separated.
 
-**Later recovered detail (26 October 2026):** The creator provided a separate **nine-item Red Trap Button feature checklist** in [TRAP_MODE.md](TRAP_MODE.md). It supplements the original six-item historical summary with ordinary spawn/lifespan/rotation/shatter parity, untouched trap expiry and the next spawn, center-origin passive points and a small red icon beside qualifying leaderboard names. The entire feature is **not started**. This later detail is not silently inserted into the original seven-category checklist.
+**Later recovered detail (26 October 2026):** Babuni.dev provided a separate **nine-item Red Trap Button feature checklist** in [TRAP_MODE.md](TRAP_MODE.md). It supplements the original six-item historical summary with ordinary spawn/lifespan/rotation/shatter parity, untouched trap expiry and the next spawn, center-origin passive points and a small red icon beside qualifying leaderboard names. The entire feature is **not started**. This later detail is not silently inserted into the original seven-category checklist.
