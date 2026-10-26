@@ -1,13 +1,13 @@
 # Button Game — AI and Contributor Rules
 
-This is a creator-directed artwork and a software project. Preserve the user's authorship, distinctive mechanics and decision history.
+This is a Babuni.dev-directed artwork and a software project. Preserve the user's authorship, distinctive mechanics and decision history.
 
 ## Authority and scope
 
-1. **Creator direction takes precedence.** Do not treat ideas proposed by an assistant as approved features. Never attribute the user's concepts or constraints to AI.
+1. **Babuni.dev direction takes precedence.** Do not treat ideas proposed by an assistant as approved features. Never attribute the user's concepts or constraints to AI.
 2. **Do not redesign the game without approval.** The existing turquoise jacket-button interaction, physical number mergers, Quick Strike, special 21→42 / 37→73 effects, time/score collectors, and Wi-Fi host model are intentional.
-3. The creator has supplied the [nine-item Red Trap Button specification](docs/TRAP_MODE.md), expanding the earlier [six-item historical checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md). It defines a pre-game toggle, random red replacements with normal button lifecycle, immediate loss on tapping, untouched expiry/shatter, passive +3 points each ⅓ second from center through standard float/fusion, saved mode flag, and red leaderboard icon. **ENTIRE FEATURE NOT STARTED.** This documentation is not authorization to implement. Preserve original user wording and do not invent unresolved timing/probability edge cases.
-4. **Creator has already tested and confirmed the working installed game on two phones:** Quick Strike, combos, timers/HUD, sound, player list, guest scores, Game Over live refresh and score persistence. Do not repeatedly re-add these as unfinished QA. Sound packaging is now complete in source; the remaining release gate is to verify the new CI build, then original-certificate sign/install the **same** Android app (not a TEST variant). Beta high scores need not be preserved.
+3. Babuni.dev has supplied the [nine-item Red Trap Button specification](docs/TRAP_MODE.md), expanding the earlier [six-item historical checklist](docs/HISTORICAL_CHECKLIST_2026-10-25.md). It defines a pre-game toggle, random red replacements with normal button lifecycle, immediate loss on tapping, untouched expiry/shatter, passive +3 points each ⅓ second from center through standard float/fusion, saved mode flag, and red leaderboard icon. **ENTIRE FEATURE NOT STARTED.** This documentation is not authorization to implement. Preserve original user wording and do not invent unresolved timing/probability edge cases.
+4. **Babuni.dev has already tested and confirmed the working installed game on two phones:** Quick Strike, combos, timers/HUD, sound, player list, guest scores, Game Over live refresh and score persistence. Do not repeatedly re-add these as unfinished QA. Sound packaging is now complete in source; the remaining release gate is to verify the new CI build, then original-certificate sign/install the **same** Android app (not a TEST variant). Beta high scores need not be preserved.
 5. **Keep this a simple game.** Do not add an unnecessary score submission retry, complicated startup protection or abstract hardening as milestones without a real user-observed problem or explicit request. Bluetooth and peer-to-peer are exploratory ideas, not roadmap milestones. Never replace or rewrite the archived Flash game or earlier reconstruction while editing the modern game.
 
 ## Inspect before editing
@@ -40,13 +40,13 @@ For substantive code or design work, update the relevant documents in the same r
 - `CONCEPT.md`: creative purpose and explicitly approved feature boundaries.
 - `ROADMAP.md`: active tasks and their evidence-backed statuses.
 - `CHANGELOG.md`: changes actually implemented.
-- `docs/DEVLOG.md`: narrative of creator intent, AI proposal, iteration, failures and verification; the original `DEVLOG.md` is retained.
+- `docs/DEVLOG.md`: narrative of Babuni.dev intent, AI proposal, iteration, failures and verification; the original `DEVLOG.md` is retained.
 - `docs/DECISIONS.md`: accepted/rejected/deferred choices, with provenance.
 - `docs/DESIGN.md` and `docs/ARCHITECTURE.md`: observable behavioral/technical changes.
 - `docs/CONTENT.md` and `docs/AI_COLLABORATION.md`: publication-safe portfolio and attribution.
 - `docs/QA.md`: tested/unverified cases with reproducible evidence.
 
-**Record format:** date; user direction; AI interpretation/contribution; alternatives or corrections; creator's actual decision (or pending); files/commit; tests performed; remaining uncertainty.
+**Record format:** date; user direction; AI interpretation/contribution; alternatives or corrections; Babuni.dev's actual decision (or pending); files/commit; tests performed; remaining uncertainty.
 
 Never invent recovered chat dialogue, acceptance, test output, commits, releases, or assets. Unavailable archived conversations remain unavailable until supplied. Do not publish raw private conversations or credentials.
 
@@ -55,3 +55,7 @@ Never invent recovered chat dialogue, acceptance, test output, commits, releases
 At minimum for web-only changes: JavaScript parse check, targeted tests, bundle equality and relevant interaction checks. For Android changes: native compile, host API/persistence tests as applicable, package/signature inspection and physical-device tests when claiming device correctness. For release claims: confirm the exact signed APK, package ID, signer identity, version increment, integrity, source equivalence and intended installation behavior.
 
 A documentation-only change does not validate gameplay, sign an APK, or close release tasks.
+
+## Author attribution
+
+Use **Babuni.dev** as the named project author in metadata and public-facing documentation. Do not describe Babuni.dev with the role label “creator.” Record specific AI contributions separately without shifting ownership of original ideas.
