@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-10-26 — Preserve complete nine-item Red Trap Button specification
+
+- The creator supplied a more detailed **Red Trap Button** specification and explicitly stated **entire feature not started**. The intended experience is “an optional game mode that rewards patience and punishes careless tapping.”
+- Added [`docs/TRAP_MODE.md`](docs/TRAP_MODE.md) preserving all nine tasks: pre-game Traps checkbox/red icon; random red-button replacements; identical ordinary spawn position, lifespan, rotation and shatter; immediate Game Over on a trap tap; untouched trap expiry/shatter/next spawn; +3 passive points every ⅓ second (9/s); center-origin passive floaters with normal combination/expiry/fusion; host high-score mode flag; small red button beside relevant leaderboard names.
+- Updated concept, design, decisions, roadmap, architecture, devlog, README, contributor and portfolio/collaboration records to distinguish this complete design from the *earlier* six-part recovered historical checklist.
+- **Documentation only.** No Trap Mode feature code, host score format, UI behavior, Android asset, test or released APK was changed. The normal signed-APK release priority remains unchanged.
+
 ## 2026-10-26 — Recover original seven-category development checklist and Trap Mode
 
 - Preserved the creator-provided historical checklist at `docs/HISTORICAL_CHECKLIST_2026-10-25.md`, keeping its seven original categories separate from the live roadmap and later AI recommendations.
