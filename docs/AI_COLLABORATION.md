@@ -1,5 +1,14 @@
 # Button Game — Human / AI Collaboration Record
 
+## 2026-10-27 — Sequential portfolio audit #27
+
+**Babuni.dev direction:** Continue the repository-by-repository documentation audit, preserving original 2009 game authorship, recovered creative ideas, alternative directions, decisions, implementation and verification. The creator has already supplied historic dialogue for a publication-safe [creative origins](CREATIVE_ORIGINS.md) synthesis; that is not permission to publish a private transcript.
+
+**AI work here:** Identify ButtonGame as the next relevant GitHub repository; inspect source, commits, test files and the existing 11 canonical docs; clarify implemented 10% Trap Mode versus earlier “not started” text; clarify separate Android/desktop host score ownership and the **Ogg-only Git tree versus the separately prepared Ogg+MP3 desktop ZIP**. Add targeted, dated evidence without rewriting or claiming ownership of the original concept.
+
+**Limit:** This is editorial/source analysis, not a new score/Trap Mode implementation, physical two-device test, fresh passed CI run, audio confirmation, signed Android update or downloadable ZIP. All runtime sources, media, extra historical journals and private signing data remain unchanged. Preserve the already documented mistaken AI assumptions and Babuni.dev's corrective feedback rather than laundering them into creator-approved choices.
+
+
 ## Principle
 
 Babuni.dev owns the creative direction of Button Game. AI assistance is a tool used for interpretation, coding, testing, drafting and historical synthesis. **Babuni.dev's ideas are never retroactively attributed to an AI**, and an AI suggestion is not accepted simply because it appears in a chat or draft.
@@ -12,7 +21,7 @@ Babuni.dev owns the creative direction of Button Game. AI assistance is a tool u
 4. Retrospective summaries, including Babuni.dev-provided 2026-10-26 "Complete To-Do List".
 5. Inference or proposal, always clearly labelled and never turned into a historical fact.
 
-Missing archived messages must remain **unrecovered**, not paraphrased from imagination. Babuni.dev first supplied an earlier [seven-category checklist](HISTORICAL_CHECKLIST_2026-10-25.md) with six Trap Mode requirements, then a more detailed standalone [nine-item Red Trap Button specification](TRAP_MODE.md), including the explicit intent to reward patience and punish careless tapping. Neither document is equivalent to accessing the complete original conversation. Babuni.dev explicitly says the **entire feature is not started**, and supplied its design for documentation rather than a new implementation request.
+Missing archived messages must remain **unrecovered**, not paraphrased from imagination. Babuni.dev first supplied an earlier [seven-category checklist](HISTORICAL_CHECKLIST_2026-10-25.md) with six Trap Mode requirements, then a more detailed standalone [nine-item Red Trap Button specification](TRAP_MODE.md), including the explicit intent to reward patience and punish careless tapping. Neither document is equivalent to accessing the complete original conversation. At the time of that historical checklist, Babuni.dev explicitly said the **entire feature was not started** and requested documentation rather than immediate implementation; the feature was **subsequently approved and implemented on 26 October**, which supersedes that earlier status.
 
 ## What each substantial entry records
 

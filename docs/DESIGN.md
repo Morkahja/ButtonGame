@@ -1,5 +1,14 @@
 # Button Game — Visual and Interaction Design
 
+## 2026-10-27 — Status and delivery clarification
+
+The current **Traps** control belongs near the bottom Reaction/APM/replay area, persists through Game Over and cannot be toggled mid-round. The desktop responsive layout places **players left, game center, scores right** when wide, without changing the stacked phone experience. The red button is a **creator-approved, 10%-chance implemented mode**, not a future mockup.
+
+Button Game's tap, bell, Quick Strike and 42/73 reveal sounds are part of the creator's tactile aesthetic. A browser's stored mute preference or audio policy may silence them; source now has media-element fallback. A separately delivered desktop ZIP reportedly adds ten MP3 copies that **are absent from the Git checkout**. The creator's silence report is an observed issue, but the recipient's actual audio behavior is **not confirmed resolved** by a Node mock.
+
+Do not infer new permissions to remove sounds, soften distinctive score physics or change red traps from a documentation/packaging issue.
+
+
 ## Replay selector and wider-screen composition — 26 October 2026
 
 Following Babuni.dev's actual phone test, the former pre-game Traps checkbox moves to a compact **bottom-left** position next to the Reaction/APM plate and Game Over's Play Again control. Its value remains checked for Trap Mode runs, unchecked for normal runs, and can be switched for the next game. The source disables changes during a round and enables them again once the score settles; no percentage slider is included because the author dismissed it.
@@ -73,4 +82,4 @@ Detailed credit conservation differs between transformations and ordinary merged
 
 While a trap is active, it generates **3 passive points every ⅓ second (9 points/sec)**. Those points appear **from the center**, pass through the **same number physics, merges, expiry and score fusion** as ordinary point effects. Scores earned with this mode active display a **small red button next to the player's name** in the leaderboard, and the mode-enabled flag is recorded with the host score.
 
-These requirements come from Babuni.dev's [nine-item specification](TRAP_MODE.md). They are **now implemented in source**, after Babuni.dev's approval. Spawn probability, specific red color/art geometry, race conditions at instant loss, pending-point settlement and screen-reader accommodation are not yet defined; do not invent them or mistake these notes for current UI.
+These requirements come from Babuni.dev's [nine-item specification](TRAP_MODE.md). They are **now implemented in source**, after Babuni.dev's approval. **Updated status:** red-spawn probability is defined in source as 10% and pending-score settlement is implemented. Device-specific event ordering and screen-reader behavior still merit tests; do not treat this historical description as the current feature status.

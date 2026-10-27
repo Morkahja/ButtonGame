@@ -1,5 +1,14 @@
 # Button Game — Technical Architecture
 
+## 2026-10-27 — Current source and media-contract audit
+
+**Separate execution generations:** `Game.swf` and `Game.html` preserve the 2009 Flash origin; `ChatGPT Remake/` preserves an intermediate prototype; root `index.html` + `game.js` drive current play, mirrored under Android's `assets/www/`. The Android Kotlin host provides scores/presence at **port 8766**, whereas `scripts/serve-desktop.py` defaults to **8000** and stores a different host-owned ledger in ignored `.local-data/desktop-scores.json`. These are not two clients writing one shared central database.
+
+**Audio resource contract:** `game.js` attempts Web Audio preloading of Ogg samples. On unavailable buffers/suspended context it switches to a media element, choosing `.mp3` instead of `.ogg` when the browser reports no Ogg/Vorbis decoder. The current Git tree includes the ten Ogg masters and mirrors, but **no matching MP3 files**. Thus a fresh repo checkout on a non-Ogg browser may request unavailable fallback resources; the previously produced desktop ZIP reportedly included those conversions. The source-level [sound regression](../tests/sound-playback-fallback.cjs) checks mock URL selection, mute behavior and Ogg presence, **not actual audible output**.
+
+**Implemented status:** `TRAP_CHANCE = 0.10` and red-trap event handling are present in current JS and Android-mirrored JS; original no-implementation analyses are historical. Local Python API fixture tests exist but are not live multi-device verification. No code or game tests were run in this documentation pass.
+
+
 **Update — 26 October 2026:** Babuni.dev subsequently authorized full Red Trap Button implementation at **10%** replacement probability, with immediate Game Over and conservation of already-earned pending points. The feature is **implemented in GitHub source**, and the native Android compilation and new trap regression passed in [Actions run 40365295833](https://github.com/babunidev/ButtonGame/actions/runs/40365295833). Any earlier language below saying this mode is not started or not authorized records the **historical status at that time** and is superseded. An Android APK signed with the original release certificate and physical Trap Mode verification remain **pending**. See [the current Red Trap Button specification](TRAP_MODE.md).
 
 **Inspected baseline:** GitHub `main` at `d5ce766`, 2026-10-26. Architectural descriptions below concern code paths; production behavior is not proven solely by reading source.

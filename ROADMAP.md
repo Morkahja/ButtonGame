@@ -1,5 +1,17 @@
 # Button Game — Current Project To-Do
 
+## 2026-10-27 — Outstanding verification after documentation audit
+
+- [x] **Source exists:** 10% optional red Trap Mode with pending-score settlement; widescreen player/game/score layout; separate Python LAN host; Web Audio-to-media-element fallback.
+- [x] **Artifact boundary documented:** ten original Ogg files are tracked; MP3 fallback copies were reported in a **separate desktop ZIP**, not this source repository.
+- [ ] **Recipient desktop audio:** check the saved speaker mute setting, browser codec support, and actual audible playback. If the browser lacks Ogg support, inspect that *specific* shared ZIP for its ten MP3 files; a source checkout does not include them.
+- [ ] **Desktop LAN acceptance:** play from a second device and verify desktop-host scores survive a server restart; local HTTP tests are not a substitute.
+- [ ] **Compatible Android update:** compare the signing certificate against the actually installed app and use the matching permanent key with a higher versionCode; preserve phone-host scores before an exceptional migration.
+- [ ] **Publication rights:** determine license and redistribution permissions for the source, historic Flash work, recordings, images and bundled font before broad external redistribution.
+
+Do not reopen already creator-tested gameplay as a speculative task or claim a new test pass from this docs-only audit.
+
+
 ## Prevent APK signing incompatibilities
 
 - [x] Diagnose why previously signed updates worked but newer CI-debug APKs do not: **different signing certificate**, not a changed package ID or missed version bump.

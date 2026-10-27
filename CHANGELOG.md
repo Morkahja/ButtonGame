@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-10-27 — Portfolio audit #27 (documentation only)
+
+- Reviewed the current Button Game tree and its preserved 2009 Flash artifact, recovered original-concept documentation, three game/client generations, the Android Kotlin host, the desktop Python host and sound/Trap regressions.
+- Reconciled the README's superseded “entire Trap Mode is not started” wording with the **26 October approved and committed 10% implementation**. Earlier pre-approval documentation remains readable as dated history.
+- Distinguished **ten tracked Ogg recordings** from MP3 conversions reported in the separately prepared desktop sharing ZIP. The current browser fallback requests MP3 for non-Ogg browsers, but the Git tree itself has no MP3 assets.
+- Preserved Babuni.dev's creative credit and explicit decision history, including corrections to previous AI delivery/signing claims.
+- Touched only the eleven canonical Markdown docs. No source, script, tests, Android build, Flash media, audio, image, font, private signing material or historical root journal changed. No tests were run in this audit.
+
+
 ## 2026-10-26 — More reliable desktop sound playback
 
 - **User observation:** A delivered 1.0.3-beta desktop session appeared entirely silent. Investigation of the actual share-with-nephew ZIP confirmed all ten original Ogg Vorbis files were present, nonempty, and valid. A missing-media packaging claim would be incorrect.

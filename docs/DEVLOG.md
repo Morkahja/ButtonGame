@@ -1,5 +1,18 @@
 # Button Game — Curated Development Journal
 
+## 2026-10-27 — Reading a mature, creator-led history without replacing it
+
+**User direction:** Continue the numbered portfolio GitHub audit with repository #27 after FlourishForever. ButtonGame is the next repository in the relevant sequence. This is the creator's game originating in **2009**, with preserved Flash files and a 2026 HTML5/Android/desktop rebuild; the repository creation timestamp must not replace the date of original invention.
+
+**AI contribution:** Re-read the active JavaScript and HTML, Android Kotlin host, Python LAN host, sound regression, current Git tree, the already substantial journals, creative-origin reconstruction, decisions and release/signing guidance. Because the original creator-supplied evidence has been carefully documented already, preserve the existing root/curated journals instead of regenerating an AI-made substitute.
+
+**What the check corrected:** The README's final creative section still called **the entire Red Trap Button mode “not started”**. That was an authentic earlier planning status, since superseded by Babuni.dev's 10%/immediate-loss decision and the October 26 implemented JS. The source also differentiates two LAN score hosts: phone Android and desktop Python, which are not a single shared persistent database.
+
+**What distribution still obscures:** The October 26 desktop sound concern was *not* proof missing Ogg assets; ten valid original recordings were reported present in a shared ZIP. A later browser fallback can choose MP3 on clients without Ogg support, but this Git checkout has **only Ogg**; the new MP3 files belonged to a separately assembled sharing ZIP, not this tree. A source-code fallback test cannot prove a specific nephew's browser played audio.
+
+**Verification:** Documentation diff and relative-link/blob preservation only. This audit did not run tests, compile/sign Android, open the game in a browser, re-create the sharing ZIP, verify a particular recipient's sound, or publicly expose raw private creative conversations. The human's original decisions and corrections remain credited to Babuni.dev; previous AI mistakes remain explicitly recorded.
+
+
 ## 2026-10-26 — Investigating a silent shared desktop session
 
 **Babuni.dev observation.** After receiving a compact, shareable desktop ZIP meant for the creator's nephew, Babuni.dev reported that the session **appeared to have no sound**. The original game relies on its distinctive tap, Quick Strike, bell and special-reveal recordings; a visually playable but silent session is not an acceptable finished share.

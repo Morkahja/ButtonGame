@@ -1,5 +1,14 @@
 # Button Game — Creative Concept
 
+## 2026-10-27 — Creative continuity across editions
+
+The original 2009 Flash Button Game, the intermediate ChatGPT remake, the current HTML5 toy and its Android/desktop shared-score hosts are distinct stages—not a single 2009 feature set. The creator's turquoise four-hole jacket button, physical number combination, visible score collection, unusual 21→42 and 37→73 events, and later Red Trap rules demonstrate an evolving authored experience.
+
+The recovered private conversation was summarized in [CREATIVE_ORIGINS.md](docs/CREATIVE_ORIGINS.md); it should not be reproduced as raw dialogue. **Babuni.dev** owns the creative ideas and approvals, including the final 10% red-spawn choice and preservation of already-earned score when a trap is tapped. AI contributions include rejected proposals, coding and test interpretation. The history of “not started” Trap Mode is legitimate **only when explicitly dated before the October 26 implementation**.
+
+Sound is part of the game's tactile identity. The later audio fallback changes delivery behavior; it is not approval to remove the unique recordings. The repository's lack of MP3 source copies means the standalone sharing ZIP and current Git checkout have different codec coverage.
+
+
 **Update — 26 October 2026:** Babuni.dev subsequently authorized full Red Trap Button implementation at **10%** replacement probability, with immediate Game Over and conservation of already-earned pending points. The feature is **implemented in GitHub source**, and the native Android compilation and new trap regression passed in [Actions run 40365295833](https://github.com/babunidev/ButtonGame/actions/runs/40365295833). Any earlier language below saying this mode is not started or not authorized records the **historical status at that time** and is superseded. An Android APK signed with the original release certificate and physical Trap Mode verification remain **pending**. See [the current Red Trap Button specification](docs/TRAP_MODE.md).
 
 **Author and creative direction:** Babuni.dev.  

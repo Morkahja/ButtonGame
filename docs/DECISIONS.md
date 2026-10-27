@@ -1,5 +1,18 @@
 # Button Game — Decisions and Open Questions
 
+## 2026-10-27 — Audit evidence reconciliation (not a new creative decision)
+
+**Trap Mode status.** A nine-item Red Trap Button specification was first recorded as *not started*. Babuni.dev then explicitly chose the **10%** chance and immediate loss with earned-score settlement, and approved implementation. Commits from 26 October implemented the red button, passive emission, host metadata and score behavior. “Not started” is no longer a present-tense status; retain it only as a dated earlier milestone.
+
+**Desktop sound.** Babuni.dev observed a silent shared game. The assistant inspected a prior ZIP and found the original Ogg files, then added a media fallback and diagnostic warnings. The reported refreshed ZIP included MP3 transcodes; the current Git tree has **none**. No creator decision was made to strip sound, and neither culprit nor real-world audio recovery is verified by source.
+
+**Desktop networking.** A static file server lacked score/presence endpoints; a Python host now implements the existing local API and owns a separate score ledger. That does not approve a public server, authentication account system or score syncing with Android.
+
+**APK signer.** The creator explicitly wants compatible in-place updates. A CI debug APK with another signer is not one. The original private certificate remains a delivery constraint; no new key or bypass is authorized.
+
+These are editorial corrections distinguishing proposals, implemented changes and observed test evidence, not retrospective AI claims over user decisions.
+
+
 ## D-024 — Preserve one permanent Android signer for every release
 
 - **Babuni.dev requirement:** APKs must update the existing installed Button Game without repeated uninstalls. The creator confirmed this worked in earlier releases.

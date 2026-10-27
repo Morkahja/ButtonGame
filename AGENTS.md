@@ -1,5 +1,15 @@
 # Button Game — AI and Contributor Rules
 
+## 2026-10-27 — Evidence and artifact distinctions
+
+- The complete Trap Mode is **implemented** in the current JS source with `TRAP_CHANCE = 0.10`; earlier “not started” quotes were pre-approval snapshots and must be explicitly dated when retained.
+- Distinguish source tree from private sharing ZIP: the repository tracks ten **Ogg** clips, while a separately prepared desktop ZIP reportedly contained ten **MP3** copies. The current `playMediaFallback` chooses an MP3 name on clients reporting no Ogg/Vorbis support. Do not claim raw-checkout codec completeness.
+- For Wi-Fi scores, `python3 -m http.server` is static-only. Use `scripts/serve-desktop.py` for a desktop-hosted score/presence API. Its ledger and Android-hosted saved scores are intentionally separate.
+- CI compilation/debug APKs aren't proof of an update APK. The installed certificate and higher versionCode must match; do not expose or commit a private signing key.
+- Do not rewrite or collapse [root DEVLOG](DEVLOG.md), [curated journal](docs/DEVLOG.md), [creative origins](docs/CREATIVE_ORIGINS.md) or rejected approaches. Preserve Babuni.dev's authorship and publication-safe human–AI record.
+- This audit performs **source and docs inspection only**, not browser/Android tests or an APK/ZIP release.
+
+
 ## Mandatory APK update signing practice
 
 - **Never label a GitHub CI debug APK an ordinary update**: temporary debug certificates differ across runners. An original-key-signed APK is required to update any existing installation signed with that original certificate.

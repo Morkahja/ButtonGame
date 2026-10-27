@@ -1,5 +1,14 @@
 # Button Game — Portfolio Content and Publication Outline
 
+## 2026-10-27 — What is actually tracked versus delivered
+
+The Git tree preserves [Game.swf](../Game.swf) and [Game.html](../Game.html) as the Flash-era artifact; the [early ChatGPT remake](../ChatGPT%20Remake/README.md) is not the current version. Active assets include the approved [Button Game logo](../ButtonGameLogo.png), button SVG, imagery and the **ten original Ogg sounds**, replicated in [browser assets](../assets/sfx/) and [Android assets](../android/app/src/main/assets/www/assets/sfx/).
+
+The game code selects `.mp3` paths for browsers without Ogg/Vorbis support. Those copies were included in a **previously produced standalone desktop ZIP**, not in Git; **no MP3 files are currently tracked**. Distinguish the exact distributed ZIP from the repository and the Android WebView when writing portfolio installation or audio claims. A previously checked ZIP is not automatically recoverable from this repository.
+
+Host-owned scores are separate: a phone-hosted Android game persists them on that phone, while `scripts/serve-desktop.py` uses private local `.local-data/desktop-scores.json`. Avoid publishing private player names/scores without appropriate consent. No top-level LICENSE file appears in this tree; don't silently assign redistribution rights over code, Flash art, font or recordings.
+
+
 **Update — 26 October 2026:** Babuni.dev subsequently authorized full Red Trap Button implementation at **10%** replacement probability, with immediate Game Over and conservation of already-earned pending points. The feature is **implemented in GitHub source**, and the native Android compilation and new trap regression passed in [Actions run 40365295833](https://github.com/babunidev/ButtonGame/actions/runs/40365295833). Any earlier language below saying this mode is not started or not authorized records the **historical status at that time** and is superseded. An Android APK signed with the original release certificate and physical Trap Mode verification remain **pending**. See [the current Red Trap Button specification](TRAP_MODE.md).
 
 The website **babuni.dev** is itself a portfolio project. Button Game should eventually show not only a playable artifact but also Babuni.dev's decisions and the AI-assisted engineering process.
